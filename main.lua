@@ -10,7 +10,7 @@ function love.load()
    local f = love.graphics.newFont(12)
    love.graphics.setFont(f)
    love.graphics.setColor(255,255,255,255)
-   love.graphics.setBackgroundColor(255,255,255)
+   love.graphics.setBackgroundColor(0,0,255)
 end
 
 function love.draw()
@@ -43,7 +43,7 @@ end
 function love.draw()
    
    --testing a simple cuadrado
-   --figura = newCuadrado(5)
+   --local figura = Cuadrado:new(5)
    --a=figura:Area()
    --love.graphics.print(a, 400, 300)
    love.graphics.draw(image, imgx, imgy)
