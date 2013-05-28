@@ -17,6 +17,6 @@ end
 function Screen:keypressed(key, unicode)
 end
 
-function Screen:getExitMark()
+function Screen.static:getExitMark()
 	return -10
 end

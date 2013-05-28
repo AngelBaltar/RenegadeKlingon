@@ -1,0 +1,71 @@
+require 'middleclass/middleclass'
+
+SpaceObject = class('GameFrameWork.SpaceObject')
+
+--constructor
+--draw_object must be a drawable
+--posx and posy define the initial positions for the object
+function SpaceObject:initialize(draw_object,posx,posy)
+  self._toDraw=draw_object
+  self._xPos=posx
+  self._yPos=posy
+end
+
+--Performs movements changing the position of the object, firing bullets...
+function SpaceObject:pilot()
+
+end
+
+--Draws the object in the screen
+function SpaceObject:draw()
+	love.graphics.setColor(255,255,255,255)
+   	love.graphics.setBackgroundColor(0,0,0)
+   	love.graphics.draw(self._toDraw, self._xPos, self._yPos)
+end
+
+--returns the X component of the position for this object
+function SpaceObject:getPositionX()
+	return self._xPos
+end
+
+--returns the Y component of the position for this object
+function SpaceObject:getPositionY()
+	return self._yPos
+end
+
+--sets the X coordenate
+function SpaceObject:setPositionX(x)
+	self._xPos=x
+end
+
+--sets the Y coordenate
+function SpaceObject:setPositionY(y)
+	self._yPos=y
+end
+
+--must be implemented in subclasses
+function SpaceObject:getWidth()
+
+end
+
+--must be implemented in subclasses
+function SpaceObject:getHeight()
+
+end
+
+--the PlayerShip class must extend this class and overwritte this method returning true
+function SpaceObject:isPlayerShip()
+	return false
+end
+
+
+--the Bullet class must extend this class and overwritte this method returning true
+function SpaceObject:isBullet()
+	return false
+end
+
+
+--the EnemyShip class must extend this class and overwritte this method returning true
+function SpaceObject:isEnemyShip()
+	return false
+end
