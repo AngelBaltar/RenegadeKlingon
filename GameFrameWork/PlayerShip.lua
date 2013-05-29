@@ -1,14 +1,17 @@
 require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
+require 'GameFrameWork/Bullet'
 
 PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 
+local SHOT_CADENCE=0.3
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function PlayerShip:initialize()
+function PlayerShip:initialize(space)
   self._ship=love.graphics.newImage("Resources/destructor_klingon.png")
-  SpaceObject.initialize(self, self._ship,0,0)
+  SpaceObject.initialize(self,space, self._ship,0,0)
+  self._lastShot=SHOT_CADENCE
 end
 
 --return the width of this ship
@@ -22,28 +25,56 @@ function PlayerShip:getHeight()
 end
 
 --Performs movements changing the position of the object, firing bullets...
-function PlayerShip:pilot()
-  local step=5
+function PlayerShip:pilot(dt)
+  local step=4
+  local position_x=SpaceObject.getPositionX(self)
+  local position_y=SpaceObject.getPositionY(self)
+  local my_space=SpaceObject.getSpace(self)
+
+  local x_relative_step=0
+  local y_relative_step=0
+
+  local shot_emit_x=0
+  local shot_emit_y=0
+
+  self._lastShot=self._lastShot+dt
+
   if love.keyboard.isDown("up") then
-		if(SpaceObject.getPositionY(self)>0)then
-			SpaceObject.setPositionY(self,SpaceObject.getPositionY(self)-step)
+		if(position_y>0)then
+			SpaceObject.setPositionY(self,position_y-step)
+			y_relative_step=y_relative_step-step
 		end
    end
   if love.keyboard.isDown("down") then
-		if(SpaceObject.getPositionY(self)<love.graphics.getHeight()-self:getHeight())then
-			SpaceObject.setPositionY(self,SpaceObject.getPositionY(self)+step)
+		if(position_y<love.graphics.getHeight()-self:getHeight())then
+			SpaceObject.setPositionY(self,position_y+step)
+			y_relative_step=y_relative_step+step
 		end
    end
 
    if love.keyboard.isDown("left") then
-    if(SpaceObject.getPositionX(self)>0)then
-			SpaceObject.setPositionX(self,SpaceObject.getPositionX(self)-step)
+    if(position_x>0)then
+			SpaceObject.setPositionX(self,position_x-step)
+			x_relative_step=x_relative_step-step
 		end
    end
   if love.keyboard.isDown("right") then
-    if(SpaceObject.getPositionX(self)<love.graphics.getWidth()-self:getWidth())then
-			SpaceObject.setPositionX(self,SpaceObject.getPositionX(self)+step)
+    if(position_x<love.graphics.getWidth()-self:getWidth())then
+			SpaceObject.setPositionX(self,position_x+step)
+			x_relative_step=x_relative_step+step
 		end
+   end
+   
+   --actualize positions now
+   position_x=SpaceObject.getPositionX(self)
+   position_y=SpaceObject.getPositionY(self)
+   shot_emit_x=position_x+self:getWidth()
+   shot_emit_y=position_y+self:getHeight()/2
+
+   if ((love.keyboard.isDown("a")) and (self._lastShot>=SHOT_CADENCE)) then
+   	    shot_emit_x=
+   		my_space:addSpaceObject(Bullet:new(my_space,shot_emit_x,shot_emit_y,6+x_relative_step,0+y_relative_step))
+   		self._lastShot=0
    end
 end
 

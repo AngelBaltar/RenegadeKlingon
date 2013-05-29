@@ -5,14 +5,15 @@ SpaceObject = class('GameFrameWork.SpaceObject')
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function SpaceObject:initialize(draw_object,posx,posy)
+function SpaceObject:initialize(space,draw_object,posx,posy)
   self._toDraw=draw_object
   self._xPos=posx
   self._yPos=posy
+  self._space=space
 end
 
 --Performs movements changing the position of the object, firing bullets...
-function SpaceObject:pilot()
+function SpaceObject:pilot(dt)
 
 end
 
@@ -51,6 +52,15 @@ end
 --must be implemented in subclasses
 function SpaceObject:getHeight()
 
+end
+
+function SpaceObject:die()
+	self._space:removeSpaceObject(self)
+end
+
+--returns the space where this object is
+function SpaceObject:getSpace()
+	return self._space
 end
 
 --the PlayerShip class must extend this class and overwritte this method returning true
