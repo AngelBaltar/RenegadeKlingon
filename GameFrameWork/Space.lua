@@ -28,9 +28,11 @@ function Space:removeSpaceObject(object)
 			pos=pos+1
 		end
 	end
-	table.remove(self._objectsList,pos)
-	
-	self._insertAt=self._insertAt-1
+
+	if(found) then
+		table.remove(self._objectsList,pos)
+		self._insertAt=self._insertAt-1
+	end
 end
 
 --draws all the objects in the space
@@ -56,15 +58,20 @@ local _collisionManagement = function(self,soA,soB)
 	local y2A = soA:getHeight()+y1A
 
 	local x1B = soB:getPositionX()
-	local x2B = soB:getWidth()+x1A
+	local x2B = soB:getWidth()+x1B
 	local y1B = soB:getPositionY()
-	local y2B = soB:getHeight()+y1A
+	local y2B = soB:getHeight()+y1B
 
 	local X_contained=(( x1B>x1A and x1B<x2A ) or (x2B>x1A and x2B<x2A) ) or (( x1A>x1B and x1A<x2B ) or (x2A>x1B and x2A<x2B) )
-	local Y_contained=(( y1B>y1A and y1B<y2A ) or (y2B>x1A and y2B<x2A) ) or (( y1A>x1B and y1A<x2B ) or (y2A>x1B and y2A<x2B) )
+	local Y_contained=(( y1B>y1A and y1B<y2A ) or (y2B>y1A and y2B<y2A) ) or (( y1A>y1B and y1A<y2B ) or (y2A>y1B and y2A<y2B) )
 
+	local lifeA=soA:getLife()
+	local lifeB=soB:getLife()
 	if(X_contained and Y_contained) then
-			--perform the collision
+			soA:collision(soB)
+			soB:collision(soA)
+			soA:setLife(lifeA-lifeB)
+			soB:setLife(lifeB-lifeA)
 	end
 
 end
@@ -74,14 +81,18 @@ function Space:update(dt)
 	local i=0
 	local j=0
 
+	--check game paused
 	if(self._pause) then
 		return
 	end
 
+	--pilot all the objects
 	while(i<self._insertAt) do
 		self._objectsList[i]:pilot(dt)
 		i=i+1
 	end
+
+	--check collisions between objects
 	i=0
 	j=0
 	while(i<self._insertAt) do
@@ -111,4 +122,15 @@ function Space:keypressed(key, unicode)
 		self._objectsList[i]:keypressed(key,unicode)
 		i=i+1
 	end
+end
+
+function Space:getPlayerShip()
+	local i=0
+	while(i<self._insertAt) do
+		if self._objectsList[i]:isPlayerShip() then
+			return self._objectsList[i]
+		end
+		i=i+1
+	end
+	return nil
 end

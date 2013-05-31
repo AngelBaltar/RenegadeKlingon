@@ -1,13 +1,17 @@
 require 'middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/Space'
+require 'GameFrameWork/Enemy'
+require 'GameFrameWork/Hud'
 
 GameScreen = class('GameScreen',Screen)
 
 
 function Screen:initialize()
     self._space=Space:new()
-    self._space:addSpaceObject(PlayerShip:new(self._space))
+    PlayerShip:new(self._space)
+    Enemy:new(self._space)
+    Hud:new(self._space)
 end
 
 function Screen:draw()

@@ -1,18 +1,18 @@
-require("Menu")
-require("OptionsScreen")
-require("Screen")
-require("GameScreen")
+require("Utils/Menu")
+require("GameScreens/OptionsScreen")
+require("GameScreens/Screen")
+require("GameScreens/GameScreen")
 
+
+local selected_option=0
+
+local NONE_OPTION=0
+local PLAY_OPTION=1
+local OPTIONS_OPTION=2
 
 function love.load()
 
-   selected_option=0
-
-   NONE_OPTION=0
-   PLAY_OPTION=1
-   OPTIONS_OPTION=2
-
-   mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2)
+   mainMenu=Menu:new(love.graphics.getWidth()/2-50,love.graphics.getHeight()/2-50)
    mainMenu:addItem("Play")
    mainMenu:addItem("Options")
 
@@ -20,7 +20,7 @@ function love.load()
    
    play=GameScreen:new()
 
-   local f = love.graphics.newFont("Resources/klingon_font.ttf",35)
+   local f = love.graphics.newFont("Resources/klingon_blade.ttf",35)
    love.graphics.setFont(f)
    love.graphics.setColor(255,0,0,255)
    love.graphics.setBackgroundColor(0,0,0)
@@ -61,6 +61,8 @@ end
 
 function love.keypressed(key, unicode)
     if(selected_option==PLAY_OPTION) then
-        play:keypressed(key,unicode)
+         if play:keypressed(key,unicode)==Screen:getExitMark() then
+            selected_option=NONE_OPTION
+         end
     end
 end

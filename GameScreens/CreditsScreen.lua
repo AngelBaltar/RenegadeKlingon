@@ -1,5 +1,5 @@
 require 'middleclass/middleclass'
-require 'Screen'
+require 'GameScreens/Screen'
 
 CreditsScreen = class('CreditsScreen', Screen)
 

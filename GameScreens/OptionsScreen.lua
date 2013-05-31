@@ -1,7 +1,7 @@
 require 'middleclass/middleclass'
-require 'Menu'
-require 'Screen'
-require 'CreditsScreen'
+require 'Utils/Menu'
+require 'GameScreens/Screen'
+require 'GameScreens/CreditsScreen'
 
 OptionsScreen = class('OptionsScreen', Screen)
 

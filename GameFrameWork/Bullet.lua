@@ -8,7 +8,8 @@ Bullet = class('GameFrameWork.Bullet',SpaceObject)
 --posx and posy define the initial positions for the object
 function Bullet:initialize(space,x,y,stepx,stepy)
   self._bullet=love.graphics.newImage("Resources/red_bullet.png")
-  SpaceObject.initialize(self,space, self._bullet,x,y)
+  --3 health for the bullet
+  SpaceObject.initialize(self,space, self._bullet,x,y,3)
   self._xStep=stepx
   self._yStep=stepy
 end
@@ -31,12 +32,9 @@ function Bullet:pilot(dt)
   x=x+self._xStep
   y=y+self._yStep
 
-  if((x<0) or (x>love.graphics.getWidth()) or (y<0) or (y>love.graphics.getHeight())) then
-  	self:die()
-  else
-  	SpaceObject.setPositionY(self,y)
-  	SpaceObject.setPositionX(self,x)
-  end
+ 
+  SpaceObject.setPositionY(self,y)
+  SpaceObject.setPositionX(self,x)
 end
 
 --im the bullet, ovewritting from SpaceObject
