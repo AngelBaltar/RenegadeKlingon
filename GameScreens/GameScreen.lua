@@ -20,6 +20,12 @@ end
 
 function Screen:update(dt)
    self._space:update(dt)
+   player=self._space:getPlayerShip()
+
+   --if player dead!
+   if(player==nil)then
+   		return Screen:getExitMark()
+   end
 end
 
 function Screen:keypressed(key, unicode)

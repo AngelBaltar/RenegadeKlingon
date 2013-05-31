@@ -14,7 +14,7 @@ function love.load()
 
    mainMenu=Menu:new(love.graphics.getWidth()/2-50,love.graphics.getHeight()/2-50)
    mainMenu:addItem("Play")
-   mainMenu:addItem("Options")
+   mainMenu:addItem("Options")  
 
    optionsMenu=OptionsScreen:new()
    
@@ -32,7 +32,7 @@ end
 function love.update(dt)
    
    if(selected_option==NONE_OPTION) then
-    selected_option=mainMenu:read()
+      selected_option=mainMenu:read()
    end
     if(selected_option==PLAY_OPTION) then
        if play:update(dt)==Screen:getExitMark() then

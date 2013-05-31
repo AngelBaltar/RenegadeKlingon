@@ -34,7 +34,7 @@ function Enemy:pilot(dt)
  local shot_emit_x=position_x-1
  local shot_emit_y=position_y+self:getHeight()/2
 
-  Bullet:new(my_space,shot_emit_x,shot_emit_y,-6,0)
+  --Bullet:new(my_space,shot_emit_x,shot_emit_y,-6,0)
 
 end
 
