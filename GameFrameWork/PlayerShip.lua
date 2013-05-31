@@ -26,6 +26,11 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function PlayerShip:pilot(dt)
+ 
+end
+
+--Read from keyboard
+function PlayerShip:keypressed(key, unicode)
   local step=4
   local position_x=SpaceObject.getPositionX(self)
   local position_y=SpaceObject.getPositionY(self)
@@ -37,32 +42,31 @@ function PlayerShip:pilot(dt)
   local shot_emit_x=0
   local shot_emit_y=0
 
-  self._lastShot=self._lastShot+dt
 
-  if love.keyboard.isDown("up") then
-		if(position_y>0)then
-			SpaceObject.setPositionY(self,position_y-step)
-			y_relative_step=y_relative_step-step
-		end
+  if key=="up" then
+    if(position_y>0)then
+      SpaceObject.setPositionY(self,position_y-step)
+      y_relative_step=y_relative_step-step
+    end
    end
-  if love.keyboard.isDown("down") then
-		if(position_y<love.graphics.getHeight()-self:getHeight())then
-			SpaceObject.setPositionY(self,position_y+step)
-			y_relative_step=y_relative_step+step
-		end
+  if key=="down" then
+    if(position_y<love.graphics.getHeight()-self:getHeight())then
+      SpaceObject.setPositionY(self,position_y+step)
+      y_relative_step=y_relative_step+step
+    end
    end
 
-   if love.keyboard.isDown("left") then
+   if key=="left" then
     if(position_x>0)then
-			SpaceObject.setPositionX(self,position_x-step)
-			x_relative_step=x_relative_step-step
-		end
+      SpaceObject.setPositionX(self,position_x-step)
+      x_relative_step=x_relative_step-step
+    end
    end
-  if love.keyboard.isDown("right") then
+  if key=="right" then
     if(position_x<love.graphics.getWidth()-self:getWidth())then
-			SpaceObject.setPositionX(self,position_x+step)
-			x_relative_step=x_relative_step+step
-		end
+      SpaceObject.setPositionX(self,position_x+step)
+      x_relative_step=x_relative_step+step
+    end
    end
    
    --actualize positions now
@@ -71,10 +75,10 @@ function PlayerShip:pilot(dt)
    shot_emit_x=position_x+self:getWidth()
    shot_emit_y=position_y+self:getHeight()/2
 
-   if ((love.keyboard.isDown("a")) and (self._lastShot>=SHOT_CADENCE)) then
-   	    shot_emit_x=
-   		my_space:addSpaceObject(Bullet:new(my_space,shot_emit_x,shot_emit_y,6+x_relative_step,0+y_relative_step))
-   		self._lastShot=0
+   if key=="a" then
+        shot_emit_x=
+      my_space:addSpaceObject(Bullet:new(my_space,shot_emit_x,shot_emit_y,6+x_relative_step,0+y_relative_step))
+      self._lastShot=0
    end
 end
 

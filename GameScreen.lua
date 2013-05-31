@@ -15,12 +15,12 @@ function Screen:draw()
 end
 
 function Screen:update(dt)
-	
-   if love.keyboard.isDown("escape") then
-    	return Screen:getExitMark()
-   end
    self._space:update(dt)
 end
 
 function Screen:keypressed(key, unicode)
+	if key=="escape" then
+    	return Screen:getExitMark()
+   end
+   self._space:keypressed(key,unicode)
 end

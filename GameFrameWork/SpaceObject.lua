@@ -24,6 +24,10 @@ function SpaceObject:draw()
    	love.graphics.draw(self._toDraw, self._xPos, self._yPos)
 end
 
+--Read from keyboard
+function SpaceObject:keypressed(key, unicode)
+end
+
 --returns the X component of the position for this object
 function SpaceObject:getPositionX()
 	return self._xPos

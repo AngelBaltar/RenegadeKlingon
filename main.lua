@@ -20,10 +20,12 @@ function love.load()
    
    play=GameScreen:new()
 
-   local f = love.graphics.newFont(23)
+   local f = love.graphics.newFont("Resources/klingon_font.ttf",35)
    love.graphics.setFont(f)
    love.graphics.setColor(255,0,0,255)
    love.graphics.setBackgroundColor(0,0,0)
+
+   love.keyboard.setKeyRepeat(0.03, 0.07)
 end
 
 
@@ -58,5 +60,7 @@ function love.draw()
 end
 
 function love.keypressed(key, unicode)
-
+    if(selected_option==PLAY_OPTION) then
+        play:keypressed(key,unicode)
+    end
 end
