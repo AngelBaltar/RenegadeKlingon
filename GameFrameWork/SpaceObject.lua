@@ -50,16 +50,20 @@ end
 
 --sets the X coordenate
 function SpaceObject:setPositionX(x)
+	local x_inf=self._space:getXinit()
+	local x_sup=self._space:getXend()
 	self._xPos=x
-	if(x<0) or (x>love.graphics.getWidth()) then
+	if(x<x_inf) or (x>x_sup) then
 		self:die()
 	end
 end
 
 --sets the Y coordenate
 function SpaceObject:setPositionY(y)
+	local y_inf=self._space:getYinit()
+	local y_sup=self._space:getYend()
 	self._yPos=y
-	if(y<0) or (y>love.graphics.getHeight()) then
+	if(y<y_inf) or (y>y_sup) then
 		self:die()
 	end
 end
@@ -85,8 +89,8 @@ function SpaceObject:setHealth(health)
 	end
 end
 
-function SpaceObject:collision(object)
-
+function SpaceObject:collision(object,damage)
+	self:setHealth(self:getHealth()-damage)
 end
 
 --returns the space where this object is

@@ -10,9 +10,10 @@ GameScreen = class('GameScreen',Screen)
 function GameScreen:initialize()
     self._bg=love.graphics.newImage("Resources/background1.png")
     self._space=Space:new()
+    Hud:new(self._space)
     PlayerShip:new(self._space)
     Enemy:new(self._space)
-    Hud:new(self._space)
+    --Enemy:new(self._space)
 end
 
 function GameScreen:draw()

@@ -59,7 +59,8 @@ function Space:draw()
 	end
 end
 
-local _collisionManagement = function(self,soA,soB) 
+--checks a collision between space object A and B
+local _collisionCheck = function(self,soA,soB)
 	local x1A = soA:getPositionX()
 	local x2A = soA:getWidth()+x1A
 	local y1A = soA:getPositionY()
@@ -70,16 +71,20 @@ local _collisionManagement = function(self,soA,soB)
 	local y1B = soB:getPositionY()
 	local y2B = soB:getHeight()+y1B
 
-	local X_contained=(( x1B>x1A and x1B<x2A ) or (x2B>x1A and x2B<x2A) ) or (( x1A>x1B and x1A<x2B ) or (x2A>x1B and x2A<x2B) )
-	local Y_contained=(( y1B>y1A and y1B<y2A ) or (y2B>y1A and y2B<y2A) ) or (( y1A>y1B and y1A<y2B ) or (y2A>y1B and y2A<y2B) )
+	local X_contained=(( x1B>=x1A and x1B<=x2A ) or (x2B>=x1A and x2B<=x2A) ) or (( x1A>=x1B and x1A<=x2B ) or (x2A>=x1B and x2A<=x2B) )
+	local Y_contained=(( y1B>=y1A and y1B<=y2A ) or (y2B>=y1A and y2B<=y2A) ) or (( y1A>=y1B and y1A<=y2B ) or (y2A>=y1B and y2A<=y2B) )
+
+	return X_contained and Y_contained
+end
+
+--checks and handles a collision between space object A and B
+local _collisionManagement = function(self,soA,soB) 
 
 	local healthA=soA:getHealth()
 	local healthB=soB:getHealth()
-	if(X_contained and Y_contained) then
-			soA:collision(soB)
-			soB:collision(soA)
-			soA:setHealth(healthA-healthB)
-			soB:setHealth(healthB-healthA)
+	if(_collisionCheck(self,soA,soB)) then
+			soA:collision(soB,healthB)
+			soB:collision(soA,healthA)
 	end
 
 end
@@ -174,4 +179,55 @@ end
 
 function Space:getYend()
 	return love.graphics.getHeight()
+end
+
+--places the object so in a place free of other space Objects
+function Space:placeOnfreeSpace(so)
+	local i=0
+	local x=self:getXend()/2
+	local y=self:getYinit()
+	local step=7
+	local collision_free=true
+
+	print("placing checking "..self._insertAt.."objects\n")
+	while(x < self:getXend()) do
+		y=self:getYinit()
+
+		while (y<self:getYend()) do
+			so:setPositionX(x)
+			so:setPositionY(y)
+			i=0
+			collision_free=true
+			while(i<self._insertAt and collision_free) do
+				if(so~=self._objectsList[i]) then
+					collision_free=collision_free and not _collisionCheck(self,so,self._objectsList[i])
+				end
+				i=i+1
+			end
+			if(collision_free) then
+				print("placing in x= "..x.." y= "..y.."\n")
+				return true
+			end
+			y=y+step
+		end
+		x=x+step
+	end
+	print("cant place anywhere")
+	return false
+end
+
+--returns true if the object so is in the area of play, else will return false
+function Space:isInBounds(so)
+	local inf_y=self:getYinit()
+	local sup_y=self:getYend()
+	local inf_x=self:getXinit()
+	local sup_x=self:getXend()
+
+	local x=so:getPositionX()
+	local y=so:getPositionY()
+
+	local inbounds_x= x<sup_x and x>inf_x
+	local inbounds_y= y<sup_y and y>inf_y
+
+	return inbounds_x and inbounds_y
 end
