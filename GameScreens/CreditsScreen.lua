@@ -6,7 +6,7 @@ CreditsScreen = class('CreditsScreen', Screen)
 
 function CreditsScreen:initialize()
   self._xPos=0
-  self._yPos=0
+  self._yPos=50
 end 
 
 
@@ -20,13 +20,12 @@ end
 
 function CreditsScreen:update(dt)
 	self._yPos=self._yPos+1
-	if love.keyboard.isDown("escape") then
+end
+
+function CreditsScreen:keypressed(key, unicode)
+	if key=="escape" then
 		self._xPos=0
 		self._yPos=0
     	return Screen:getExitMark()
    end
-   return 1
-end
-
-function Screen:keypressed(key, unicode)
 end

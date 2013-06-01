@@ -25,6 +25,14 @@ function OptionsScreen:draw()
 end
 
 function OptionsScreen:update(dt)
+
+	if(self._selectedOption==1) then
+		self._credits:update(dt)
+	end
+	return 1
+end
+
+function OptionsScreen:keypressed(key, unicode)
 	if(self._selectedOption==0) then
 
 		if love.keyboard.isDown("escape") then
@@ -32,22 +40,12 @@ function OptionsScreen:update(dt)
 		    return Screen:getExitMark()
 		end
 		
-		self._selectedOption=self._optionsMenu:read()
-
-	end
-
-	if(self._selectedOption==1) then
-
-		if(self._credits:update()==Screen:getExitMark()) then
-			self._selectedOption=0
+		self._selectedOption=self._optionsMenu:keypressed(key, unicode)
+	else
+		if(self._selectedOption==1) then
+			if self._credits:keypressed(key,unicode)==Screen:getExitMark() then
+				self._selectedOption=0
+			end
 		end
-
-	end
-	return 1
-end
-
-function Screen:keypressed(key, unicode)
-	if(self._selectedOption==1) then
-		self._credits:keypressed(key,unicode)
 	end
 end

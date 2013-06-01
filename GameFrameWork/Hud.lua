@@ -14,7 +14,7 @@ end
 
 --return the width of this ship
 function Hud:getWidth()
-	return love.graphics.getWidth()
+	return SpaceObject.getSpace(self):getXend()
 end
 
 --return the height of this ship
@@ -38,8 +38,13 @@ function Hud:draw()
   local player_health=0
 
   if player~=nil then
-    player_health=player:getLife()
+    player_health=player:getHealth()
   end
+
+  love.graphics.setColor(0,0,0,120)
+  love.graphics.rectangle("fill",0,0,self:getWidth(),self:getHeight())
+
+  love.graphics.setColor(255,255,255,255)
   love.graphics.print("Health: "..player_health, x_pos+60, y_pos)
   SpaceObject.draw(self)
 end

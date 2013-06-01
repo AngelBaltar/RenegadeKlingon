@@ -7,18 +7,20 @@ require 'GameFrameWork/Hud'
 GameScreen = class('GameScreen',Screen)
 
 
-function Screen:initialize()
+function GameScreen:initialize()
+    self._bg=love.graphics.newImage("Resources/background1.png")
     self._space=Space:new()
     PlayerShip:new(self._space)
     Enemy:new(self._space)
     Hud:new(self._space)
 end
 
-function Screen:draw()
+function GameScreen:draw()
+   love.graphics.draw(self._bg, 0, 0)
 	self._space:draw()
 end
 
-function Screen:update(dt)
+function GameScreen:update(dt)
    self._space:update(dt)
    player=self._space:getPlayerShip()
 
@@ -28,7 +30,7 @@ function Screen:update(dt)
    end
 end
 
-function Screen:keypressed(key, unicode)
+function GameScreen:keypressed(key, unicode)
 	if key=="escape" then
     	return Screen:getExitMark()
    end

@@ -5,12 +5,12 @@ SpaceObject = class('GameFrameWork.SpaceObject')
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function SpaceObject:initialize(space,draw_object,posx,posy,life)
+function SpaceObject:initialize(space,draw_object,posx,posy,health)
   self._toDraw=draw_object
   self._xPos=posx
   self._yPos=posy
   self._space=space
-  self._life=life
+  self._health=health
   space:addSpaceObject(self)
 end
 
@@ -74,13 +74,13 @@ function SpaceObject:getHeight()
 
 end
 
-function SpaceObject:getLife()
-	return self._life;
+function SpaceObject:getHealth()
+	return self._health;
 end
 
-function SpaceObject:setLife(life)
-	self._life=life;
-	if(life<=0) then
+function SpaceObject:setHealth(health)
+	self._health=health;
+	if(health<=0) then
 		self:die()
 	end
 end

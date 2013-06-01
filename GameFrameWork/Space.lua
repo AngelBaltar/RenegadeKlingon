@@ -73,13 +73,13 @@ local _collisionManagement = function(self,soA,soB)
 	local X_contained=(( x1B>x1A and x1B<x2A ) or (x2B>x1A and x2B<x2A) ) or (( x1A>x1B and x1A<x2B ) or (x2A>x1B and x2A<x2B) )
 	local Y_contained=(( y1B>y1A and y1B<y2A ) or (y2B>y1A and y2B<y2A) ) or (( y1A>y1B and y1A<y2B ) or (y2A>y1B and y2A<y2B) )
 
-	local lifeA=soA:getLife()
-	local lifeB=soB:getLife()
+	local healthA=soA:getHealth()
+	local healthB=soB:getHealth()
 	if(X_contained and Y_contained) then
 			soA:collision(soB)
 			soB:collision(soA)
-			soA:setLife(lifeA-lifeB)
-			soB:setLife(lifeB-lifeA)
+			soA:setHealth(healthA-healthB)
+			soB:setHealth(healthB-healthA)
 	end
 
 end
@@ -141,4 +141,37 @@ function Space:getPlayerShip()
 		i=i+1
 	end
 	return nil
+end
+
+function Space:getXinit()
+	return 0
+end
+
+function Space:getXend()
+	return love.graphics.getWidth()
+end
+
+function Space:getYinit()
+	local i=0
+	local hud=nil
+	local hud_found=false
+	
+	while(i<self._insertAt and not hud_found) do
+		
+		if(self._objectsList[i]:isHud()) then
+			hud_found=true
+			hud=self._objectsList[i]
+		else
+			i=i+1
+		end
+	end
+	if(hud_found) then
+		return hud:getHeight()
+	else
+		return 0
+	end
+end
+
+function Space:getYend()
+	return love.graphics.getHeight()
 end
