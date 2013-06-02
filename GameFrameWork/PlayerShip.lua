@@ -82,7 +82,7 @@ function PlayerShip:keypressed(key, unicode)
    shot_emit_y=position_y+self:getHeight()/2
 
    if key=="a" then
-     Bullet:new(my_space,shot_emit_x,shot_emit_y,6+x_relative_step,0+y_relative_step)
+     Bullet:new(my_space,shot_emit_x,shot_emit_y,6+x_relative_step,0+y_relative_step,"Resources/red_bullet.png")
    end
 end
 

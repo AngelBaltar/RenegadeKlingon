@@ -10,8 +10,8 @@ Bullet = class('GameFrameWork.Bullet',SpaceObject)
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Bullet:initialize(space,x,y,stepx,stepy)
-  local bullet=love.graphics.newImage("Resources/red_bullet.png")
+function Bullet:initialize(space,x,y,stepx,stepy,bullet_path)
+  local bullet=love.graphics.newImage(bullet_path)
   --3 health for the bullet
   SpaceObject.initialize(self,space,bullet,x,y,3)
   self._xStep=stepx
@@ -29,10 +29,17 @@ function Bullet:die()
   --it only causes explosion if dies because a collision
   --no by out of bounds
   if my_space:isInBounds(self) then
-    Explosion:new(my_space,x,y)
+    Explosion:new(my_space,x,y,0.25,"Resources/fire.png")
   end
   
   SpaceObject.die(self)
+end
+
+function Bullet:collision(object,damage)
+  --avoid bullet with bullet collisions
+  if(not object:isBullet()) then
+    SpaceObject.collision(self,object,damage)
+  end
 end
 
 

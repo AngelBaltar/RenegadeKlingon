@@ -28,4 +28,5 @@ function CreditsScreen:keypressed(key, unicode)
 		self._yPos=0
     	return Screen:getExitMark()
    end
+   return 1
 end

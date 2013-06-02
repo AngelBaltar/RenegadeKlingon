@@ -19,6 +19,20 @@ function Enemy:initialize(space)
   space:placeOnfreeSpace(self)
 end
 
+function Enemy:die()
+  local my_space=SpaceObject.getSpace(self)
+  local x=SpaceObject.getPositionX(self)
+  local y=SpaceObject.getPositionY(self)
+  
+  --it only causes explosion if dies because a collision
+  --no by out of bounds
+  if my_space:isInBounds(self) then
+    Explosion:new(my_space,x+self:getWidth()/2,y+self:getHeight()/2,2.5,"Resources/fire.png")
+  end
+  
+  SpaceObject.die(self)
+end
+
 --return the width of this ship
 function Enemy:getWidth()
   local ship=SpaceObject.getDrawableObject(self)
@@ -51,7 +65,7 @@ function Enemy:pilot(dt)
  self._last_shoot=self._last_shoot+dt
  if(math.abs(position_y-player_y)<5)  then --shoot that guy
     if(self._last_shoot>SHOOT_CADENCE) then
-      Bullet:new(my_space,shot_emit_x,shot_emit_y,-6,0)
+      Bullet:new(my_space,shot_emit_x,shot_emit_y,-6,0,"Resources/blue_bullet.png")
       self._last_shoot=0
     end
  else

@@ -64,6 +64,10 @@ function love.keypressed(key, unicode)
           love.event.push("quit")   -- actually causes the app to quit
         end
         selected_option=mainMenu:keypressed(key, unicode)
+        if(selected_option==PLAY_OPTION) then
+            --create new instance of the game
+            play=GameScreen:new()
+        end
     else
       if(selected_option==PLAY_OPTION) then
            if play:keypressed(key,unicode)==Screen:getExitMark() then

@@ -17,18 +17,23 @@ function GameScreen:initialize()
 end
 
 function GameScreen:draw()
+   local player=self._space:getPlayerShip()
    love.graphics.draw(self._bg, 0, 0)
-	self._space:draw()
+   self._space:draw()
+   if(player==nil)then
+      love.graphics.setColor(255,0,0,255)
+      love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
+   end
 end
 
 function GameScreen:update(dt)
-   self._space:update(dt)
-   player=self._space:getPlayerShip()
-
+  local player=self._space:getPlayerShip()
    --if player dead!
    if(player==nil)then
-   		--return Screen:getExitMark()
-   end
+   		
+  else
+      self._space:update(dt)
+  end
 end
 
 function GameScreen:keypressed(key, unicode)

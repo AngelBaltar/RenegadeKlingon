@@ -9,14 +9,14 @@ Explosion = class('GameFrameWork.Explosion',SpaceObject)
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Explosion:initialize(space,x,y)
-  local particle = love.graphics.newImage("Resources/fire.png")
+function Explosion:initialize(space,x,y,intensity,particle_path)
+  local particle = love.graphics.newImage(particle_path)
   particle:setFilter("nearest","nearest")
 
   local ps = love.graphics.newParticleSystem(particle, 5000)
   ps:stop()
   ps:setEmissionRate(500)
-  ps:setLifetime(0.25)
+  ps:setLifetime(intensity)
   ps:setParticleLife(1)
   ps:setSpread(2*3.1415)
   ps:setRadialAcceleration(-25)
