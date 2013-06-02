@@ -27,7 +27,7 @@ function GameScreen:update(dt)
 
    --if player dead!
    if(player==nil)then
-   		return Screen:getExitMark()
+   		--return Screen:getExitMark()
    end
 end
 

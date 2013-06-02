@@ -89,6 +89,11 @@ function SpaceObject:setHealth(health)
 	end
 end
 
+--gets the drawable object
+function SpaceObject:getDrawableObject()
+	return self._toDraw;
+end
+
 function SpaceObject:collision(object,damage)
 	self:setHealth(self:getHealth()-damage)
 end
@@ -115,7 +120,10 @@ function SpaceObject:isEnemyShip()
 	return false
 end
 
---im the Hud, ovewritting from SpaceObject
 function SpaceObject:isHud()
 	return false
+end
+
+function SpaceObject:isExplosion()
+	return true
 end

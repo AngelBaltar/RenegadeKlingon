@@ -8,8 +8,8 @@ Hud = class('GameFrameWork.Hud',SpaceObject)
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function Hud:initialize(space)
-  self._bar=love.graphics.newImage("Resources/hud.png")
-  SpaceObject.initialize(self,space, self._bar,0,0,200)
+  local bar=love.graphics.newImage("Resources/hud.png")
+  SpaceObject.initialize(self,space, bar,0,0,200)
 end
 
 --return the width of this ship
@@ -19,7 +19,8 @@ end
 
 --return the height of this ship
 function Hud:getHeight()
-	return self._bar:getHeight()
+  local bar=SpaceObject.getDrawableObject(self)
+	return bar:getHeight()
 end
 
 --Performs movements changing the position of the object, firing bullets...

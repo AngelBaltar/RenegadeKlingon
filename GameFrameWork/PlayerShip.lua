@@ -8,19 +8,21 @@ PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function PlayerShip:initialize(space)
-  self._ship=love.graphics.newImage("Resources/destructor_klingon.png")
+  local ship=love.graphics.newImage("Resources/destructor_klingon.png")
   --100 health for the player
-  SpaceObject.initialize(self,space, self._ship,0,400,100)
+  SpaceObject.initialize(self,space, ship,0,400,100)
 end
 
 --return the width of this ship
 function PlayerShip:getWidth()
-	return self._ship:getWidth()
+  local ship=SpaceObject.getDrawableObject(self)
+	return ship:getWidth()
 end
 
 --return the height of this ship
 function PlayerShip:getHeight()
-	return self._ship:getHeight()
+  local ship=SpaceObject.getDrawableObject(self)
+	return ship:getHeight()
 end
 
 --Performs movements changing the position of the object, firing bullets...
@@ -30,8 +32,9 @@ function PlayerShip:pilot(dt)
   local position_y=SpaceObject.getPositionY(self)
   local my_space=SpaceObject.getSpace(self)
 
-  local inf_y=my_space:getYinit()
-  local inf_x=my_space:getXinit()
+  local inf_y=my_space:getYinit()+4
+  local inf_x=my_space:getXinit()+4
+
   local sup_y=my_space:getYend()-self:getHeight()
   local sup_x=my_space:getXend()-self:getWidth()
 
