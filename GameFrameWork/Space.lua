@@ -21,6 +21,9 @@ function Space:removeSpaceObject(object)
 	if(object:isPlayerShip()) then
 		print("removing player");
 	end
+	if(object:isEnemyShip()) then
+		print("removing enemy");
+	end
 	local pos=0
 	local found=false
 	while ((not found) and (pos<self._insertAt)) do
@@ -34,12 +37,12 @@ function Space:removeSpaceObject(object)
 
 	--if found erase it
 	if(found) then
-		i=pos
-		while (i+1<self._insertAt) do
-			self._objectsList[i]=self._objectsList[i+1]
-			i=i+1
-		end
-		self._insertAt=self._insertAt-1
+		  i=pos
+		  while (i+1<self._insertAt) do
+		  	self._objectsList[i]=self._objectsList[i+1]
+		  	i=i+1
+		  end
+		  self._insertAt=self._insertAt-1
 	end
 end
 

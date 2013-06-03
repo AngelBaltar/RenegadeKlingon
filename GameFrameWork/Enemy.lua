@@ -1,6 +1,8 @@
 require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Bullet'
+require 'GameFrameWork/AnimatedExplosion'
+require 'GameFrameWork/ParticleExplosion'
 
 Enemy = class('GameFrameWork.Enemy',SpaceObject)
 
@@ -14,7 +16,7 @@ function Enemy:initialize(space)
   
   self._last_shoot=1
   --100 health for the enemy
-  SpaceObject.initialize(self,space, ship,100,300,500)
+  SpaceObject.initialize(self,space, ship,100,300,100)
   --place it in free space
   space:placeOnfreeSpace(self)
 end
@@ -26,11 +28,12 @@ function Enemy:die()
   
   --it only causes explosion if dies because a collision
   --no by out of bounds
-  if my_space:isInBounds(self) then
-    Explosion:new(my_space,x+self:getWidth()/2,y+self:getHeight()/2,2.5,"Resources/fire.png")
-  end
-  
   SpaceObject.die(self)
+  if my_space:isInBounds(self) then
+    print("enemy dies\n")
+    --ParticleExplosion:new(my_space,x,y,1,"Resources/fire.png")
+    --AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
+  end
 end
 
 --return the width of this ship
