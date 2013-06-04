@@ -16,18 +16,19 @@ function love.load()
    mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2-50)
    mainMenu:addItem("Play")
    mainMenu:addItem("Options")  
-   image=love.graphics.newImage("Resources/kelogo.jpg")
+   image=love.graphics.newImage("Resources/gfx/kelogo.jpg")
    optionsMenu=OptionsScreen:new()
    
    play=GameScreen:new()
 
-   local f = love.graphics.newFont("Resources/klingon_blade.ttf",35)
+   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",35)
    love.graphics.setFont(f)
    love.graphics.setColor(255,255,255,255)
    love.graphics.setBackgroundColor(0,0,0)
 
    love.keyboard.setKeyRepeat(0.03, 0.07)
 end
+
 
 
 function love.update(dt)

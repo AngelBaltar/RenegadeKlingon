@@ -11,7 +11,7 @@ local SHOOT_CADENCE=0.07
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function Enemy:initialize(space)
-  local ship=love.graphics.newImage("Resources/federation1.png")
+  local ship=love.graphics.newImage("Resources/gfx/federation1.png")
   
   self._last_shoot=1
   --100 health for the enemy
@@ -29,7 +29,7 @@ function Enemy:die()
   --no by out of bounds
   SpaceObject.die(self)
   if my_space:isInBounds(self) then
-    AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
+    AnimatedExplosion:new(my_space,x,y,64,64,"Resources/gfx/explosion.png")
   end
 end
 
@@ -65,7 +65,7 @@ function Enemy:pilot(dt)
  self._last_shoot=self._last_shoot+dt
  if(math.abs(position_y-player_y)<5)  then --shoot that guy
     if(self._last_shoot>SHOOT_CADENCE) then
-      Bullet:new(my_space,shot_emit_x,shot_emit_y,-6,0,"Resources/blue_bullet.png")
+      Bullet:new(my_space,shot_emit_x,shot_emit_y,-6,0,"Resources/gfx/blue_bullet.png")
       self._last_shoot=0
     end
  else

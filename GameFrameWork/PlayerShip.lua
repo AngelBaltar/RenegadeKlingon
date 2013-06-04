@@ -9,7 +9,7 @@ PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function PlayerShip:initialize(space)
-  local ship=love.graphics.newImage("Resources/destructor_klingon.png")
+  local ship=love.graphics.newImage("Resources/gfx/destructor_klingon.png")
   --100 health for the player
   SpaceObject.initialize(self,space, ship,0,400,100)
 end
@@ -30,7 +30,7 @@ function PlayerShip:die()
   local my_space=SpaceObject.getSpace(self)
   local x=SpaceObject.getPositionX(self)
   local y=SpaceObject.getPositionY(self)
-  AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
+  AnimatedExplosion:new(my_space,x,y,64,64,"Resources/gfx/explosion.png")
   SpaceObject.die(self)
 end
 
@@ -91,7 +91,7 @@ function PlayerShip:keypressed(key, unicode)
    shot_emit_y=position_y+self:getHeight()/2
 
    if key=="a" then
-     Bullet:new(my_space,shot_emit_x,shot_emit_y,6+x_relative_step,0+y_relative_step,"Resources/red_bullet.png")
+     Bullet:new(my_space,shot_emit_x,shot_emit_y,6+x_relative_step,0+y_relative_step,"Resources/gfx/red_bullet.png")
    end
 end
 

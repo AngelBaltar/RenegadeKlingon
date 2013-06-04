@@ -8,7 +8,7 @@ Hud = class('GameFrameWork.Hud',SpaceObject)
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function Hud:initialize(space)
-  local bar=love.graphics.newImage("Resources/hud.png")
+  local bar=love.graphics.newImage("Resources/gfx/hud.png")
   SpaceObject.initialize(self,space, bar,0,0,200)
 end
 
