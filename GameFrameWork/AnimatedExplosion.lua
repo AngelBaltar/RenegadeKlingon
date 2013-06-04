@@ -11,7 +11,6 @@ AnimatedExplosion = class('GameFrameWork.AnimatedExplosion',Explosion)
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function AnimatedExplosion:initialize(space,x,y,sizex,sizey,animation_path)
-  print("creating new animation\n")
   local spritesheet = love.graphics.newImage(animation_path) --load the spritesheet image
   spritesheet:setFilter("nearest", "nearest") 
   self._sizeX=sizex      
@@ -32,6 +31,6 @@ end
 
 function AnimatedExplosion:draw()
 
-  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,1) 
+  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,2) 
   --draw the animation object at (16, 16), upright (0 degree), and scale it up 4 times
 end

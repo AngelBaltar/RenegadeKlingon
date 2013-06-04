@@ -2,7 +2,6 @@ require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Bullet'
 require 'GameFrameWork/AnimatedExplosion'
-require 'GameFrameWork/ParticleExplosion'
 
 Enemy = class('GameFrameWork.Enemy',SpaceObject)
 
@@ -30,9 +29,7 @@ function Enemy:die()
   --no by out of bounds
   SpaceObject.die(self)
   if my_space:isInBounds(self) then
-    print("enemy dies\n")
-    --ParticleExplosion:new(my_space,x,y,1,"Resources/fire.png")
-    --AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
+    AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
   end
 end
 

@@ -30,7 +30,7 @@ function PlayerShip:die()
   local my_space=SpaceObject.getSpace(self)
   local x=SpaceObject.getPositionX(self)
   local y=SpaceObject.getPositionY(self)
-  --AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
+  AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
   SpaceObject.die(self)
 end
 

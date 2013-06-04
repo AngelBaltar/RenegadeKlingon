@@ -1,7 +1,6 @@
 require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/ParticleExplosion'
-require 'GameFrameWork/AnimatedExplosion'
 
 
 Bullet = class('GameFrameWork.Bullet',SpaceObject)
@@ -31,8 +30,7 @@ function Bullet:die()
   --it only causes explosion if dies because a collision
   --no by out of bounds
   if my_space:isInBounds(self) then
-    --ParticleExplosion:new(my_space,x,y,0.25,"Resources/fire.png")
-    AnimatedExplosion:new(my_space,x,y,64,64,"Resources/explosion.png")
+    ParticleExplosion:new(my_space,x,y,0.25,"Resources/fire.png")
   end
   
   SpaceObject.die(self)

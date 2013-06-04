@@ -15,6 +15,19 @@ function Space:addSpaceObject(object)
 	self._insertAt=self._insertAt+1
 end
 
+function Space:exists(so)
+	local pos=0
+	local found=false
+	while ((not found) and (pos<self._insertAt)) do
+
+		if(self._objectsList[pos]==so) then
+			found=true
+		else
+			pos=pos+1
+		end
+	end
+	return found
+end
 --removes a object from the space
 function Space:removeSpaceObject(object)
 
@@ -85,17 +98,17 @@ local _collisionManagement = function(self,soA,soB)
 
 	local healthA=soA:getHealth()
 	local healthB=soB:getHealth()
-	if(_collisionCheck(self,soA,soB)) then
-			soA:collision(soB,healthB)
-			soB:collision(soA,healthA)
-	end
-
+	soA:collision(soB,healthB)
+	soB:collision(soA,healthA)
 end
 
 --updates the space, call all objects method pilot so they can move shoot...
 function Space:update(dt)
 	local i=0
 	local j=0
+	local collision_arrayA={}
+	local collision_arrayB={}
+	local count=0
 
 	--check game paused
 	if(self._pause) then
@@ -111,16 +124,36 @@ function Space:update(dt)
 	--check collisions between objects
 	i=0
 	j=0
+	count=0
+	--annotate collisions
 	while(i<self._insertAt) do
 		soA=self._objectsList[i]
 		j=i+1
 		while(j<self._insertAt) do
 			soB=self._objectsList[j]
-			_collisionManagement(self,soA,soB)
+
+			if _collisionCheck(self,soA,soB) then
+				collision_arrayA[count]=soA
+				collision_arrayB[count]=soB
+				count=count+1
+			end
 			j=j+1
 		end
 		i=i+1
 	end
+
+	i=0
+	--perform collision hits
+	while(i<count) do
+		soA=collision_arrayA[i]
+		soB=collision_arrayB[i]
+		if self:exists(soA) and self:exists(soB) then
+			_collisionManagement(self,soA,soB)
+		end
+		--in other case soA or soB is dead
+		i=i+1
+	end
+
 end
 
 function Space:keypressed(key, unicode)
