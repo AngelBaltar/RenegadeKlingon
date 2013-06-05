@@ -8,9 +8,15 @@ GameScreen = class('GameScreen',Screen)
 
 
 function GameScreen:initialize()
-    self._bg1=love.graphics.newImage("Resources/gfx/space-1.png")
-    self._bg2=love.graphics.newImage("Resources/gfx/space-2.png")
+    self._bgList={}
+    self._bgList[0]=love.graphics.newImage("Resources/gfx/space-1.png")
+    self._bgList[1]=love.graphics.newImage("Resources/gfx/space-2.png")
+    self._bgList[2]=love.graphics.newImage("Resources/gfx/space-3.png")
+    self._bgList[3]=love.graphics.newImage("Resources/gfx/space-4.png")
     self._bgPos=0
+    self._bgActual=0
+    self._bgSize=4
+    self._bgWidth=self._bgList[0]:getWidth()
     self._space=Space:new()
     Hud:new(self._space)
     PlayerShip:new(self._space)
@@ -19,16 +25,17 @@ function GameScreen:initialize()
 end
 
  local _printBackground=function(self)
-    love.graphics.draw(self._bg1, self._bgPos, 0) -- this is the original image
-    love.graphics.draw(self._bg2, self._bgPos + self._bg1:getWidth(), 0) -- this is the copy that we draw to the original's right
+    love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0) -- this is the original image
+    love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos + self._bgWidth, 0) -- this is the copy that we draw to the original's right
     
     self._bgPos = self._bgPos - 1 -- scrolling the posX to the left
 
-     if self._bgPos*-1 > self._bg1:getWidth() then
+     if self._bgPos*-1 > self._bgWidth then
       self._bgPos = 0
-      imaux=self._bg1
-      self._bg1=self._bg2
-      self._bg2=imaux
+      --imaux=self._bg1
+      --self._bg1=self._bg2
+      --self._bg2=imaux
+      self._bgActual=(self._bgActual+1)%self._bgSize
     end
 end
 
