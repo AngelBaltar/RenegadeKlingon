@@ -4,59 +4,28 @@ Space = class('GameFrameWork.Space')
 
 --creates the space must create only one space for the game
 function Space:initialize()
-    self._insertAt=0
     self._objectsList={}
     self._pause=false
 end
 
 --adds a new SpaceObject to the space
 function Space:addSpaceObject(object)
-	self._objectsList[self._insertAt]=object
-	self._insertAt=self._insertAt+1
+	self._objectsList[object]=true
 end
 
 function Space:exists(so)
 	local pos=0
 	local found=false
-	while ((not found) and (pos<self._insertAt)) do
-
-		if(self._objectsList[pos]==so) then
-			found=true
-		else
-			pos=pos+1
+	for obj,_ in pairs(self._objectsList) do
+		if(obj==so) then
+			return true
 		end
 	end
-	return found
+	return false
 end
 --removes a object from the space
 function Space:removeSpaceObject(object)
-
-	if(object:isPlayerShip()) then
-		print("removing player");
-	end
-	if(object:isEnemyShip()) then
-		print("removing enemy");
-	end
-	local pos=0
-	local found=false
-	while ((not found) and (pos<self._insertAt)) do
-
-		if(self._objectsList[pos]==object) then
-			found=true
-		else
-			pos=pos+1
-		end
-	end
-
-	--if found erase it
-	if(found) then
-		  i=pos
-		  while (i+1<self._insertAt) do
-		  	self._objectsList[i]=self._objectsList[i+1]
-		  	i=i+1
-		  end
-		  self._insertAt=self._insertAt-1
-	end
+	self._objectsList[object]=nil
 end
 
 --draws all the objects in the space
@@ -68,9 +37,8 @@ function Space:draw()
         love.graphics.print("PAUSE",100,100)
 	end
 
-	while(i<self._insertAt) do
-
-		self._objectsList[i]:draw()
+	for obj,_ in pairs(self._objectsList) do
+		obj:draw()
 		i=i+1
 	end
 end
@@ -90,6 +58,10 @@ local _collisionCheck = function(self,soA,soB)
 	local X_contained=(( x1B>=x1A and x1B<=x2A ) or (x2B>=x1A and x2B<=x2A) ) or (( x1A>=x1B and x1A<=x2B ) or (x2A>=x1B and x2A<=x2B) )
 	local Y_contained=(( y1B>=y1A and y1B<=y2A ) or (y2B>=y1A and y2B<=y2A) ) or (( y1A>=y1B and y1A<=y2B ) or (y2A>=y1B and y2A<=y2B) )
 
+	if(soA==soB) then
+		return false
+	end
+
 	return X_contained and Y_contained
 end
 
@@ -104,11 +76,7 @@ end
 
 --updates the space, call all objects method pilot so they can move shoot...
 function Space:update(dt)
-	local i=0
-	local j=0
-	local collision_arrayA={}
-	local collision_arrayB={}
-	local count=0
+	local collision_array={}
 
 	--check game paused
 	if(self._pause) then
@@ -116,42 +84,28 @@ function Space:update(dt)
 	end
 
 	--pilot all the objects
-	while(i<self._insertAt) do
-		self._objectsList[i]:pilot(dt)
-		i=i+1
+	for obj,k in pairs(self._objectsList) do
+		obj:pilot(dt)
 	end
 
 	--check collisions between objects
-	i=0
-	j=0
-	count=0
 	--annotate collisions
-	while(i<self._insertAt) do
-		soA=self._objectsList[i]
-		j=i+1
-		while(j<self._insertAt) do
-			soB=self._objectsList[j]
-
+	for soA,k in pairs(self._objectsList) do
+		for soB,h in pairs(self._objectsList) do
 			if _collisionCheck(self,soA,soB) then
-				collision_arrayA[count]=soA
-				collision_arrayB[count]=soB
-				count=count+1
+				collision_array[{A=soA,B=soB}]=true
 			end
-			j=j+1
 		end
-		i=i+1
 	end
 
-	i=0
 	--perform collision hits
-	while(i<count) do
-		soA=collision_arrayA[i]
-		soB=collision_arrayB[i]
+	for obj,__ in pairs(collision_array) do
+		soA=obj.A
+		soB=obj.B
 		if self:exists(soA) and self:exists(soB) then
 			_collisionManagement(self,soA,soB)
 		end
 		--in other case soA or soB is dead
-		i=i+1
 	end
 
 end
@@ -167,17 +121,17 @@ function Space:keypressed(key, unicode)
 		return
 	end
 
-	while(i<self._insertAt) do
-		self._objectsList[i]:keypressed(key,unicode)
+	for obj,_ in pairs(self._objectsList) do
+		obj:keypressed(key,unicode)
 		i=i+1
 	end
 end
 
 function Space:getPlayerShip()
 	local i=0
-	while(i<self._insertAt) do
-		if self._objectsList[i]:isPlayerShip() then
-			return self._objectsList[i]
+	for obj,_ in pairs(self._objectsList) do
+		if obj:isPlayerShip() then
+			return obj
 		end
 		i=i+1
 	end
@@ -197,11 +151,11 @@ function Space:getYinit()
 	local hud=nil
 	local hud_found=false
 	
-	while(i<self._insertAt and not hud_found) do
-		
-		if(self._objectsList[i]:isHud()) then
+	for obj,_ in pairs(self._objectsList) do	
+		if(obj:isHud()) then
 			hud_found=true
-			hud=self._objectsList[i]
+			hud=obj
+			break
 		else
 			i=i+1
 		end
@@ -225,7 +179,6 @@ function Space:placeOnfreeSpace(so)
 	local step=7
 	local collision_free=true
 
-	print("placing checking "..self._insertAt.."objects\n")
 	while(x < self:getXend()) do
 		y=self:getYinit()
 
@@ -234,9 +187,13 @@ function Space:placeOnfreeSpace(so)
 			so:setPositionY(y)
 			i=0
 			collision_free=true
-			while(i<self._insertAt and collision_free) do
-				if(so~=self._objectsList[i]) then
-					collision_free=collision_free and not _collisionCheck(self,so,self._objectsList[i])
+			--while(i<self._insertAt and collision_free) do
+			for obj,_ in pairs(self._objectsList) do
+				if(not collision_free) then
+					break;
+				end
+				if(so~=obj) then
+					collision_free=collision_free and not _collisionCheck(self,so,obj)
 				end
 				i=i+1
 			end

@@ -52,8 +52,7 @@ function Enemy:pilot(dt)
   local position_y=SpaceObject.getPositionY(self)
   local my_space=SpaceObject.getSpace(self)
   --SpaceObject.setPositionY(self,position_y-1)
-
- local shot_emit_x=position_x-6
+ local shot_emit_x=position_x-15
  local shot_emit_y=position_y+self:getHeight()/2
  local player=my_space:getPlayerShip()
  if(player==nil) then

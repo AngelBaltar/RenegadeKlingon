@@ -32,9 +32,6 @@ end
 
      if self._bgPos*-1 > self._bgWidth then
       self._bgPos = 0
-      --imaux=self._bg1
-      --self._bg1=self._bg2
-      --self._bg2=imaux
       self._bgActual=(self._bgActual+1)%self._bgSize
     end
 end

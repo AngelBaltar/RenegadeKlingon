@@ -68,8 +68,6 @@ function PlayerShip:pilot(dt)
       SpaceObject.setPositionX(self,position_x+step)
     end
    end
-
-
 end
 
 --Read from keyboard
