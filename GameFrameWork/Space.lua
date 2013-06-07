@@ -45,6 +45,16 @@ end
 
 --checks a collision between space object A and B
 local _collisionCheck = function(self,soA,soB)
+	
+	--bullets do not collide
+	if soA:isBullet() and soB:isBullet() then
+		return false
+	end
+
+	if(soA==soB) then
+		return false
+	end
+
 	local x1A = soA:getPositionX()
 	local x2A = soA:getWidth()+x1A
 	local y1A = soA:getPositionY()
@@ -58,9 +68,6 @@ local _collisionCheck = function(self,soA,soB)
 	local X_contained=(( x1B>=x1A and x1B<=x2A ) or (x2B>=x1A and x2B<=x2A) ) or (( x1A>=x1B and x1A<=x2B ) or (x2A>=x1B and x2A<=x2B) )
 	local Y_contained=(( y1B>=y1A and y1B<=y2A ) or (y2B>=y1A and y2B<=y2A) ) or (( y1A>=y1B and y1A<=y2B ) or (y2A>=y1B and y2A<=y2B) )
 
-	if(soA==soB) then
-		return false
-	end
 
 	return X_contained and Y_contained
 end
@@ -172,17 +179,17 @@ function Space:getYend()
 end
 
 --places the object so in a place free of other space Objects
-function Space:placeOnfreeSpace(so)
+function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 	local i=0
-	local x=self:getXend()/2
-	local y=self:getYinit()
+	local x=init_x
+	local y=init_y
 	local step=7
 	local collision_free=true
 
-	while(x < self:getXend()) do
-		y=self:getYinit()
+	while(x < end_x) do
+		y=init_y
 
-		while (y<self:getYend()) do
+		while (y<end_y) do
 			so:setPositionX(x)
 			so:setPositionY(y)
 			i=0

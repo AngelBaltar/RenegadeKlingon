@@ -17,7 +17,6 @@ function Bullet:initialize(space,x,y,stepx,stepy,bullet_path)
   SpaceObject.initialize(self,space,bullet,x,y,3)
   self._xStep=stepx
   self._yStep=stepy
-  self._enabled=true
 
 end
 

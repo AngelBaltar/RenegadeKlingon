@@ -1,7 +1,7 @@
 require 'middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/Space'
-require 'GameFrameWork/Enemy'
+require 'GameFrameWork/RomulanScout'
 require 'GameFrameWork/Hud'
 
 GameScreen = class('GameScreen',Screen)
@@ -20,7 +20,11 @@ function GameScreen:initialize()
     self._space=Space:new()
     Hud:new(self._space)
     PlayerShip:new(self._space)
-    Enemy:new(self._space)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
     --Enemy:new(self._space)
 end
 
