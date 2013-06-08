@@ -1,8 +1,8 @@
+require('Utils/Debugging') love.graphics.setFont(love.graphics.newFont( 12 ))
 require("Utils/Menu")
 require("GameScreens/OptionsScreen")
 require("GameScreens/Screen")
 require("GameScreens/GameScreen")
-
 
 
 local selected_option=0
@@ -12,6 +12,8 @@ local PLAY_OPTION=1
 local OPTIONS_OPTION=2
 
 function love.load()
+
+   DEBUG_PRINT("LOADING GAME...")
 
    mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2-50)
    mainMenu:addItem("Play")

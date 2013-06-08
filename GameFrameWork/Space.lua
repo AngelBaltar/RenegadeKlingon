@@ -1,4 +1,5 @@
 require 'middleclass/middleclass'
+require('Utils/Debugging')
 
 Space = class('GameFrameWork.Space')
 
@@ -34,7 +35,7 @@ function Space:draw()
 
 	if(self._pause) then
 		love.graphics.setColor(255,0,0,255)
-        love.graphics.print("PAUSE",100,100)
+        love.graphics.DEBUG_PRINT("PAUSE",100,100)
 	end
 
 	for obj,_ in pairs(self._objectsList) do
@@ -97,12 +98,20 @@ function Space:update(dt)
 
 	--check collisions between objects
 	--annotate collisions
+	local count_extr=0
+	local count_intr=0
 	for soA,k in pairs(self._objectsList) do
+		count_intr=0
 		for soB,h in pairs(self._objectsList) do
-			if _collisionCheck(self,soA,soB) then
-				collision_array[{A=soA,B=soB}]=true
+
+			if(count_intr>count_extr) then
+				if _collisionCheck(self,soA,soB) then
+					collision_array[{A=soA,B=soB}]=true
+				end
 			end
+			count_intr=count_intr+1
 		end
+		count_extr=count_extr+1
 	end
 
 	--perform collision hits
@@ -205,14 +214,14 @@ function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 				i=i+1
 			end
 			if(collision_free) then
-				print("placing in x= "..x.." y= "..y.."\n")
+				DEBUG_PRINT("placing in x= "..x.." y= "..y.."\n")
 				return true
 			end
 			y=y+step
 		end
 		x=x+step
 	end
-	print("cant place anywhere")
+	DEBUG_PRINT("cant place anywhere")
 	return false
 end
 
@@ -230,4 +239,12 @@ function Space:isInBounds(so)
 	local inbounds_y= y<sup_y and y>inf_y
 
 	return inbounds_x and inbounds_y
+end
+
+function Space:getNumObjects()
+	local count=0
+	for obj,_ in pairs(self._objectsList) do
+		count=count+1
+	end
+	return count
 end
