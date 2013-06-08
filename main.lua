@@ -1,4 +1,4 @@
-require('Utils/Debugging') love.graphics.setFont(love.graphics.newFont( 12 ))
+require('Utils/Debugging')
 require("Utils/Menu")
 require("GameScreens/OptionsScreen")
 require("GameScreens/Screen")

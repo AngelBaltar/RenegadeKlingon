@@ -1,5 +1,5 @@
 require 'middleclass/middleclass'
-require('Utils/Debugging')
+require 'Utils/Debugging'
 
 Space = class('GameFrameWork.Space')
 
@@ -211,9 +211,10 @@ function Space:getYend()
 	return love.graphics.getHeight()
 end
 
+
 --places the object so in a place free of other space Objects
 function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
-	local i=0
+
 	local x=init_x
 	local y=init_y
 	local step=7
@@ -225,17 +226,16 @@ function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 		while (y<end_y) do
 			so:setPositionX(x)
 			so:setPositionY(y)
-			i=0
+
 			collision_free=true
-			--while(i<self._insertAt and collision_free) do
+
 			for obj,_ in pairs(self._objectsList) do
 				if(not collision_free) then
-					break;
+					break
 				end
 				if(so~=obj) then
 					collision_free=collision_free and not _collisionCheck(self,so,obj)
 				end
-				i=i+1
 			end
 			if(collision_free) then
 				DEBUG_PRINT("placing in x= "..x.." y= "..y.."\n")

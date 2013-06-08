@@ -1,4 +1,4 @@
-require 'middleclass/middleclass'
+require 'GameFrameWork/Space'
 
 SpaceObject = class('GameFrameWork.SpaceObject')
 
@@ -132,5 +132,9 @@ function SpaceObject:isHud()
 end
 
 function SpaceObject:isExplosion()
-	return true
+	return false
+end
+
+function SpaceObject:isHarvestableObject()
+	return false
 end

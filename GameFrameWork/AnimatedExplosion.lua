@@ -1,4 +1,3 @@
-require 'middleclass/middleclass'
 require 'GameFrameWork/Explosion'
 require 'Utils/Animation'
 

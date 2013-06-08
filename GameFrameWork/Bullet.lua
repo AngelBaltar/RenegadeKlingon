@@ -1,4 +1,3 @@
-require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/ParticleExplosion'
 

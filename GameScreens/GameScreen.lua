@@ -3,6 +3,8 @@ require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/Space'
 require 'GameFrameWork/RomulanScout'
 require 'GameFrameWork/Hud'
+require 'GameFrameWork/HarvestableObject'
+require 'GameFrameWork/HealthObject'
 
 GameScreen = class('GameScreen',Screen)
 
@@ -25,7 +27,7 @@ function GameScreen:initialize()
     RomulanScout:new(self._space)
     RomulanScout:new(self._space)
     RomulanScout:new(self._space)
-    --Enemy:new(self._space)
+    HealthObject:new(self._space)
 end
 
  local _printBackground=function(self)
@@ -60,13 +62,13 @@ function GameScreen:draw()
   font_ant=love.graphics.getFont()
   love.graphics.setFont(mini_font)
   love.graphics.setColor(0,0,0,100)
-  love.graphics.rectangle("fill",500,500,216,93)
+  love.graphics.rectangle("fill",550,500,216,93)
   love.graphics.setColor(255,255,255,255)
 
   love.graphics.setColor(255,255,255,255)
-  love.graphics.print("FPS: "..love.timer.getFPS(), 520, 510)
-  love.graphics.print("Memory: "..memory.." Mb", 520, 530)
-  love.graphics.print("Entities: "..self._space:getNumObjects(), 520, 550)
+  love.graphics.print("FPS: "..love.timer.getFPS(), 570, 510)
+  love.graphics.print("Memory: "..memory.." Mb", 570, 530)
+  love.graphics.print("Entities: "..self._space:getNumObjects(), 570, 550)
   love.graphics.setFont(font_ant)
 end
 

@@ -1,17 +1,16 @@
-require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Bullet'
 require 'GameFrameWork/AnimatedExplosion'
 
 PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 
+PlayerShip.static.SHIP = love.graphics.newImage("Resources/gfx/destructor_klingon.png")
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function PlayerShip:initialize(space)
-  local ship=love.graphics.newImage("Resources/gfx/destructor_klingon.png")
   --100 health for the player
-  SpaceObject.initialize(self,space, ship,0,400,100)
+  SpaceObject.initialize(self,space, PlayerShip.static.SHIP,0,400,100)
 end
 
 --return the width of this ship

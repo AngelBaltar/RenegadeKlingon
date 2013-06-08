@@ -1,6 +1,4 @@
-require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
-require 'GameFrameWork/Bullet'
 
 Hud = class('GameFrameWork.Hud',SpaceObject)
 

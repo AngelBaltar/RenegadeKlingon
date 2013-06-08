@@ -1,4 +1,3 @@
-require 'middleclass/middleclass'
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Bullet'
 require 'GameFrameWork/Enemy'
@@ -6,15 +5,15 @@ require 'GameFrameWork/AnimatedExplosion'
 
 RomulanScout = class('GameFrameWork.RomulanScout',Enemy)
 
-local SHOOT_CADENCE=0.2
+local SHOOT_CADENCE=0.5
 
+RomulanScout.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanScout.png")
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function RomulanScout:initialize(space)
-  local ship=love.graphics.newImage("Resources/gfx/RomulanScout.png")
   self._last_shoot=1
-  Enemy.initialize(self,space,ship,6)
+  Enemy.initialize(self,space,RomulanScout.static.SHIP,6)
   
 end
 

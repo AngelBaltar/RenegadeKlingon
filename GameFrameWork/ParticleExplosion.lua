@@ -1,4 +1,3 @@
-require 'middleclass/middleclass'
 require 'GameFrameWork/Explosion'
 
 ParticleExplosion = class('GameFrameWork.ParticleExplosion',Explosion)
