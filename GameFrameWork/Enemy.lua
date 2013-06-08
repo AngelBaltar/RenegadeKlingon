@@ -17,7 +17,7 @@ function Enemy:initialize(space,drawable,health)
   --100 health for the enemy
   SpaceObject.initialize(self,space, drawable,100,300,health)
   --place it in free space
-  space:placeOnfreeSpace(self,absolule_end_x-200,absolule_end_x,absolute_init_y,absolule_end_y)
+  space:placeOnfreeSpace(self,absolule_end_x-200,absolule_end_x,absolule_end_y-200,absolule_end_y)
 end
 
 --return the width of this ship

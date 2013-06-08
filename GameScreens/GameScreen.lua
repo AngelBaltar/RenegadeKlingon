@@ -6,7 +6,7 @@ require 'GameFrameWork/Hud'
 
 GameScreen = class('GameScreen',Screen)
 
-
+local mini_font=love.graphics.newFont( 12 )
 function GameScreen:initialize()
     self._bgList={}
     self._bgList[0]=love.graphics.newImage("Resources/gfx/space-1.png")
@@ -58,7 +58,7 @@ function GameScreen:draw()
       love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
    end
   font_ant=love.graphics.getFont()
-  love.graphics.setFont(love.graphics.newFont( 12 ))
+  love.graphics.setFont(mini_font)
   love.graphics.setColor(0,0,0,100)
   love.graphics.rectangle("fill",500,500,216,93)
   love.graphics.setColor(255,255,255,255)

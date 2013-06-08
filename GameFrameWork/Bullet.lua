@@ -5,16 +5,15 @@ require 'GameFrameWork/ParticleExplosion'
 
 Bullet = class('GameFrameWork.Bullet',SpaceObject)
 
-
-
+Bullet.static.BLUE_BULLET = love.graphics.newImage("Resources/gfx/blue_bullet.png")
+Bullet.static.RED_BULLET =love.graphics.newImage("Resources/gfx/red_bullet.png")
 --ps:setColor(255,255,255,255,255,255,255,0)
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Bullet:initialize(space,x,y,stepx,stepy,bullet_path)
-  local bullet=love.graphics.newImage(bullet_path)
+function Bullet:initialize(space,x,y,stepx,stepy,bullet_type)
   --3 health for the bullet
-  SpaceObject.initialize(self,space,bullet,x,y,3)
+  SpaceObject.initialize(self,space,bullet_type,x,y,3)
   self._xStep=stepx
   self._yStep=stepy
 
@@ -48,8 +47,7 @@ function Bullet:getWidth()
   bullet=SpaceObject.getDrawableObject(self)
 	return bullet:getWidth()
 end
-
---return the height of this ship
+--return the height of this shiplove.graphics.newImage("Resources/gfx/blue_bullet.png")
 function Bullet:getHeight()
   bullet=SpaceObject.getDrawableObject(self)
 	return bullet:getHeight()

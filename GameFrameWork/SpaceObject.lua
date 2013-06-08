@@ -78,6 +78,13 @@ function SpaceObject:getHeight()
 
 end
 
+--gets the stimated size of the object to get an idea how big it is
+function SpaceObject:getStimatedSize()
+	local w=self:getWidth()
+	local h=self:getHeight()
+	return math.sqrt(w*w+h*h)
+end
+
 function SpaceObject:getHealth()
 	return self._health;
 end

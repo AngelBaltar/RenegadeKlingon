@@ -45,10 +45,18 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function RomulanScout:pilot(dt)
-   local step=1
+  local step=1
   local position_x=SpaceObject.getPositionX(self)
   local position_y=SpaceObject.getPositionY(self)
   local my_space=SpaceObject.getSpace(self)
+  local direction=-1
+
+  if(position_x>200) then
+    direction=-1
+  end
+  if(position_y<100) then
+    direction=1
+  end
   --SpaceObject.setPositionY(self,position_y-1)
  local shot_emit_x=position_x-15
  local shot_emit_y=position_y+self:getHeight()/2
@@ -63,10 +71,10 @@ function RomulanScout:pilot(dt)
  local delta_y=3*((player_y-position_y)/(math.abs(player_x-position_x)))
  self._last_shoot=self._last_shoot+dt
  if(self._last_shoot>SHOOT_CADENCE) then
-      Bullet:new(my_space,shot_emit_x,shot_emit_y,delta_x,delta_y,"Resources/gfx/blue_bullet.png")
+      Bullet:new(my_space,shot_emit_x,shot_emit_y,delta_x,delta_y,Bullet.static.BLUE_BULLET)
       self._last_shoot=0
  end
- self:setPositionX(position_x+step*-1)
- self:setPositionY(position_y+step)
+ self:setPositionX(position_x+step*direction)
+ --self:setPositionY(position_y+step*direction)
 
 end

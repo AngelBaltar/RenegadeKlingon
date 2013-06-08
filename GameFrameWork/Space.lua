@@ -31,7 +31,6 @@ end
 
 --draws all the objects in the space
 function Space:draw()
-	local i=0
 
 	if(self._pause) then
 		love.graphics.setColor(255,0,0,255)
@@ -40,8 +39,19 @@ function Space:draw()
 
 	for obj,_ in pairs(self._objectsList) do
 		obj:draw()
-		i=i+1
 	end
+end
+
+function Space:getDistance(soA,soB)
+	xa=soA:getPositionX()
+	ya=soA:getPositionY()
+
+	xb=soB:getPositionX()
+	yb=soB:getPositionY()
+
+    ct1=(xa-xb)
+    ct2=(ya-yb)
+	return math.sqrt(ct1*ct1+ct2*ct2)
 end
 
 --checks a collision between space object A and B
@@ -53,6 +63,20 @@ local _collisionCheck = function(self,soA,soB)
 	end
 
 	if(soA==soB) then
+		return false
+	end
+	local max_siz=0
+	local sizA=soA:getStimatedSize()
+	local sizB=soB:getStimatedSize()
+
+	if(sizA>sizB) then
+		max_siz=sizA
+	else
+		max_siz=sizB
+	end
+
+	--a previous filter to get better performance
+	if(self:getDistance(soA,soB)>max_siz+10) then
 		return false
 	end
 
@@ -248,3 +272,4 @@ function Space:getNumObjects()
 	end
 	return count
 end
+
