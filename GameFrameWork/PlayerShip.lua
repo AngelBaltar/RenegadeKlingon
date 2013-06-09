@@ -1,6 +1,7 @@
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Bullet'
-require 'GameFrameWork/AnimatedExplosion'
+require 'GameFrameWork/Explosions/AnimatedExplosion'
+require 'GameFrameWork/Weapons/DestructorKlingonBasicWeapon'
 
 PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 
@@ -11,6 +12,7 @@ PlayerShip.static.SHIP = love.graphics.newImage("Resources/gfx/destructor_klingo
 function PlayerShip:initialize(space)
   --100 health for the player
   SpaceObject.initialize(self,space, PlayerShip.static.SHIP,0,400,100)
+  self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
 end
 
 --return the width of this ship
@@ -79,26 +81,8 @@ end
 --Read from keyboard
 function PlayerShip:keypressed(key, unicode)
 
-   
-   --actualize positions now
-   local position_x=SpaceObject.getPositionX(self)
-   local position_y=SpaceObject.getPositionY(self)
-   local shot_emit_x=position_x+self:getWidth()
-   local shot_emit_y=position_y+self:getHeight()/2
-   local my_space=SpaceObject.getSpace(self)
-   local x_relative_step=0
-   local y_relative_step=0
-
-   local shot_emit_x=0
-   local shot_emit_y=0
-   shot_emit_x=position_x+self:getWidth()+1
-   shot_emit_y=position_y+self:getHeight()/2
-
    if key=="a" then
-     Bullet:new(my_space,self,shot_emit_x,shot_emit_y-self:getHeight()/2-2,
-                    6+x_relative_step,0+y_relative_step,Bullet.static.RED_BULLET)
-     Bullet:new(my_space,self,shot_emit_x,shot_emit_y+self:getHeight()/2-2
-                ,6+x_relative_step,0+y_relative_step,Bullet.static.RED_BULLET)
+    self._basic_weapon:fire()
    end
 end
 

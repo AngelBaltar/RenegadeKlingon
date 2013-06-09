@@ -1,6 +1,6 @@
 require 'GameFrameWork/SpaceObject'
 
-Explosion = class('GameFrameWork.Explosion',SpaceObject)
+Explosion = class('GameFrameWork.Explosions.Explosion',SpaceObject)
 
 
 

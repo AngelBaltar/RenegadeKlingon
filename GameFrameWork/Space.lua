@@ -125,6 +125,49 @@ local _collisionCheck = function(self,soA,soB)
 	return X_contained and Y_contained
 end
 
+
+
+--checks a collision between space object A and B
+--check natural collision, enemies collide enemies...
+--bullets collide bullets ...
+local _naturalCollisionCheck = function(self,soA,soB)
+
+	if(soA==soB) then
+		return false
+	end
+
+	local max_siz=0
+	local sizA=soA:getStimatedSize()
+	local sizB=soB:getStimatedSize()
+
+	if(sizA>sizB) then
+		max_siz=sizA
+	else
+		max_siz=sizB
+	end
+
+	--a previous filter to get better performance
+	if(self:getDistance(soA,soB)>max_siz+10) then
+		return false
+	end
+
+	local x1A = soA:getPositionX()
+	local x2A = soA:getWidth()+x1A
+	local y1A = soA:getPositionY()
+	local y2A = soA:getHeight()+y1A
+
+	local x1B = soB:getPositionX()
+	local x2B = soB:getWidth()+x1B
+	local y1B = soB:getPositionY()
+	local y2B = soB:getHeight()+y1B
+
+	local X_contained=(( x1B>=x1A and x1B<=x2A ) or (x2B>=x1A and x2B<=x2A) ) or (( x1A>=x1B and x1A<=x2B ) or (x2A>=x1B and x2A<=x2B) )
+	local Y_contained=(( y1B>=y1A and y1B<=y2A ) or (y2B>=y1A and y2B<=y2A) ) or (( y1A>=y1B and y1A<=y2B ) or (y2A>=y1B and y2A<=y2B) )
+
+
+	return X_contained and Y_contained
+end
+
 --checks and handles a collision between space object A and B
 local _collisionManagement = function(self,soA,soB) 
 
@@ -265,7 +308,7 @@ function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 					break
 				end
 				if(so~=obj) then
-					collision_free=collision_free and not _collisionCheck(self,so,obj)
+					collision_free=collision_free and not _naturalCollisionCheck(self,so,obj)
 				end
 			end
 			if(collision_free) then
@@ -294,6 +337,16 @@ function Space:isInBounds(so)
 	local inbounds_y= y<sup_y and y>inf_y
 
 	return inbounds_x and inbounds_y
+end
+
+function Space:getAllEnemies()
+	local all_enemies={}
+	for obj,_ in pairs(self._objectsList) do
+		if obj:isEnemyShip() then
+			all_enemies[obj]=true
+		end
+	end
+	return all_enemies
 end
 
 function Space:getNumObjects()

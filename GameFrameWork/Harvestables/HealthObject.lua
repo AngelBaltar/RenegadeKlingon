@@ -1,7 +1,7 @@
-require 'GameFrameWork/HarvestableObject'
+require 'GameFrameWork/Harvestables/HarvestableObject'
 
 
-HealthObject = class('GameFrameWork.HealthObject',HarvestableObject)
+HealthObject = class('GameFrameWork.Harverstables.HealthObject',HarvestableObject)
 
 HealthObject.static.HEALTH_IMG=love.graphics.newImage("Resources/gfx/health.png")
 

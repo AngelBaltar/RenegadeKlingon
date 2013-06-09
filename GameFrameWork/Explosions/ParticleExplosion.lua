@@ -1,6 +1,6 @@
-require 'GameFrameWork/Explosion'
+require 'GameFrameWork/Explosions/Explosion'
 
-ParticleExplosion = class('GameFrameWork.ParticleExplosion',Explosion)
+ParticleExplosion = class('GameFrameWork.Explosions.ParticleExplosion',Explosion)
 
 
 

@@ -1,7 +1,7 @@
-require 'GameFrameWork/Explosion'
+require 'GameFrameWork/Explosions/Explosion'
 require 'Utils/Animation'
 
-AnimatedExplosion = class('GameFrameWork.AnimatedExplosion',Explosion)
+AnimatedExplosion = class('GameFrameWork.Explosions.AnimatedExplosion',Explosion)
 
 
 

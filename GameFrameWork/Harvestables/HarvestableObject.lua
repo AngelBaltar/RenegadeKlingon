@@ -1,6 +1,6 @@
 require 'GameFrameWork/SpaceObject'
 
-HarvestableObject = class('GameFrameWork.HarvestableObject',SpaceObject)
+HarvestableObject = class('GameFrameWork.Harverstables.HarvestableObject',SpaceObject)
 
 --constructor
 function HarvestableObject:initialize(space,drawable,health)
@@ -20,9 +20,7 @@ end
 
 
 function HarvestableObject:collision(object,damage)
-  if object:isPlayerShip() then
       self:die()
-  end
 end
 
 

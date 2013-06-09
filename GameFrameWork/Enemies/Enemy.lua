@@ -1,6 +1,7 @@
 require 'GameFrameWork/SpaceObject'
+require 'Utils/Debugging'
 
-Enemy = class('GameFrameWork.Enemy',SpaceObject)
+Enemy = class('GameFrameWork.Enemies.Enemy',SpaceObject)
 
 
 --constructor
@@ -30,6 +31,7 @@ function Enemy:collision(object,damage)
  if not (object:isBullet() and object:getEmmiter():isEnemyShip())
   and not object:isEnemyShip() then
     SpaceObject.collision(self,object,damage)
+    DEBUG_PRINT("COLLIDING WITH DAMAGE "..damage.."\n")
   end
 end
 

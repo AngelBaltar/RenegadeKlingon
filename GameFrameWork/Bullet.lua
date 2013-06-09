@@ -1,5 +1,5 @@
 require 'GameFrameWork/SpaceObject'
-require 'GameFrameWork/ParticleExplosion'
+require 'GameFrameWork/Explosions/ParticleExplosion'
 
 
 Bullet = class('GameFrameWork.Bullet',SpaceObject)

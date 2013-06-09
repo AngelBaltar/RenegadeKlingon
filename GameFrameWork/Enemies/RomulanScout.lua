@@ -1,11 +1,11 @@
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Bullet'
-require 'GameFrameWork/Enemy'
-require 'GameFrameWork/AnimatedExplosion'
+require 'GameFrameWork/Enemies/Enemy'
+require 'GameFrameWork/Explosions/AnimatedExplosion'
 
-RomulanScout = class('GameFrameWork.RomulanScout',Enemy)
+RomulanScout = class('GameFrameWork.Enemies.RomulanScout',Enemy)
 
-local SHOOT_CADENCE=0.4
+local SHOOT_CADENCE=1.5
 
 RomulanScout.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanScout.png")
 --constructor
@@ -53,11 +53,11 @@ end
 --Performs movements changing the position of the object, firing bullets...
 function RomulanScout:pilot(dt)
   local my_space=self:getSpace()
-  local x_i=my_space:getXinit()
-  local x_e=my_space:getXend()
+  local x_i=my_space:getXend()/2
+  local x_e=my_space:getXend()-self:getWidth()
 
   local y_i=my_space:getYinit()
-  local y_e=my_space:getYend()
+  local y_e=my_space:getYend()-self:getHeight()
 
   local pos_x=self:getPositionX()
   local pos_y=self:getPositionY()

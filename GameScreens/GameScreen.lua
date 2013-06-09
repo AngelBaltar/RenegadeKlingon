@@ -1,10 +1,9 @@
 require 'middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/Space'
-require 'GameFrameWork/RomulanScout'
+require 'GameFrameWork/Enemies/RomulanScout'
 require 'GameFrameWork/Hud'
-require 'GameFrameWork/HarvestableObject'
-require 'GameFrameWork/HealthObject'
+require 'GameFrameWork/Harvestables/HealthObject'
 
 GameScreen = class('GameScreen',Screen)
 
@@ -69,6 +68,12 @@ function GameScreen:draw()
   love.graphics.print("FPS: "..love.timer.getFPS(), 570, 510)
   love.graphics.print("Memory: "..memory.." Mb", 570, 530)
   love.graphics.print("Entities: "..self._space:getNumObjects(), 570, 550)
+  local all_enemies=self._space:getAllEnemies()
+  local count=12
+  for en,_ in pairs(all_enemies) do
+    love.graphics.print("Enemy: "..en:getHealth(), 570, 550+count)
+    count=count+12
+  end
   love.graphics.setFont(font_ant)
 end
 
