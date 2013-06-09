@@ -10,11 +10,12 @@ Bullet.static.RED_BULLET =love.graphics.newImage("Resources/gfx/red_bullet.png")
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Bullet:initialize(space,x,y,stepx,stepy,bullet_type)
+function Bullet:initialize(space,emmiter,x,y,stepx,stepy,bullet_type)
   --3 health for the bullet
   SpaceObject.initialize(self,space,bullet_type,x,y,3)
   self._xStep=stepx
   self._yStep=stepy
+  self._emmiter=emmiter
 
 end
 
@@ -35,7 +36,9 @@ end
 
 function Bullet:collision(object,damage)
   --avoid bullet with bullet collisions
-  if(not object:isBullet()) then
+  if(not object:isBullet()) 
+    and not( object:isEnemyShip() and self._emmiter:isEnemyShip())
+    and not( object:isPlayerShip() and self._emmiter:isPlayerShip()) then
     SpaceObject.collision(self,object,damage)
   end
 end
@@ -64,6 +67,10 @@ function Bullet:pilot(dt)
   SpaceObject.setPositionY(self,y)
   SpaceObject.setPositionX(self,x)
 
+end
+
+function Bullet:getEmmiter()
+  return self._emmiter
 end
 
 --im the bullet, ovewritting from SpaceObject

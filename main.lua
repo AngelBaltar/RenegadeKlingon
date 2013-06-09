@@ -28,7 +28,7 @@ function love.load()
    love.graphics.setColor(255,255,255,255)
    love.graphics.setBackgroundColor(0,0,0)
 
-   love.keyboard.setKeyRepeat(0.03, 0.07)
+   love.keyboard.setKeyRepeat(0.2, 0.1)
 end
 
 

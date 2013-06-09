@@ -5,10 +5,7 @@ AnimatedExplosion = class('GameFrameWork.AnimatedExplosion',Explosion)
 
 
 
---ps:setColor(255,255,255,255,255,255,255,0)
 --constructor
---draw_object must be a drawable
---posx and posy define the initial positions for the object
 function AnimatedExplosion:initialize(space,x,y,sizex,sizey,animation_path)
   local spritesheet = love.graphics.newImage(animation_path) --load the spritesheet image
   spritesheet:setFilter("nearest", "nearest") 

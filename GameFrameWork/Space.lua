@@ -57,14 +57,42 @@ end
 --checks a collision between space object A and B
 local _collisionCheck = function(self,soA,soB)
 	
+	--some of this checks are implemented in subclasses method collision
+	--but returning false here we get more performance
+
 	--bullets do not collide
 	if soA:isBullet() and soB:isBullet() then
+		return false
+	end
+
+	--two enemies do not collide
+	if soA:isEnemyShip() and soB:isEnemyShip() then
+		return false
+	end
+
+	--enemy bullets do not hit enemies
+	if soA:isBullet() and soB:isEnemyShip() and soA:getEmmiter():isEnemyShip() then
+		return false
+	end
+	
+	if soB:isBullet() and soA:isEnemyShip() and soB:getEmmiter():isEnemyShip() then
+		return false
+	end
+
+	--player bullets do not hit player
+	if soA:isBullet() and soB:isPlayerShip() and soA:getEmmiter():isPlayerShip() then
+		return false
+	end
+
+
+	if soB:isBullet() and soA:isPlayerShip() and soB:getEmmiter():isPlayerShip() then
 		return false
 	end
 
 	if(soA==soB) then
 		return false
 	end
+
 	local max_siz=0
 	local sizA=soA:getStimatedSize()
 	local sizB=soB:getStimatedSize()
@@ -219,11 +247,14 @@ function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 	local y=init_y
 	local step=7
 	local collision_free=true
+    local iter_x=0
+    local iter_y=0
 
-	while(x < end_x) do
-		y=init_y
-
-		while (y<end_y) do
+	while(iter_x < 100) do
+		x=init_x+math.random(end_x-init_x)
+		iter_y=0
+		while (iter_y<100) do
+		    y=init_y+math.random(end_y-init_y)
 			so:setPositionX(x)
 			so:setPositionY(y)
 
@@ -241,9 +272,9 @@ function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 				DEBUG_PRINT("placing in x= "..x.." y= "..y.."\n")
 				return true
 			end
-			y=y+step
+			iter_y=iter_y+1
 		end
-		x=x+step
+		iter_x=iter_x+1
 	end
 	DEBUG_PRINT("cant place anywhere")
 	return false

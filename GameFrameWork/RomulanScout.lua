@@ -5,7 +5,7 @@ require 'GameFrameWork/AnimatedExplosion'
 
 RomulanScout = class('GameFrameWork.RomulanScout',Enemy)
 
-local SHOOT_CADENCE=0.5
+local SHOOT_CADENCE=0.4
 
 RomulanScout.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanScout.png")
 --constructor
@@ -14,7 +14,15 @@ RomulanScout.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanScout.pn
 function RomulanScout:initialize(space)
   self._last_shoot=1
   Enemy.initialize(self,space,RomulanScout.static.SHIP,6)
-  
+  self._timer=0
+  self._directionX=-1
+  self._directionY=1
+  local absolute_init_x=space:getXinit()
+  local absolule_end_x=space:getXend()-self:getWidth()
+
+  local absolute_init_y=space:getYinit()
+  local absolule_end_y=space:getYend()-self:getHeight()
+  space:placeOnfreeSpace(self,absolule_end_x-200,absolule_end_x,absolule_end_y-50,absolule_end_y)
 end
 
 function RomulanScout:die()
@@ -44,21 +52,19 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function RomulanScout:pilot(dt)
-  local step=1
-  local position_x=SpaceObject.getPositionX(self)
-  local position_y=SpaceObject.getPositionY(self)
-  local my_space=SpaceObject.getSpace(self)
-  local direction=-1
+  local my_space=self:getSpace()
+  local x_i=my_space:getXinit()
+  local x_e=my_space:getXend()
 
-  if(position_x>200) then
-    direction=-1
-  end
-  if(position_y<100) then
-    direction=1
-  end
-  --SpaceObject.setPositionY(self,position_y-1)
- local shot_emit_x=position_x-15
- local shot_emit_y=position_y+self:getHeight()/2
+  local y_i=my_space:getYinit()
+  local y_e=my_space:getYend()
+
+  local pos_x=self:getPositionX()
+  local pos_y=self:getPositionY()
+  
+
+ local shot_emit_x=pos_x-50
+ local shot_emit_y=pos_y+self:getHeight()/2
  local player=my_space:getPlayerShip()
  if(player==nil) then
     return --no enemy to kill
@@ -67,13 +73,42 @@ function RomulanScout:pilot(dt)
  local player_y=player:getPositionY()
  
  local delta_x=-3
- local delta_y=3*((player_y-position_y)/(math.abs(player_x-position_x)))
+ 
+ local delta_y=3*((player_y-pos_y)/(math.abs(player_x-pos_x)))
  self._last_shoot=self._last_shoot+dt
+ 
  if(self._last_shoot>SHOOT_CADENCE) then
-      Bullet:new(my_space,shot_emit_x,shot_emit_y,delta_x,delta_y,Bullet.static.BLUE_BULLET)
+      Bullet:new(my_space,self,shot_emit_x,shot_emit_y,delta_x,delta_y,Bullet.static.BLUE_BULLET)
       self._last_shoot=0
  end
- self:setPositionX(position_x+step*direction)
- --self:setPositionY(position_y+step*direction)
+
+
+if(self._timer>0.5) then
+    self._directionX=self._directionX*-1
+  end
+
+  if(self._timer>1) then
+    self._directionY=self._directionY*-1
+    self._timer=0
+  end
+
+  if (math.abs(pos_x-x_i)<5) then
+    self._directionX=1
+  end
+
+  if (math.abs(pos_x-x_e)<5) then
+    self._directionX=-1
+  end
+
+  if (math.abs(pos_y-y_i)<5) then
+    self._directionY=1
+  end
+
+  if (math.abs(pos_y-y_e)<5) then
+    self._directionY=-1
+  end
+
+  self:setPositionX(pos_x+self._directionX)
+  self:setPositionY(pos_y+self._directionY)
 
 end

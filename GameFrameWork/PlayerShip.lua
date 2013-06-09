@@ -33,6 +33,13 @@ function PlayerShip:die()
   SpaceObject.die(self)
 end
 
+function PlayerShip:collision(object,damage)
+  --my bullets do not hit me
+  if not ( object:isBullet() and object:getEmmiter():isPlayerShip()) then
+    SpaceObject.collision(self,object,damage)
+  end
+end
+
 --Performs movements changing the position of the object, firing bullets...
 function PlayerShip:pilot(dt)
    local step=4
@@ -43,8 +50,8 @@ function PlayerShip:pilot(dt)
   local inf_y=my_space:getYinit()+4
   local inf_x=my_space:getXinit()+4
 
-  local sup_y=my_space:getYend()-self:getHeight()
-  local sup_x=my_space:getXend()-self:getWidth()
+  local sup_y=my_space:getYend()-self:getHeight()-4
+  local sup_x=my_space:getXend()-self:getWidth()-4
 
   if love.keyboard.isDown("up") then
     if(position_y>inf_y)then
@@ -88,8 +95,10 @@ function PlayerShip:keypressed(key, unicode)
    shot_emit_y=position_y+self:getHeight()/2
 
    if key=="a" then
-     Bullet:new(my_space,shot_emit_x,shot_emit_y-25,6+x_relative_step,0+y_relative_step,Bullet.static.RED_BULLET)
-     Bullet:new(my_space,shot_emit_x,shot_emit_y+25,6+x_relative_step,0+y_relative_step,Bullet.static.RED_BULLET)
+     Bullet:new(my_space,self,shot_emit_x,shot_emit_y-self:getHeight()/2-2,
+                    6+x_relative_step,0+y_relative_step,Bullet.static.RED_BULLET)
+     Bullet:new(my_space,self,shot_emit_x,shot_emit_y+self:getHeight()/2-2
+                ,6+x_relative_step,0+y_relative_step,Bullet.static.RED_BULLET)
    end
 end
 
