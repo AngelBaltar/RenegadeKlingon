@@ -1,5 +1,5 @@
 require 'GameFrameWork/SpaceObject'
-require 'GameFrameWork/Bullet'
+require 'GameFrameWork/Weapons/EnemyBasicWeapon'
 require 'GameFrameWork/Enemies/Enemy'
 require 'GameFrameWork/Explosions/AnimatedExplosion'
 
@@ -23,6 +23,7 @@ function RomulanScout:initialize(space)
   local absolute_init_y=space:getYinit()
   local absolule_end_y=space:getYend()-self:getHeight()
   space:placeOnfreeSpace(self,absolule_end_x-200,absolule_end_x,absolule_end_y-50,absolule_end_y)
+  self._weapon=EnemyBasicWeapon:new(self)
 end
 
 function RomulanScout:die()
@@ -61,24 +62,9 @@ function RomulanScout:pilot(dt)
 
   local pos_x=self:getPositionX()
   local pos_y=self:getPositionY()
-  
-
- local shot_emit_x=pos_x-50
- local shot_emit_y=pos_y+self:getHeight()/2
- local player=my_space:getPlayerShip()
- if(player==nil) then
-    return --no enemy to kill
- end
- local player_x=player:getPositionX()
- local player_y=player:getPositionY()
- 
- local delta_x=-3
- 
- local delta_y=3*((player_y-pos_y)/(math.abs(player_x-pos_x)))
  self._last_shoot=self._last_shoot+dt
- 
  if(self._last_shoot>SHOOT_CADENCE) then
-      Bullet:new(my_space,self,shot_emit_x,shot_emit_y,delta_x,delta_y,Bullet.static.BLUE_BULLET)
+      self._weapon:fire()
       self._last_shoot=0
  end
 

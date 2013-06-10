@@ -4,15 +4,11 @@ require 'GameFrameWork/Explosions/ParticleExplosion'
 
 Bullet = class('GameFrameWork.Bullet',SpaceObject)
 
-Bullet.static.BLUE_BULLET = love.graphics.newImage("Resources/gfx/blue_bullet.png")
-Bullet.static.RED_BULLET =love.graphics.newImage("Resources/gfx/red_bullet.png")
---ps:setColor(255,255,255,255,255,255,255,0)
+
 --constructor
---draw_object must be a drawable
---posx and posy define the initial positions for the object
-function Bullet:initialize(space,emmiter,x,y,stepx,stepy,bullet_type)
+function Bullet:initialize(space,emmiter,x,y,stepx,stepy,health,drawable)
   --3 health for the bullet
-  SpaceObject.initialize(self,space,bullet_type,x,y,3)
+  SpaceObject.initialize(self,space,drawable,x,y,health)
   self._xStep=stepx
   self._yStep=stepy
   self._emmiter=emmiter
@@ -38,21 +34,10 @@ function Bullet:collision(object,damage)
   --avoid bullet with bullet collisions
   if(not object:isBullet()) 
     and not( object:isEnemyShip() and self._emmiter:isEnemyShip())
-    and not( object:isPlayerShip() and self._emmiter:isPlayerShip()) then
+    and not( object:isPlayerShip() and self._emmiter:isPlayerShip())
+    and not (object:isHarvestableObject()) then
     SpaceObject.collision(self,object,damage)
   end
-end
-
-
---return the width of this ship
-function Bullet:getWidth()
-  bullet=SpaceObject.getDrawableObject(self)
-	return bullet:getWidth()
-end
---return the height of this shiplove.graphics.newImage("Resources/gfx/blue_bullet.png")
-function Bullet:getHeight()
-  bullet=SpaceObject.getDrawableObject(self)
-	return bullet:getHeight()
 end
 
 --Performs movements changing the position of the object, firing bullets...

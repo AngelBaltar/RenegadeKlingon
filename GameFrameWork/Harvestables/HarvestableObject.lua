@@ -20,7 +20,9 @@ end
 
 
 function HarvestableObject:collision(object,damage)
+    if not (object:isBullet()) then
       self:die()
+    end
 end
 
 

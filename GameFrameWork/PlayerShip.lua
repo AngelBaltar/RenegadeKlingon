@@ -1,5 +1,4 @@
 require 'GameFrameWork/SpaceObject'
-require 'GameFrameWork/Bullet'
 require 'GameFrameWork/Explosions/AnimatedExplosion'
 require 'GameFrameWork/Weapons/DestructorKlingonBasicWeapon'
 

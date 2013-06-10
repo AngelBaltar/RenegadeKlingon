@@ -166,13 +166,13 @@ end
 --- Get the width of the current frame
 -- @return The width of the current frame
 function animation:getWidth()
-	return self.frames[self.position]:getWidth()
+	return self.fw
 end
 
 --- Get the height of the current frame
 -- @return The height of the current frame
 function animation:getHeight()
-	return self.frames[self.position]:getHeight()
+	return self.fh
 end
 
 function animation:isPlaying()

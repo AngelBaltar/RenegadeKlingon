@@ -89,6 +89,15 @@ local _collisionCheck = function(self,soA,soB)
 		return false
 	end
 
+	--bullets do not hit harvestables
+	if soA:isBullet() and soB:isHarvestableObject() then
+		return false
+	end
+	
+	if soB:isBullet() and soA:isHarvestableObject() then
+		return false
+	end
+
 	if(soA==soB) then
 		return false
 	end
