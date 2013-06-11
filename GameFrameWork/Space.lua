@@ -64,6 +64,11 @@ local _collisionCheck = function(self,soA,soB)
 	if soA:isBullet() and soB:isBullet() then
 		return false
 	end
+	
+	--harvestables do not collide
+	if soA:isHarvestableObject() and soB:isHarvestableObject() then
+		return false
+	end
 
 	--two enemies do not collide
 	if soA:isEnemyShip() and soB:isEnemyShip() then
@@ -95,6 +100,15 @@ local _collisionCheck = function(self,soA,soB)
 	end
 	
 	if soB:isBullet() and soA:isHarvestableObject() then
+		return false
+	end
+
+	--enemies cant hit harvestables
+	if soA:isEnemyShip() and soB:isHarvestableObject() then
+		return false
+	end
+	
+	if soB:isEnemyShip() and soA:isHarvestableObject() then
 		return false
 	end
 

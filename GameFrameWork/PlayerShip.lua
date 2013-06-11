@@ -1,6 +1,7 @@
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Explosions/AnimatedExplosion'
 require 'GameFrameWork/Weapons/DestructorKlingonBasicWeapon'
+require 'GameFrameWork/Weapons/MachineGunWeapon'
 
 PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 
@@ -11,6 +12,7 @@ PlayerShip.static.SHIP = love.graphics.newImage("Resources/gfx/destructor_klingo
 function PlayerShip:initialize(space)
   --100 health for the player
   SpaceObject.initialize(self,space, PlayerShip.static.SHIP,0,400,100)
+  self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
   self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
 end
 
@@ -24,6 +26,11 @@ end
 function PlayerShip:getHeight()
   local ship=SpaceObject.getDrawableObject(self)
 	return ship:getHeight()
+end
+
+function PlayerShip:setWeapon(weapon)
+  self._basic_weapon=weapon
+  weapon:setAttachedShip(self)
 end
 
 function PlayerShip:die()
@@ -75,14 +82,15 @@ function PlayerShip:pilot(dt)
       SpaceObject.setPositionX(self,position_x+step)
     end
    end
+  if love.keyboard.isDown("a") then
+    self._basic_weapon:fire()
+   end
 end
 
 --Read from keyboard
 function PlayerShip:keypressed(key, unicode)
 
-   if key=="a" then
-    self._basic_weapon:fire()
-   end
+ 
 end
 
 --im the player, ovewritting from SpaceObject

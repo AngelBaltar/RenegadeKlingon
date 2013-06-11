@@ -5,14 +5,12 @@ require 'GameFrameWork/Explosions/AnimatedExplosion'
 
 RomulanScout = class('GameFrameWork.Enemies.RomulanScout',Enemy)
 
-local SHOOT_CADENCE=1.5
 
 RomulanScout.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanScout.png")
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function RomulanScout:initialize(space)
-  self._last_shoot=1
   Enemy.initialize(self,space,RomulanScout.static.SHIP,6)
   self._timer=0
   self._directionX=-1
@@ -62,11 +60,8 @@ function RomulanScout:pilot(dt)
 
   local pos_x=self:getPositionX()
   local pos_y=self:getPositionY()
- self._last_shoot=self._last_shoot+dt
- if(self._last_shoot>SHOOT_CADENCE) then
-      self._weapon:fire()
-      self._last_shoot=0
- end
+  
+  self._weapon:fire()
 
 
 if(self._timer>0.5) then

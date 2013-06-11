@@ -6,10 +6,10 @@ DestructorKlingonBasicWeapon = class('GameFrameWork.Weapons.DestructorKlingonBas
 
 --constructor
 function DestructorKlingonBasicWeapon:initialize(destructor_klingon)
-	Weapon.initialize(self,destructor_klingon)
+	Weapon.initialize(self,destructor_klingon,0.06)
 end
 
-function DestructorKlingonBasicWeapon:fire()
+function DestructorKlingonBasicWeapon:doFire()
    local my_ship=self:getAttachedShip()
    local my_space=my_ship:getSpace()
 
@@ -20,10 +20,9 @@ function DestructorKlingonBasicWeapon:fire()
    local x_relative_step=0
    local y_relative_step=0
 
-	 -- SimpleBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y-my_ship:getHeight()/2-2,
-  --                   6+x_relative_step,0+y_relative_step,SimpleBullet.static.RED_BULLET)
-  --  SimpleBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y+my_ship:getHeight()/2-2
-  --               ,6+x_relative_step,0+y_relative_step,SimpleBullet.static.RED_BULLET)ç
-    AnimatedBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y-my_ship:getHeight()/2-2,
-                     6+x_relative_step,0+y_relative_step,AnimatedBullet.static.BLUE_ANIMATED)
+	  SimpleBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y-my_ship:getHeight()/2-2,
+                     6+x_relative_step,0+y_relative_step,SimpleBullet.static.RED_BULLET)
+    SimpleBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y+my_ship:getHeight()/2-2
+               ,6+x_relative_step,0+y_relative_step,SimpleBullet.static.RED_BULLET)
+   
 end

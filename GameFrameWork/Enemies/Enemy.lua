@@ -29,7 +29,8 @@ end
 function Enemy:collision(object,damage)
   --other enemies bullets do not hit me
  if not (object:isBullet() and object:getEmmiter():isEnemyShip())
-  and not object:isEnemyShip() then
+  and not object:isEnemyShip() and
+  not object:isHarvestableObject() then
     SpaceObject.collision(self,object,damage)
     DEBUG_PRINT("COLLIDING WITH DAMAGE "..damage.."\n")
   end

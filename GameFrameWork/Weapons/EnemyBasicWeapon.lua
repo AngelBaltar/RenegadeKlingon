@@ -5,10 +5,11 @@ EnemyBasicWeapon = class('GameFrameWork.Weapons.EnemyBasicWeapon',Weapon)
 
 --constructor
 function EnemyBasicWeapon:initialize(enemie)
-	Weapon.initialize(self,enemie)
+	--cadence 1.2 seconds
+  Weapon.initialize(self,enemie,0.7)
 end
 
-function EnemyBasicWeapon:fire()
+function EnemyBasicWeapon:doFire()
    local my_ship=self:getAttachedShip()
    local my_space=my_ship:getSpace()
 

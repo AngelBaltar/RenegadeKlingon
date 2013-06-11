@@ -4,6 +4,7 @@ require 'GameFrameWork/Space'
 require 'GameFrameWork/Enemies/RomulanScout'
 require 'GameFrameWork/Hud'
 require 'GameFrameWork/Harvestables/HealthObject'
+require 'GameFrameWork/Harvestables/WeaponObject'
 
 GameScreen = class('GameScreen',Screen)
 
@@ -27,6 +28,7 @@ function GameScreen:initialize()
     RomulanScout:new(self._space)
     RomulanScout:new(self._space)
     HealthObject:new(self._space)
+    WeaponObject:new(self._space,WeaponObject.static.MACHINE_GUN)
 end
 
  local _printBackground=function(self)
