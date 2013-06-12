@@ -14,19 +14,24 @@ weapons_tab[WeaponObject.static.MACHINE_GUN]={
 												size_y=18,
 												n_steps=4,
 												mode="loop",
+                        delay=0.3,
+                        zoom=3,
 												weapon=WP_MACHINEGUN}
 
 --constructor
 function WeaponObject:initialize(space,weapon_type)
 
  self._animation = newAnimation(weapon_type,
-  					weapons_tab[weapon_type].size_x,
-  					weapons_tab[weapon_type].size_y, 0.2, weapons_tab[weapon_type].n_steps)
+  					                   weapons_tab[weapon_type].size_x,
+  					                   weapons_tab[weapon_type].size_y,
+                               weapons_tab[weapon_type].delay,
+                               weapons_tab[weapon_type].n_steps)
   self._animation:setMode(weapons_tab[weapon_type].mode)
 
   if(weapons_tab[weapon_type].weapon==WP_MACHINEGUN) then
   	self._weapon=MachineGunWeapon:new(nil)
   end
+  self._zoom=weapons_tab[weapon_type].zoom
   HarvestableObject.initialize(self,space,weapon_type,0)
 
 end
@@ -45,14 +50,14 @@ end
 
 --return the width of this ship
 function WeaponObject:getWidth()
-  return self._animation:getWidth()
+  return self._animation:getWidth()*self._zoom
 end
 
 function WeaponObject:getHeight()
-  return self._animation:getHeight()
+  return self._animation:getHeight()*self._zoom
 end
 
 function WeaponObject:draw()
 
-  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,3) 
+  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom) 
 end

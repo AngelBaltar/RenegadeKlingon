@@ -36,6 +36,19 @@ function Enemy:collision(object,damage)
   end
 end
 
+function Enemy:die()
+  local my_space=SpaceObject.getSpace(self)
+  local x=SpaceObject.getPositionX(self)
+  local y=SpaceObject.getPositionY(self)
+  
+  --it only causes explosion if dies because a collision
+  --no by out of bounds
+  SpaceObject.die(self)
+  if my_space:isInBounds(self) then
+    AnimatedExplosion:new(my_space,x,y)
+  end
+end
+
 --Performs movements changing the position of the object, firing bullets...
 function Enemy:pilot(dt)
 

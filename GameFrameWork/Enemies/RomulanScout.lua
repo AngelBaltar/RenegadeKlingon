@@ -24,19 +24,6 @@ function RomulanScout:initialize(space)
   self._weapon=EnemyBasicWeapon:new(self)
 end
 
-function RomulanScout:die()
-  local my_space=SpaceObject.getSpace(self)
-  local x=SpaceObject.getPositionX(self)
-  local y=SpaceObject.getPositionY(self)
-  
-  --it only causes explosion if dies because a collision
-  --no by out of bounds
-  SpaceObject.die(self)
-  if my_space:isInBounds(self) then
-    AnimatedExplosion:new(my_space,x,y,64,64,"Resources/gfx/explosion.png")
-  end
-end
-
 --return the width of this ship
 function RomulanScout:getWidth()
   local ship=SpaceObject.getDrawableObject(self)
