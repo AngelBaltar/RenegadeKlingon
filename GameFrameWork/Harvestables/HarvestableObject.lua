@@ -89,8 +89,8 @@ function HarvestableObject:pilot(dt)
     self._directionY=-1
   end
 
-  self:setPositionX(pos_x+self._directionX)
-  self:setPositionY(pos_y+self._directionY)
+  --self:setPositionX(pos_x+self._directionX)
+  --self:setPositionY(pos_y+self._directionY)
 
 end
 

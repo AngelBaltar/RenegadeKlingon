@@ -7,8 +7,43 @@ Space = class('GameFrameWork.Space')
 function Space:initialize()
     self._objectsList={}
     self._pause=false
+
+    self._bgList={}
+    self._bgSize=0
+    self._bgPos=0
+    self._bgActual=0
 end
 
+function Space:addBackGroundImage(path_to_image)
+	self._bgList[self._bgSize]=love.graphics.newImage(path_to_image)
+	self._bgSize=self._bgSize+1
+end
+
+function Space:clearBackGroundImages()
+	self._bgSize=0
+end
+
+function Space:getBackGroundWidth()
+	if(self._bgSize>0) then
+		return self._bgList[0]:getWidth()
+	else
+		return 0
+	end
+end
+
+function Space:getBackGroundHeight()
+	if(self._bgSize>0) then
+		return self._bgList[0]:getHeight()
+	else
+		return 0
+	end
+end
+
+--returns the x axis position that makes background to
+--move
+function Space:getPlayerBackGroundScroll()
+	return self:getBackGroundWidth()/2
+end
 --adds a new SpaceObject to the space
 function Space:addSpaceObject(object)
 	self._objectsList[object]=true
@@ -29,6 +64,41 @@ function Space:removeSpaceObject(object)
 	self._objectsList[object]=nil
 end
 
+local _printBackground=function(self)
+	local size=self:getBackGroundWidth()
+	local player=self:getPlayerShip()
+	local delta_x=0
+	local player_x=0
+
+    love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0) -- this is the left image
+    love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
+    								+ size, 0) -- this is the right image
+    if (not self._pause)
+      and player~=nil 
+      and player:getPositionX()>=self:getPlayerBackGroundScroll() then
+
+      	player_x=player:getPositionX()
+      	delta_x=player:getPositionX()-self:getPlayerBackGroundScroll()
+      	-- scrolling the posX to the left
+      	if delta_x<=0 then
+    		self._bgPos = self._bgPos - 1 
+    	elseif delta_x<=40 then
+    		self._bgPos = self._bgPos - 2
+    	elseif delta_x<=80 then
+    		self._bgPos = self._bgPos - 3
+    	else
+    		self._bgPos = self._bgPos - 4
+    	end
+
+    	--love.graphics.translate( self._bgPos, 0)
+	end
+
+     if self._bgPos*-1 > self:getBackGroundWidth() then
+      self._bgPos = 0
+      self._bgActual=(self._bgActual+1)%self._bgSize
+    end
+end
+
 --draws all the objects in the space
 function Space:draw()
 
@@ -36,6 +106,8 @@ function Space:draw()
 		love.graphics.setColor(255,0,0,255)
         love.graphics.DEBUG_PRINT("PAUSE",100,100)
 	end
+
+	_printBackground(self)
 
 	for obj,_ in pairs(self._objectsList) do
 		obj:draw()
