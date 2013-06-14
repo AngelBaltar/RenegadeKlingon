@@ -6,6 +6,7 @@ require 'GameFrameWork/Hud'
 require 'GameFrameWork/Harvestables/HealthObject'
 require 'GameFrameWork/Harvestables/WeaponObject'
 require 'GameFrameWork/TileBlock'
+require 'Utils/Debugging'
 
 GameScreen = class('GameScreen',Screen)
 
@@ -19,10 +20,10 @@ function GameScreen:initialize()
     Hud:new(self._space)
     PlayerShip:new(self._space)
     HealthObject:new(self._space)
-    TileBlock:new(self._space,"Resources/gfx/block1.png",600,500)
-    TileBlock:new(self._space,"Resources/gfx/block1.png",600-65,500)
-    TileBlock:new(self._space,"Resources/gfx/block1.png",600-2*65,500)
-    TileBlock:new(self._space,"Resources/gfx/block1.png",600-3*65,500)
+    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600,500)
+    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600-65,500)
+    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600-2*65,500)
+    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600-3*65,500)
     WeaponObject:new(self._space,WeaponObject.static.MACHINE_GUN)
     RomulanScout:new(self._space)
     RomulanScout:new(self._space)
@@ -49,23 +50,25 @@ function GameScreen:draw()
       love.graphics.setColor(255,0,0,255)
       love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
    end
-  font_ant=love.graphics.getFont()
-  love.graphics.setFont(mini_font)
-  love.graphics.setColor(0,0,0,100)
-  love.graphics.rectangle("fill",550,500,216,93)
-  love.graphics.setColor(255,255,255,255)
+   if getDebug() then
+    font_ant=love.graphics.getFont()
+    love.graphics.setFont(mini_font)
+    love.graphics.setColor(0,0,0,100)
+    love.graphics.rectangle("fill",550,500,216,93)
+    love.graphics.setColor(255,255,255,255)
 
-  love.graphics.setColor(255,255,255,255)
-  love.graphics.print("FPS: "..love.timer.getFPS(), 570, 510)
-  love.graphics.print("Memory: "..memory.." Mb", 570, 530)
-  love.graphics.print("Entities: "..self._space:getNumObjects(), 570, 550)
-  local all_enemies=self._space:getAllEnemies()
-  local count=12
-  for en,_ in pairs(all_enemies) do
-    love.graphics.print("Enemy: "..en:getHealth(), 570, 550+count)
-    count=count+12
+    love.graphics.setColor(255,255,255,255)
+    love.graphics.print("FPS: "..love.timer.getFPS(), 570, 510)
+    love.graphics.print("Memory: "..memory.." Mb", 570, 530)
+    love.graphics.print("Entities: "..self._space:getNumObjects(), 570, 550)
+    local all_enemies=self._space:getAllEnemies()
+    local count=12
+    for en,_ in pairs(all_enemies) do
+      love.graphics.print("Enemy: "..en:getHealth(), 570, 550+count)
+      count=count+12
+    end
+    love.graphics.setFont(font_ant)
   end
-  love.graphics.setFont(font_ant)
 end
 
 function GameScreen:update(dt)

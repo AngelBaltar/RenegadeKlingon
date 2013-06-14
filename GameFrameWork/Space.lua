@@ -3,11 +3,36 @@ require 'Utils/Debugging'
 
 Space = class('GameFrameWork.Space')
 
+local BUCKET_SIZE=50
+local SIZE_BUCKETS_X=0
+local SIZE_BUCKETS_Y=0
+
+local SCREEN_WD=love.graphics.getWidth()
+local SCREEN_HT=love.graphics.getHeight()
+
 --creates the space must create only one space for the game
 function Space:initialize()
+    --space implementation
     self._objectsList={}
+
+    --collision system implementation
+    self._buckets={}
+
+    --create empty list of buckets
+    
+    SIZE_BUCKETS_X=(SCREEN_WD/BUCKET_SIZE)
+    SIZE_BUCKETS_Y=(SCREEN_HT/BUCKET_SIZE)
+     for i=0,SIZE_BUCKETS_X do
+     	self._buckets[i]={}
+     	for j=0,SIZE_BUCKETS_Y do
+     		self._buckets[i][j]={}
+     	end
+     end
+
+    --pause implementation
     self._pause=false
 
+    --background implementation
     self._bgList={}
     self._bgSize=0
     self._bgPos=0
@@ -16,6 +41,84 @@ function Space:initialize()
     self._bgTimingCadence=1
 end
 
+function Space:getBucketFor(so)
+	local bc_x=-1
+	local bc_y=-1
+	local found=false
+	DEBUG_PRINT("searching bucket")
+	--search for so
+	for i=0,SIZE_BUCKETS_X do
+		for j=0,SIZE_BUCKETS_Y do
+			for obj,_ in pairs(self._buckets[i][j]) do
+				if obj==so then
+					found=true
+					bc_x=i
+					bc_y=j
+				end
+				if found then 
+					break
+				end
+			end
+			if found then 
+				break
+			end
+		end
+		if found then 
+			break
+		end
+	end
+	if found then
+		return bc_x,bc_y
+	else
+		return -1,-1
+	end
+end
+
+function Space:removeFromBuckets(so)
+	local bc_x=0
+	local bc_y=0
+	bc_x,bc_y=self:getBucketFor(so)
+	local found=(bc_x~=-1 and bc_y~=-1)
+
+	if found then
+		self._buckets[bc_x][bc_y][so]=nil
+	end
+end
+function Space:updateBucketFor(so)
+	local bc_x_old=0
+	local bc_y_old=0
+	bc_x_old,bc_y_old=self:getBucketFor(so)
+
+	local found=(bc_x_old~=-1 and bc_y_old~=-1)
+	
+	local x=so:getPositionX()
+	local y=so:getPositionY()
+	local bc_x_new=math.floor(x/BUCKET_SIZE)
+	local bc_y_new=math.floor(y/BUCKET_SIZE)
+
+	--this object will die because an out of bounds
+	if bc_x_new<0 or bc_y_new<0 then
+		return
+	end
+	if bc_x_new>SIZE_BUCKETS_X or bc_y_new>SIZE_BUCKETS_Y then
+		return 
+	end
+
+
+	if found then
+		--if it is a bucket change, drop the old and insert the new
+		if not (bc_x_new==bc_x_old and bc_y_new==bc_y_old) then
+			self._buckets[bc_x_old][bc_y_old][so]=nil
+			DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
+			self._buckets[bc_x_new][bc_y_new][so]=true
+		end
+	else
+		--it was not in a bucket add it
+		DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
+		self._buckets[bc_x_new][bc_y_new][so]=true
+	end
+
+end
 function Space:addBackGroundImage(path_to_image)
 	self._bgList[self._bgSize]=love.graphics.newImage(path_to_image)
 	self._bgSize=self._bgSize+1
@@ -49,6 +152,7 @@ end
 --adds a new SpaceObject to the space
 function Space:addSpaceObject(object)
 	self._objectsList[object]=true
+	self:updateBucketFor(object)
 end
 
 function Space:exists(so)
@@ -64,6 +168,8 @@ end
 --removes a object from the space
 function Space:removeSpaceObject(object)
 	self._objectsList[object]=nil
+	self:removeFromBuckets(object)
+
 end
 
 local _printBackground=function(self)
@@ -119,7 +225,7 @@ function Space:draw()
 
 	if(self._pause) then
 		love.graphics.setColor(255,0,0,255)
-        love.graphics.DEBUG_PRINT("PAUSE",100,100)
+        love.graphics.print("PAUSE",100,100)
 	end
 
 	_printBackground(self)
@@ -304,21 +410,38 @@ function Space:update(dt)
 
 	--check collisions between objects
 	--annotate collisions
-	local count_extr=0
-	local count_intr=0
-	for soA,k in pairs(self._objectsList) do
-		count_intr=0
-		for soB,h in pairs(self._objectsList) do
+	--old collision system
 
-			if(count_intr>count_extr) then
-				if _collisionCheck(self,soA,soB) then
-					collision_array[{A=soA,B=soB}]=true
-				end
-			end
-			count_intr=count_intr+1
-		end
-		count_extr=count_extr+1
-	end
+	-- local count_extr=0
+	-- local count_intr=0
+	-- for soA,k in pairs(self._objectsList) do
+	-- 	count_intr=0
+	-- 	for soB,h in pairs(self._objectsList) do
+
+	-- 		if(count_intr>count_extr) then
+	-- 			if _collisionCheck(self,soA,soB) then
+	-- 				collision_array[{A=soA,B=soB}]=true
+	-- 			end
+	-- 		end
+	-- 		count_intr=count_intr+1
+	-- 	end
+	-- 	count_extr=count_extr+1
+	-- end
+
+	 for i=0,SIZE_BUCKETS_X do
+     	for j=0,SIZE_BUCKETS_Y do
+     		for soA,kk in pairs(self._buckets[i][j]) do
+     			--TODO check neightbours too
+     			for soB,ku in pairs(self._buckets[i][j]) do
+     				if soA~=soB then
+     					if _collisionCheck(self,soA,soB) then
+	 						collision_array[{A=soA,B=soB}]=true
+	 					end
+     				end
+     			end
+     		end
+     	end
+     end
 
 	--perform collision hits
 	for obj,__ in pairs(collision_array) do

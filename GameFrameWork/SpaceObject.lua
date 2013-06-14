@@ -7,10 +7,10 @@ SpaceObject = class('GameFrameWork.SpaceObject')
 --posx and posy define the initial positions for the object
 function SpaceObject:initialize(space,draw_object,posx,posy,health)
   self._toDraw=draw_object
-  self._xPos=posx
-  self._yPos=posy
   self._space=space
   self._health=health
+  self._xPos=posx
+  self._yPos=posy
   space:addSpaceObject(self)
 end
 
@@ -52,19 +52,30 @@ end
 function SpaceObject:setPositionX(x)
 	local x_inf=self._space:getXinit()
 	local x_sup=self._space:getXend()
+	local x_old=self._xPos
 	self._xPos=x
 	if(x<x_inf) or (x>x_sup) then
 		self:die()
+	else
+		if x_old~=x then
+			self._space:updateBucketFor(self)
+		end
 	end
+
 end
 
 --sets the Y coordenate
 function SpaceObject:setPositionY(y)
 	local y_inf=self._space:getYinit()
 	local y_sup=self._space:getYend()
+	local y_old=self._yPos
 	self._yPos=y
 	if(y<y_inf) or (y>y_sup) then
 		self:die()
+	else
+		if y~=y_old then
+			self._space:updateBucketFor(self)
+		end
 	end
 end
 

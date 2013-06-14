@@ -12,7 +12,7 @@ local PLAY_OPTION=1
 local OPTIONS_OPTION=2
 
 function love.load()
-
+DEBUG_PRINT("searching bucket")
    DEBUG_PRINT("LOADING GAME...")
 
    mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2-50)
@@ -62,6 +62,13 @@ end
 
 function love.keypressed(key, unicode)
 
+    if(key=='o') then
+      if getDebug() then
+        disableDebug()
+      else
+        enableDebug()
+      end
+    end
     if(selected_option==NONE_OPTION) then
         if(key=="escape") then
           love.event.push("quit")   -- actually causes the app to quit
