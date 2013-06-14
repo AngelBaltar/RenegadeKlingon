@@ -225,7 +225,7 @@ end
 --checks a collision between space object A and B
 --check natural collision, enemies collide enemies...
 --bullets collide bullets ...
-local _naturalCollisionCheck = function(self,soA,soB)
+function Space:naturalCollisionCheck(soA,soB)
 
 	if(soA==soB) then
 		return false
@@ -403,7 +403,7 @@ function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 					break
 				end
 				if(so~=obj) then
-					collision_free=collision_free and not _naturalCollisionCheck(self,so,obj)
+					collision_free=collision_free and not self:naturalCollisionCheck(so,obj)
 				end
 			end
 			if(collision_free) then
@@ -442,6 +442,16 @@ function Space:getAllEnemies()
 		end
 	end
 	return all_enemies
+end
+
+function Space:getAllTileBlocks()
+	local all_tiles={}
+	for obj,_ in pairs(self._objectsList) do
+		if obj:isTileBlock() then
+			all_tiles[obj]=true
+		end
+	end
+	return all_tiles
 end
 
 function Space:getNumObjects()

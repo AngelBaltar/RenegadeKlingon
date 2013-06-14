@@ -138,3 +138,7 @@ end
 function SpaceObject:isHarvestableObject()
 	return false
 end
+
+function SpaceObject:isTileBlock()
+	return false
+end

@@ -18,14 +18,15 @@ function GameScreen:initialize()
     self._space:addBackGroundImage("Resources/gfx/space-4.png")
     Hud:new(self._space)
     PlayerShip:new(self._space)
-    RomulanScout:new(self._space)
-    RomulanScout:new(self._space)
-    RomulanScout:new(self._space)
-    RomulanScout:new(self._space)
-    RomulanScout:new(self._space)
     HealthObject:new(self._space)
-    TileBlock:new(self._space,"Resources/gfx/block1.png",500,500)
+    TileBlock:new(self._space,"Resources/gfx/block1.png",600,500)
     WeaponObject:new(self._space,WeaponObject.static.MACHINE_GUN)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
+    RomulanScout:new(self._space)
+    
 
 end
 

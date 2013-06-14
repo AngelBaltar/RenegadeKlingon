@@ -20,7 +20,7 @@ function RomulanScout:initialize(space)
 
   local absolute_init_y=space:getYinit()
   local absolule_end_y=space:getYend()-self:getHeight()
-  space:placeOnfreeSpace(self,absolule_end_x-200,absolule_end_x,absolule_end_y-50,absolule_end_y)
+  space:placeOnfreeSpace(self,absolule_end_x-200,absolule_end_x,absolule_end_y-400,absolule_end_y)
   self._weapon=EnemyBasicWeapon:new(self)
 end
 
@@ -47,6 +47,13 @@ function RomulanScout:pilot(dt)
 
   local pos_x=self:getPositionX()
   local pos_y=self:getPositionY()
+  local tile_blocks=my_space:getAllTileBlocks()
+  local collision=false
+  local rnd1=0
+  local rnd2=0
+  local rnd3=0
+  local dir1=1
+  local dir2=1
   
   self._weapon:fire()
 
@@ -78,5 +85,45 @@ if(self._timer>0.5) then
 
   self:setPositionX(pos_x+self._directionX)
   self:setPositionY(pos_y+self._directionY)
+
+  collision=false
+  for obj,_ in pairs(tile_blocks) do
+    collision=collision or my_space:naturalCollisionCheck(obj,self)
+    if collision then
+      break
+    end
+  end
+
+while collision do
+  rnd1=math.random(5)
+  rnd2=math.random()
+  rnd3=math.random()
+  self._timer=0
+  
+ 
+  if(rnd3>0.5) then
+    dir1=1
+    self._directionX=self._directionX*-1
+  else
+    dir1=-1
+  end
+
+  if(rnd2>0.5) then
+    dir2=1
+     self._directionY=self._directionY*-1
+  else
+    dir2=-1
+  end
+
+  self:setPositionX(pos_x+rnd1*dir1)
+  self:setPositionY(pos_y+rnd1*dir2)
+  collision=false
+  for obj,_ in pairs(tile_blocks) do
+    collision=collision or my_space:naturalCollisionCheck(obj,self)
+    if collision then
+      break
+    end
+  end
+end
 
 end

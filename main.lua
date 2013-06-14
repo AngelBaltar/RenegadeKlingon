@@ -1,4 +1,4 @@
-local player=require('Utils/Debugging')
+require('Utils/Debugging')
 require("Utils/Menu")
 require("GameScreens/OptionsScreen")
 require("GameScreens/Screen")
