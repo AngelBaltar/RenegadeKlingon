@@ -6,7 +6,8 @@ TileBlock = class('GameFrameWork.Harverstables.TileBlock',SpaceObject)
 function TileBlock:initialize(space,tile_img_path,x,y)
   local tile_img=love.graphics.newImage(tile_img_path)
   SpaceObject.initialize(self,space,tile_img,x,y,5000)
-
+  self._timing=0
+  self._timingCadence=1
 end
 
 
@@ -38,17 +39,29 @@ function TileBlock:pilot(dt)
   -- scrolling the posX to the left
   if  player_x>=my_space:getPlayerBackGroundScroll() then
 
-      
-      delta_x=player_x-my_space:getPlayerBackGroundScroll()
-      if delta_x<=0 then
-        x = x - 2 
-      elseif delta_x<=40 then
-        x = x - 3
-      elseif delta_x<=80 then
-        x = x - 4
-      else
-        x = x - 5
-      end
+        self._timing=self._timing+dt
+        if self._timing>self._timingCadence then
+          x=x-1
+          self._timing=0
+        end
+
+        player_x=player:getPositionX()
+        delta_x=player:getPositionX()-my_space:getPlayerBackGroundScroll()
+        
+
+
+        -- scrolling the posX to the left
+       -- scrolling the posX to the left
+        
+        if delta_x<=0 then
+          self._timingCadence=0.1
+        elseif delta_x<=40 then
+          self._timingCadence=0.05
+        elseif delta_x<=80 then
+          self._timingCadence=0.02
+        else
+          self._timingCadence=0.01
+        end
   end
 
   self:setPositionX(x)

@@ -12,6 +12,8 @@ function Space:initialize()
     self._bgSize=0
     self._bgPos=0
     self._bgActual=0
+    self._bgTiming=0
+    self._bgTimingCadence=1
 end
 
 function Space:addBackGroundImage(path_to_image)
@@ -65,29 +67,42 @@ function Space:removeSpaceObject(object)
 end
 
 local _printBackground=function(self)
+
+	local size=self:getBackGroundWidth()
+    love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0) -- this is the left image
+    love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
+    								+ size, 0) -- this is the right image
+end
+
+local _updateBackGround=function(self,dt)
+	
 	local size=self:getBackGroundWidth()
 	local player=self:getPlayerShip()
 	local delta_x=0
 	local player_x=0
 
-    love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0) -- this is the left image
-    love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
-    								+ size, 0) -- this is the right image
-    if (not self._pause)
+	if (not self._pause)
       and player~=nil 
       and player:getPositionX()>=self:getPlayerBackGroundScroll() then
 
+      	self._bgTiming=self._bgTiming+dt
+      	if self._bgTiming>self._bgTimingCadence then
+    		self._bgPos=self._bgPos-1
+    		self._bgTiming=0
+    	end
+
       	player_x=player:getPositionX()
       	delta_x=player:getPositionX()-self:getPlayerBackGroundScroll()
+
       	-- scrolling the posX to the left
       	if delta_x<=0 then
-    		self._bgPos = self._bgPos - 1 
+    		self._bgTimingCadence=0.2
     	elseif delta_x<=40 then
-    		self._bgPos = self._bgPos - 2
+    		self._bgTimingCadence=0.1
     	elseif delta_x<=80 then
-    		self._bgPos = self._bgPos - 3
+    		self._bgTimingCadence=0.05
     	else
-    		self._bgPos = self._bgPos - 4
+    		self._bgTimingCadence=0.02
     	end
 
     	--love.graphics.translate( self._bgPos, 0)
@@ -281,6 +296,7 @@ function Space:update(dt)
 		return
 	end
 
+	_updateBackGround(self,dt)
 	--pilot all the objects
 	for obj,k in pairs(self._objectsList) do
 		obj:pilot(dt)
