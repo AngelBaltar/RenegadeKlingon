@@ -1,4 +1,3 @@
-require 'middleclass/middleclass'
 require 'Utils/Menu'
 require 'GameScreens/Screen'
 require 'GameScreens/CreditsScreen'

@@ -1,4 +1,4 @@
-require 'middleclass/middleclass'
+require 'Utils/middleclass/middleclass'
 
 
 Weapon = class('GameFrameWork.Weapons.Weapon')

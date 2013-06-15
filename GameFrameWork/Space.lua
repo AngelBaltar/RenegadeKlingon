@@ -1,4 +1,4 @@
-require 'middleclass/middleclass'
+require 'Utils/middleclass/middleclass'
 require 'Utils/Debugging'
 
 Space = class('GameFrameWork.Space')
@@ -41,14 +41,39 @@ function Space:initialize()
 end
 
 function Space:removeFromBuckets(so)
-	local bc_x=0
-	local bc_y=0
-	bc_x,bc_y=so:getBucket(so)
+	local bc_x=-1
+	local bc_y=-1
+	--bc_x,bc_y=so:getBucket(so)
 	local found=(bc_x~=-1 and bc_y~=-1)
 
 	if found then
 		self._buckets[bc_x][bc_y][so]=nil
 		so:setBucket(-1,-1)
+	else
+		 --if not cache found, search it manually, no memory garbage!!
+		 for i=0,SIZE_BUCKETS_X do
+	 		for j=0,SIZE_BUCKETS_Y do
+	 			for soA,kk in pairs(self._buckets[i][j]) do
+	 				if soA==so then
+	 					self._buckets[i][j][so]=nil
+						so:setBucket(-1,-1)
+	 				end
+	 				if found then
+	 					break
+	 				end
+	 			end
+	 			if found then
+	 				break
+	 			end
+	 		end
+	 		if found then
+	 			break
+	 		end
+	 	end
+	 	if found then
+			self._buckets[bc_x][bc_y][so]=nil
+			so:setBucket(-1,-1)
+		end
 	end
 end
 function Space:updateBucketFor(so)
@@ -136,8 +161,8 @@ function Space:exists(so)
 end
 --removes a object from the space
 function Space:removeSpaceObject(object)
-	self._objectsList[object]=nil
 	self:removeFromBuckets(object)
+	self._objectsList[object]=nil
 
 end
 
@@ -176,7 +201,7 @@ local _updateBackGround=function(self,dt)
     	else
     		self._bgTimingCadence=4
     	end
-    	DEBUG_PRINT("translating "..self._bgActual*(-800)+self._bgPos.."\n")
+    	--DEBUG_PRINT("translating "..self._bgActual*(-800)+self._bgPos.."\n")
     	
 	end
 
@@ -190,12 +215,14 @@ end
 --draws all the objects in the space
 function Space:draw()
 
+
+ 	_printBackground(self)
+
 	if(self._pause) then
 		love.graphics.setColor(255,0,0,255)
         love.graphics.print("PAUSE",100,100)
 	end
 
- 	_printBackground(self)
 	-- local player=self:getPlayerShip()
  -- 	if player:getPositionX()>=self:getPlayerBackGroundScroll() then
 	-- 		love.graphics.translate(self._bgPos, 0)
@@ -570,5 +597,17 @@ function Space:getNumObjects()
 		count=count+1
 	end
 	return count
+end
+
+function Space:getNumBucketObjects()
+	local count=0
+	for i=0,SIZE_BUCKETS_X do
+	 	for j=0,SIZE_BUCKETS_Y do
+	 		for soA,kk in pairs(self._buckets[i][j]) do
+	 			count=count+1
+	 		end
+	 	end
+	 end
+	 return count
 end
 
