@@ -3,7 +3,7 @@ require 'Utils/Debugging'
 
 Space = class('GameFrameWork.Space')
 
-local BUCKET_SIZE=30
+local BUCKET_SIZE=50
 local SIZE_BUCKETS_X=0
 local SIZE_BUCKETS_Y=0
 
@@ -41,40 +41,25 @@ function Space:initialize()
 end
 
 function Space:removeFromBuckets(so)
-	local bc_x=-1
-	local bc_y=-1
-	--bc_x,bc_y=so:getBucket(so)
-	local found=(bc_x~=-1 and bc_y~=-1)
+	-- local bc_x=-1
+	-- local bc_y=-1
+	-- --bc_x,bc_y=so:getBucket(so)
+	-- local found=(bc_x~=-1 and bc_y~=-1)
 
-	if found then
-		self._buckets[bc_x][bc_y][so]=nil
-		so:setBucket(-1,-1)
-	else
+	-- if found then
+	-- 	self._buckets[bc_x][bc_y][so]=nil
+	-- 	so:setBucket(-1,-1)
+	-- else
 		 --if not cache found, search it manually, no memory garbage!!
 		 for i=0,SIZE_BUCKETS_X do
 	 		for j=0,SIZE_BUCKETS_Y do
 	 			for soA,kk in pairs(self._buckets[i][j]) do
-	 				if soA==so then
-	 					self._buckets[i][j][so]=nil
-						so:setBucket(-1,-1)
-	 				end
-	 				if found then
-	 					break
-	 				end
+	 				self._buckets[i][j][so]=nil
 	 			end
-	 			if found then
-	 				break
-	 			end
-	 		end
-	 		if found then
-	 			break
 	 		end
 	 	end
-	 	if found then
-			self._buckets[bc_x][bc_y][so]=nil
-			so:setBucket(-1,-1)
-		end
-	end
+	 	so:setBucket(-1,-1)
+	--end
 end
 function Space:updateBucketFor(so)
 	local bc_x_old=0
@@ -530,8 +515,7 @@ function Space:placeOnfreeSpace(so,init_x,end_x,init_y,end_y)
 		iter_y=0
 		while (iter_y<100) do
 		    y=init_y+math.random(end_y-init_y)
-			so:setPositionX(x)
-			so:setPositionY(y)
+			so:setPosition(x,y)
 
 			collision_free=true
 

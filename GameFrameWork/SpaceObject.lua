@@ -47,35 +47,24 @@ function SpaceObject:getPositionY()
 	return self._yPos
 end
 
---sets the X coordenate
-function SpaceObject:setPositionX(x)
+function SpaceObject:setPosition(x,y)
 	local x_inf=self._space:getXinit()
 	local x_sup=self._space:getXend()
 	local x_old=self._xPos
-	self._xPos=x
-	if(x+self:getWidth()<x_inf) or (x>x_sup) then
-		self:die()
-	else
-		if x_old~=x then
-			self._space:updateBucketFor(self)
-		end
-	end
-
-end
-
---sets the Y coordenate
-function SpaceObject:setPositionY(y)
 	local y_inf=self._space:getYinit()
 	local y_sup=self._space:getYend()
 	local y_old=self._yPos
 	self._yPos=y
-	if(y<y_inf) or (y-self:getHeight()>y_sup) then
+	self._xPos=x
+	if(x+self:getWidth()<x_inf) or (x>x_sup)
+		or (y<y_inf) or (y-self:getHeight()>y_sup) then
 		self:die()
 	else
-		if y~=y_old then
+		if x_old~=x or y_old~=y then
 			self._space:updateBucketFor(self)
 		end
 	end
+
 end
 
 --must be implemented in subclasses

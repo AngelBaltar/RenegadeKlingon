@@ -1,6 +1,7 @@
 require 'Utils/middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/Enemies/RomulanScout'
+require 'GameFrameWork/Harvestables/HealthObject'
 local loader = require("Utils/Advanced-Tiled-Loader/Loader")
 
  -- Path to the tmx files. The file structure must be similar to how they are saved in Tiled
@@ -27,13 +28,14 @@ function Level:initialize(map_name,space)
 	   		--				x, y, tile.id,object_type,imagePath) )
 			if object_type=="RomulanScout" then
 				obj=RomulanScout:new(space)
-				obj:setPositionX(self._map.tileWidth*x)
-	  			obj:setPositionY(self._map.tileHeight*y)
+				obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
 
 			elseif object_type=="DestructorKlingon" then
 				obj=PlayerShip:new(space)
-				obj:setPositionX(self._map.tileWidth*x)
-	  			obj:setPositionY(self._map.tileHeight*y)
+				obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
+			elseif object_type=="HealthObject" then
+				obj=HealthObject:new(space)
+				obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
 			end
 			processed_tiles[y*self._map.width+x]=true
 		end

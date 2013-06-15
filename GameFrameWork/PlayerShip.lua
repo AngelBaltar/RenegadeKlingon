@@ -63,28 +63,29 @@ function PlayerShip:pilot(dt)
 
   if love.keyboard.isDown("up") then
     if(position_y>inf_y)then
-      SpaceObject.setPositionY(self,position_y-step)
+      position_y=position_y-step
     end
    end
   if love.keyboard.isDown("down") then
     if(position_y<sup_y)then
-      SpaceObject.setPositionY(self,position_y+step)
+      position_y=position_y+step
     end
    end
 
    if love.keyboard.isDown("left") then
     if(position_x>inf_x)then
-      SpaceObject.setPositionX(self,position_x-step)
+      position_x=position_x-step
     end
    end
   if love.keyboard.isDown("right") then
     if(position_x<sup_x)then
-      SpaceObject.setPositionX(self,position_x+step)
+      position_x=position_x+step
     end
    end
   if love.keyboard.isDown("a") then
     self._basic_weapon:fire()
    end
+   self:setPosition(position_x,position_y)
 end
 
 --Read from keyboard

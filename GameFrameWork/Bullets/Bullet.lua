@@ -42,15 +42,14 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function Bullet:pilot(dt)
-  local x=SpaceObject.getPositionX(self)
-  local y=SpaceObject.getPositionY(self)
+  local x=self:getPositionX(self)
+  local y=self:getPositionY(self)
 
   x=x+self._xStep
   y=y+self._yStep
 
  
-  SpaceObject.setPositionY(self,y)
-  SpaceObject.setPositionX(self,x)
+  self:setPosition(x,y)
 
 end
 
