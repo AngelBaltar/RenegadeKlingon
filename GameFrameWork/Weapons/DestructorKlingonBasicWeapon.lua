@@ -6,7 +6,7 @@ DestructorKlingonBasicWeapon = class('GameFrameWork.Weapons.DestructorKlingonBas
 
 --constructor
 function DestructorKlingonBasicWeapon:initialize(destructor_klingon)
-	Weapon.initialize(self,destructor_klingon,0.06)
+	Weapon.initialize(self,destructor_klingon,0.1)
 end
 
 function DestructorKlingonBasicWeapon:doFire()

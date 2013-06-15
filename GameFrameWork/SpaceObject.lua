@@ -35,9 +35,6 @@ end
 function SpaceObject:die()
 
 	self._space:removeSpaceObject(self)
-	-- if self:isPlayerShip() then
-	-- 	pp=pp+1
-	-- end
 end
 
 --returns the X component of the position for this object
