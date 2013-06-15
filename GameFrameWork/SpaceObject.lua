@@ -11,6 +11,8 @@ function SpaceObject:initialize(space,draw_object,posx,posy,health)
   self._health=health
   self._xPos=posx
   self._yPos=posy
+  self._bucket_x=-1
+  self._bucket_y=-1
   space:addSpaceObject(self)
 end
 
@@ -54,7 +56,7 @@ function SpaceObject:setPositionX(x)
 	local x_sup=self._space:getXend()
 	local x_old=self._xPos
 	self._xPos=x
-	if(x<x_inf) or (x>x_sup) then
+	if(x+self:getWidth()<x_inf) or (x>x_sup) then
 		self:die()
 	else
 		if x_old~=x then
@@ -70,7 +72,7 @@ function SpaceObject:setPositionY(y)
 	local y_sup=self._space:getYend()
 	local y_old=self._yPos
 	self._yPos=y
-	if(y<y_inf) or (y>y_sup) then
+	if(y<y_inf) or (y-self:getHeight()>y_sup) then
 		self:die()
 	else
 		if y~=y_old then
@@ -119,6 +121,15 @@ end
 --returns the space where this object is
 function SpaceObject:getSpace()
 	return self._space
+end
+
+function SpaceObject:getBucket()
+	return self._bucket_x,self._bucket_y
+end
+
+function SpaceObject:setBucket(x,y)
+	self._bucket_x=x
+	self._bucket_y=y
 end
 
 --the PlayerShip class must extend this class and overwritte this method returning true

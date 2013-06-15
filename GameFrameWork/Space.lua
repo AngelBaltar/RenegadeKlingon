@@ -3,7 +3,7 @@ require 'Utils/Debugging'
 
 Space = class('GameFrameWork.Space')
 
-local BUCKET_SIZE=50
+local BUCKET_SIZE=30
 local SIZE_BUCKETS_X=0
 local SIZE_BUCKETS_Y=0
 
@@ -37,57 +37,24 @@ function Space:initialize()
     self._bgSize=0
     self._bgPos=0
     self._bgActual=0
-    self._bgTiming=0
     self._bgTimingCadence=1
-end
-
-function Space:getBucketFor(so)
-	local bc_x=-1
-	local bc_y=-1
-	local found=false
-	DEBUG_PRINT("searching bucket")
-	--search for so
-	for i=0,SIZE_BUCKETS_X do
-		for j=0,SIZE_BUCKETS_Y do
-			for obj,_ in pairs(self._buckets[i][j]) do
-				if obj==so then
-					found=true
-					bc_x=i
-					bc_y=j
-				end
-				if found then 
-					break
-				end
-			end
-			if found then 
-				break
-			end
-		end
-		if found then 
-			break
-		end
-	end
-	if found then
-		return bc_x,bc_y
-	else
-		return -1,-1
-	end
 end
 
 function Space:removeFromBuckets(so)
 	local bc_x=0
 	local bc_y=0
-	bc_x,bc_y=self:getBucketFor(so)
+	bc_x,bc_y=so:getBucket(so)
 	local found=(bc_x~=-1 and bc_y~=-1)
 
 	if found then
 		self._buckets[bc_x][bc_y][so]=nil
+		so:setBucket(-1,-1)
 	end
 end
 function Space:updateBucketFor(so)
 	local bc_x_old=0
 	local bc_y_old=0
-	bc_x_old,bc_y_old=self:getBucketFor(so)
+	bc_x_old,bc_y_old=so:getBucket()
 
 	local found=(bc_x_old~=-1 and bc_y_old~=-1)
 	
@@ -109,13 +76,15 @@ function Space:updateBucketFor(so)
 		--if it is a bucket change, drop the old and insert the new
 		if not (bc_x_new==bc_x_old and bc_y_new==bc_y_old) then
 			self._buckets[bc_x_old][bc_y_old][so]=nil
-			DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
+			--DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
 			self._buckets[bc_x_new][bc_y_new][so]=true
+			so:setBucket(bc_x_new,bc_y_new)
 		end
 	else
 		--it was not in a bucket add it
-		DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
+		--DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
 		self._buckets[bc_x_new][bc_y_new][so]=true
+		so:setBucket(bc_x_new,bc_y_new)
 	end
 
 end
@@ -147,7 +116,7 @@ end
 --returns the x axis position that makes background to
 --move
 function Space:getPlayerBackGroundScroll()
-	return self:getBackGroundWidth()/2
+	return (self:getBackGroundWidth()/2)
 end
 --adds a new SpaceObject to the space
 function Space:addSpaceObject(object)
@@ -191,33 +160,31 @@ local _updateBackGround=function(self,dt)
       and player~=nil 
       and player:getPositionX()>=self:getPlayerBackGroundScroll() then
 
-      	self._bgTiming=self._bgTiming+dt
-      	if self._bgTiming>self._bgTimingCadence then
-    		self._bgPos=self._bgPos-1
-    		self._bgTiming=0
-    	end
+    	self._bgPos=self._bgPos-self._bgTimingCadence
+		
 
       	player_x=player:getPositionX()
       	delta_x=player:getPositionX()-self:getPlayerBackGroundScroll()
 
       	-- scrolling the posX to the left
       	if delta_x<=0 then
-    		self._bgTimingCadence=0.2
+    		self._bgTimingCadence=1
     	elseif delta_x<=40 then
-    		self._bgTimingCadence=0.1
+    		self._bgTimingCadence=2
     	elseif delta_x<=80 then
-    		self._bgTimingCadence=0.05
+    		self._bgTimingCadence=3
     	else
-    		self._bgTimingCadence=0.02
+    		self._bgTimingCadence=4
     	end
-
-    	--love.graphics.translate( self._bgPos, 0)
+    	DEBUG_PRINT("translating "..self._bgActual*(-800)+self._bgPos.."\n")
+    	
 	end
 
      if self._bgPos*-1 > self:getBackGroundWidth() then
       self._bgPos = 0
       self._bgActual=(self._bgActual+1)%self._bgSize
     end
+
 end
 
 --draws all the objects in the space
@@ -228,8 +195,11 @@ function Space:draw()
         love.graphics.print("PAUSE",100,100)
 	end
 
-	_printBackground(self)
-
+ 	_printBackground(self)
+	-- local player=self:getPlayerShip()
+ -- 	if player:getPositionX()>=self:getPlayerBackGroundScroll() then
+	-- 		love.graphics.translate(self._bgPos, 0)
+	-- end
 	for obj,_ in pairs(self._objectsList) do
 		obj:draw()
 	end
@@ -408,40 +378,41 @@ function Space:update(dt)
 		obj:pilot(dt)
 	end
 
-	--check collisions between objects
-	--annotate collisions
-	--old collision system
-
-	-- local count_extr=0
-	-- local count_intr=0
-	-- for soA,k in pairs(self._objectsList) do
-	-- 	count_intr=0
-	-- 	for soB,h in pairs(self._objectsList) do
-
-	-- 		if(count_intr>count_extr) then
-	-- 			if _collisionCheck(self,soA,soB) then
-	-- 				collision_array[{A=soA,B=soB}]=true
-	-- 			end
-	-- 		end
-	-- 		count_intr=count_intr+1
-	-- 	end
-	-- 	count_extr=count_extr+1
-	-- end
+	--new collision system based in spacial hashing and buckets
+	local neig_x=0
+	local neig_y=0
+	local count_extr=0
+	local count_intr=0
 
 	 for i=0,SIZE_BUCKETS_X do
-     	for j=0,SIZE_BUCKETS_Y do
-     		for soA,kk in pairs(self._buckets[i][j]) do
-     			--TODO check neightbours too
-     			for soB,ku in pairs(self._buckets[i][j]) do
-     				if soA~=soB then
-     					if _collisionCheck(self,soA,soB) then
-	 						collision_array[{A=soA,B=soB}]=true
-	 					end
-     				end
-     			end
-     		end
-     	end
-     end
+	 	for j=0,SIZE_BUCKETS_Y do
+	 		count_extr=0
+	 		for soA,kk in pairs(self._buckets[i][j]) do
+	 			--TODO check neightbours too
+	 			for nx=-1,1 do
+	 				for ny=-1,1 do
+	 					neig_x=i+nx
+	 					neig_y=j+ny
+	 					if neig_x>=0 and neig_x<=SIZE_BUCKETS_X 
+	 				   		and neig_y>=0 and neig_y<=SIZE_BUCKETS_Y then
+	 				   		count_intr=0
+			     			for soB,ku in pairs(self._buckets[neig_x][neig_y]) do
+			     				if neig_x~=i or neig_y~=j or count_intr>count_extr then
+				     				if soA~=soB then
+				     					if _collisionCheck(self,soA,soB) then
+					 						collision_array[{A=soA,B=soB}]=true
+					 					end
+				     				end
+			     				end
+			     				count_intr=count_intr+1
+			     			end
+		     			end
+	     			end
+	 			end
+	 			count_extr=count_extr+1
+	 		end
+	 	end
+	 end
 
 	--perform collision hits
 	for obj,__ in pairs(collision_array) do

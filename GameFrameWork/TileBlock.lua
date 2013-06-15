@@ -6,11 +6,15 @@ TileBlock = class('GameFrameWork.Harverstables.TileBlock',SpaceObject)
 function TileBlock:initialize(space,tile_img_path,x,y)
   local tile_img=love.graphics.newImage(tile_img_path)
   SpaceObject.initialize(self,space,tile_img,x,y,5000)
-  self._timing=0
   self._timingCadence=1
 end
 
 
+function TileBlock:collision(object,damage)
+    if not object:isTileBlock() then
+      SpaceObject.collision(self,object,damage)
+    end
+end
 
 function TileBlock:getWidth()
   local obj=SpaceObject.getDrawableObject(self)
@@ -39,11 +43,7 @@ function TileBlock:pilot(dt)
   -- scrolling the posX to the left
   if  player_x>=my_space:getPlayerBackGroundScroll() then
 
-        self._timing=self._timing+dt
-        if self._timing>self._timingCadence then
-          x=x-1
-          self._timing=0
-        end
+        x=x-self._timingCadence
 
         player_x=player:getPositionX()
         delta_x=player:getPositionX()-my_space:getPlayerBackGroundScroll()
@@ -54,13 +54,13 @@ function TileBlock:pilot(dt)
        -- scrolling the posX to the left
         
         if delta_x<=0 then
-          self._timingCadence=0.1
+          self._timingCadence=2
         elseif delta_x<=40 then
-          self._timingCadence=0.05
+          self._timingCadence=3
         elseif delta_x<=80 then
-          self._timingCadence=0.02
+          self._timingCadence=4
         else
-          self._timingCadence=0.01
+          self._timingCadence=5
         end
   end
 

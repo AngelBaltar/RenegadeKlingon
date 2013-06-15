@@ -6,7 +6,7 @@ EnemyBasicWeapon = class('GameFrameWork.Weapons.EnemyBasicWeapon',Weapon)
 --constructor
 function EnemyBasicWeapon:initialize(enemie)
 	--cadence 1.2 seconds
-  Weapon.initialize(self,enemie,0.8)
+  Weapon.initialize(self,enemie,0.6)
 end
 
 function EnemyBasicWeapon:doFire()
