@@ -3,7 +3,7 @@ require 'Utils/Debugging'
 
 Space = class('GameFrameWork.Space')
 
-local BUCKET_SIZE=50
+local BUCKET_SIZE=32
 local SIZE_BUCKETS_X=0
 local SIZE_BUCKETS_Y=0
 
@@ -41,25 +41,36 @@ function Space:initialize()
 end
 
 function Space:removeFromBuckets(so)
-	-- local bc_x=-1
-	-- local bc_y=-1
-	-- --bc_x,bc_y=so:getBucket(so)
-	-- local found=(bc_x~=-1 and bc_y~=-1)
+	local bc_x=-1
+	local bc_y=-1
+	bc_x,bc_y=so:getBucket(so)
+	local found=(bc_x~=-1 and bc_y~=-1)
+	local delta_x=0
+	local delta_y=0
 
-	-- if found then
-	-- 	self._buckets[bc_x][bc_y][so]=nil
-	-- 	so:setBucket(-1,-1)
-	-- else
-		 --if not cache found, search it manually, no memory garbage!!
+	 if found then
+	 	delta_x=math.floor(so:getWidth()/BUCKET_SIZE)
+		delta_y=math.floor(so:getHeight()/BUCKET_SIZE)
+	 	for i=bc_x,bc_x+delta_x do
+		for j=bc_y,bc_y+delta_y do
+			if i>=0 
+				and i<=SIZE_BUCKETS_X 
+				and j>=0
+				and j<=SIZE_BUCKETS_Y then
+				self._buckets[i][j][so]=nil
+			end
+		end
+	end
+	 else
+		 --if not cache found, drop it all manually, no memory garbage!!
 		 for i=0,SIZE_BUCKETS_X do
 	 		for j=0,SIZE_BUCKETS_Y do
-	 			for soA,kk in pairs(self._buckets[i][j]) do
-	 				self._buckets[i][j][so]=nil
-	 			end
+	 			self._buckets[i][j][so]=nil
 	 		end
 	 	end
-	 	so:setBucket(-1,-1)
-	--end
+	 	
+	end
+	so:setBucket(-1,-1)
 end
 function Space:updateBucketFor(so)
 	local bc_x_old=0
@@ -72,6 +83,8 @@ function Space:updateBucketFor(so)
 	local y=so:getPositionY()
 	local bc_x_new=math.floor(x/BUCKET_SIZE)
 	local bc_y_new=math.floor(y/BUCKET_SIZE)
+	local delta_x=math.floor(so:getWidth()/BUCKET_SIZE)
+	local delta_y=math.floor(so:getHeight()/BUCKET_SIZE)
 
 	--this object will die because an out of bounds
 	if bc_x_new<0 or bc_y_new<0 then
@@ -83,19 +96,27 @@ function Space:updateBucketFor(so)
 
 
 	if found then
-		--if it is a bucket change, drop the old and insert the new
-		if not (bc_x_new==bc_x_old and bc_y_new==bc_y_old) then
-			self._buckets[bc_x_old][bc_y_old][so]=nil
-			--DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
-			self._buckets[bc_x_new][bc_y_new][so]=true
-			so:setBucket(bc_x_new,bc_y_new)
+		--if the bucket exists check position change
+		if (bc_x_new==bc_x_old and bc_y_new==bc_y_old) then
+			--nothing to do here
+			return nil
 		end
-	else
-		--it was not in a bucket add it
-		--DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
-		self._buckets[bc_x_new][bc_y_new][so]=true
-		so:setBucket(bc_x_new,bc_y_new)
+		self:removeFromBuckets(so)
 	end
+
+	--DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
+	for i=bc_x_new,bc_x_new+delta_x do
+		for j=bc_y_new,bc_y_new+delta_y do
+			if i>=0 
+				and i<=SIZE_BUCKETS_X 
+				and j>=0
+				and j<=SIZE_BUCKETS_Y then
+				self._buckets[i][j][so]=true
+			end
+		end
+	end
+
+	so:setBucket(bc_x_new,bc_y_new)
 
 end
 function Space:addBackGroundImage(path_to_image)
@@ -401,8 +422,8 @@ function Space:update(dt)
 	 		count_extr=0
 	 		for soA,kk in pairs(self._buckets[i][j]) do
 	 			--TODO check neightbours too
-	 			for nx=-1,1 do
-	 				for ny=-1,1 do
+	 			for nx=0,0 do
+	 				for ny=0,0 do
 	 					neig_x=i+nx
 	 					neig_y=j+ny
 	 					if neig_x>=0 and neig_x<=SIZE_BUCKETS_X 
