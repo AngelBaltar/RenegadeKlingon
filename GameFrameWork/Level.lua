@@ -34,7 +34,10 @@ function Level:initialize(map_name,space)
 		
 		--avoid repeated tiles
 		--if processed_tiles[y*self._map.width+x]==nil then
-			object_type=tile.properties["object_type"]
+			object_type=tile.tileset.properties["object_type"]
+			if(tile.properties["object_type"]~=nil) then
+				object_type=tile.properties["object_type"]
+			end
 			imagePath=tile.tileset.imagePath
 	   		--print( string.format("Tile at (%d,%d) has an id of %d %s %s",
 	   		--				x, y, tile.id,object_type,imagePath) )
@@ -53,7 +56,8 @@ function Level:initialize(map_name,space)
 					obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN)
 					obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
 				end
-				
+			elseif object_type=="TileBlock" then
+					obj=TileBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
 			end
 			processed_tiles[y*self._map.width+x]=true
 		--end

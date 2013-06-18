@@ -114,7 +114,7 @@ while collision do
     dir2=-1
   end
 
-  self:setPositionX(pos_x+rnd1*dir1,pos_y+rnd1*dir2)
+  self:setPosition(pos_x+rnd1*dir1,pos_y+rnd1*dir2)
   collision=false
   for obj,_ in pairs(tile_blocks) do
     collision=collision or my_space:naturalCollisionCheck(obj,self)

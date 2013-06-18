@@ -3,9 +3,9 @@ require 'GameFrameWork/SpaceObject'
 TileBlock = class('GameFrameWork.Harverstables.TileBlock',SpaceObject)
 
 --constructor
-function TileBlock:initialize(space,tile_img_path,x,y)
-  local tile_img=love.graphics.newImage(tile_img_path)
-  SpaceObject.initialize(self,space,tile_img,x,y,5000)
+function TileBlock:initialize(space,tile,x,y)
+  self._tile=tile
+  SpaceObject.initialize(self,space,tile,x,y,5000)
   self._timingCadence=1
 end
 
@@ -17,13 +17,11 @@ function TileBlock:collision(object,damage)
 end
 
 function TileBlock:getWidth()
-  local obj=SpaceObject.getDrawableObject(self)
- return obj:getWidth()
+  return self._tile.width
 end
 --return the height of this shiplove.graphics.newImage("Resources/gfx/blue_TileBlock.png")
 function TileBlock:getHeight()
-  local obj=SpaceObject.getDrawableObject(self)
- return obj:getHeight()
+  return self._tile.height
 end
 
 function TileBlock:pilot(dt)
@@ -31,7 +29,7 @@ function TileBlock:pilot(dt)
   local my_space=self:getSpace()
   local player=my_space:getPlayerShip()
   local x=self:getPositionX()
-
+  local y=self:getPositionY()
 
   if(player==nil) then
     return nil
@@ -64,8 +62,15 @@ function TileBlock:pilot(dt)
         end
   end
 
-  self:setPositionX(x)
+  self:setPosition(x,y)
 
+end
+
+--Draws the object in the screen
+function TileBlock:draw()
+  local x=self:getPositionX()
+  local y=self:getPositionY()
+  self._tile:draw(x, y, 0, 1, 1, 0,0)
 end
 
 
