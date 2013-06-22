@@ -175,9 +175,6 @@ end
 --checks if so is x inbounds in the map, so can appear in the future
 function Space:isObjectEnabled(so)
 	local x=so:getPositionX()
-	local x_length=self:getXend()-self:getXinit()
-	local relative_x=self._bgActual*x_length*-1+self._bgPos
-	x=x+relative_x
 	if x>=self:getXinit() and x<=self:getXend() then
 		return true
 	else
@@ -199,6 +196,8 @@ local _updateBackGround=function(self,dt)
 	local player=self:getPlayerShip()
 	local delta_x=0
 	local player_x=0
+	local aux_x=0
+	local aux_y=0
 
 	if (not self._pause)
       and player~=nil 
@@ -206,6 +205,17 @@ local _updateBackGround=function(self,dt)
 
     	self._bgPos=self._bgPos-self._bgTimingCadence
 		
+
+    	 --actualize disabled object
+		for obj,_ in pairs(self._objectsList) do
+			if not obj:isEnabled() then
+				aux_x=obj:getPositionX()
+				aux_y=obj:getPositionY()
+				obj:setPosition(aux_x-self._bgTimingCadence,aux_y)
+				obj:setEnabled(self:isObjectEnabled(obj))
+			end
+		end
+
 
       	player_x=player:getPositionX()
       	delta_x=player:getPositionX()-self:getPlayerBackGroundScroll()
@@ -224,7 +234,7 @@ local _updateBackGround=function(self,dt)
     	
 	end
 
-     if self._bgPos*-1 > self:getBackGroundWidth() then
+    if self._bgPos*-1 > self:getBackGroundWidth() then
       self._bgPos = 0
       self._bgActual=(self._bgActual+1)%self._bgSize
     end
@@ -247,7 +257,9 @@ function Space:draw()
 	-- 		love.graphics.translate(self._bgPos, 0)
 	-- end
 	for obj,_ in pairs(self._objectsList) do
-		obj:draw()
+		if obj:isEnabled() then
+			obj:draw()
+		end
 	end
 end
 
@@ -427,44 +439,30 @@ function Space:update(dt)
 	_updateBackGround(self,dt)
 	--pilot all the objects
 	for obj,k in pairs(self._objectsList) do
-		obj:pilot(dt)
+		if obj:isEnabled() then
+			obj:pilot(dt)
+		end
 	end
 
 	--new collision system based in spacial hashing and buckets
-	local neig_x=0
-	local neig_y=0
-	local count_extr=0
-	local count_intr=0
 
 	 for i=0,SIZE_BUCKETS_X do
 	 	for j=0,SIZE_BUCKETS_Y do
-	 		count_extr=0
 	 		for soA,kk in pairs(self._buckets[i][j]) do
-	 			--TODO check neightbours too
-	 			for nx=0,0 do
-	 				for ny=0,0 do
-	 					neig_x=i+nx
-	 					neig_y=j+ny
-	 					if neig_x>=0 and neig_x<=SIZE_BUCKETS_X 
-	 				   		and neig_y>=0 and neig_y<=SIZE_BUCKETS_Y then
-	 				   		count_intr=0
-			     			for soB,ku in pairs(self._buckets[neig_x][neig_y]) do
-			     				if neig_x~=i or neig_y~=j or count_intr>count_extr then
-				     				if soA~=soB then
-				     					if _collisionCheck(self,soA,soB) then
-					 						collision_array[{A=soA,B=soB}]=true
-					 					end
-				     				end
-			     				end
-			     				count_intr=count_intr+1
-			     			end
-		     			end
-	     			end
+	 			if soA:isEnabled() then
+		 			for soB,ku in pairs(self._buckets[i][j]) do
+		 				if soB:isEnabled() then
+		     				if soA~=soB then
+		     					if _collisionCheck(self,soA,soB) then
+			 						collision_array[{A=soA,B=soB}]=true
+			 					end
+		     				end
+	     				end
+		 			end
 	 			end
-	 			count_extr=count_extr+1
-	 		end
-	 	end
-	 end
+		 	end
+		end
+	end
 
 	--perform collision hits
 	for obj,__ in pairs(collision_array) do

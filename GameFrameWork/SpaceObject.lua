@@ -17,6 +17,14 @@ function SpaceObject:initialize(space,draw_object,posx,posy,health)
   space:addSpaceObject(self)
 end
 
+function SpaceObject:isEnabled()
+	return self._isEnabled
+end
+
+function SpaceObject:setEnabled(e)
+	self._isEnabled=e
+end
+
 --Performs movements changing the position of the object, firing bullets...
 function SpaceObject:pilot(dt)
 
@@ -59,7 +67,9 @@ function SpaceObject:setPosition(x,y)
 	self._xPos=x
 	if(x+self:getWidth()<x_inf) or (x>x_sup)
 		or (y<y_inf) or (y-self:getHeight()>y_sup) then
-		self:die()
+		if self:isEnabled() then
+			self:die()
+		end
 	else
 		if x_old~=x or y_old~=y then
 			self._space:updateBucketFor(self)
