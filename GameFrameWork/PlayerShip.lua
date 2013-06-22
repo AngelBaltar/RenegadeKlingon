@@ -9,9 +9,9 @@ PlayerShip.static.SHIP = love.graphics.newImage("Resources/gfx/destructor_klingo
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function PlayerShip:initialize(space)
+function PlayerShip:initialize(space,posx,posy)
   --100 health for the player
-  SpaceObject.initialize(self,space, PlayerShip.static.SHIP,0,400,100)
+  SpaceObject.initialize(self,space, PlayerShip.static.SHIP,posx,posy,100)
   self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
   self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
 end

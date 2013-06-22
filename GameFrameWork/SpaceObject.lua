@@ -13,6 +13,7 @@ function SpaceObject:initialize(space,draw_object,posx,posy,health)
   self._yPos=posy
   self._bucket_x=-1
   self._bucket_y=-1
+  self._isEnabled=space:isObjectEnabled(self)
   space:addSpaceObject(self)
 end
 

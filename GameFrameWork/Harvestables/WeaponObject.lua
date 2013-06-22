@@ -19,7 +19,7 @@ weapons_tab[WeaponObject.static.MACHINE_GUN]={
 												weapon=WP_MACHINEGUN}
 
 --constructor
-function WeaponObject:initialize(space,weapon_type)
+function WeaponObject:initialize(space,weapon_type,posx,posy)
 
  self._animation = newAnimation(weapon_type,
   					                   weapons_tab[weapon_type].size_x,
@@ -32,7 +32,7 @@ function WeaponObject:initialize(space,weapon_type)
   	self._weapon=MachineGunWeapon:new(nil)
   end
   self._zoom=weapons_tab[weapon_type].zoom
-  HarvestableObject.initialize(self,space,weapon_type,0)
+  HarvestableObject.initialize(self,space,weapon_type,posx,posy,0)
 
 end
 

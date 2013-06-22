@@ -10,8 +10,8 @@ RomulanScout.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanScout.pn
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function RomulanScout:initialize(space)
-  Enemy.initialize(self,space,RomulanScout.static.SHIP,6)
+function RomulanScout:initialize(space,posx,posy)
+  Enemy.initialize(self,space,RomulanScout.static.SHIP,posx,posy,6)
   self._timer=0
   self._directionX=-1
   self._directionY=1
@@ -20,7 +20,6 @@ function RomulanScout:initialize(space)
 
   local absolute_init_y=space:getYinit()
   local absolule_end_y=space:getYend()-self:getHeight()
-  space:placeOnfreeSpace(self,absolule_end_x-200,absolule_end_x,absolule_end_y-400,absolule_end_y)
   self._weapon=EnemyBasicWeapon:new(self)
 end
 

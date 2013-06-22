@@ -42,19 +42,14 @@ function Level:initialize(map_name,space)
 	   		--print( string.format("Tile at (%d,%d) has an id of %d %s %s",
 	   		--				x, y, tile.id,object_type,imagePath) )
 			if object_type=="RomulanScout" then
-				obj=RomulanScout:new(space)
-				obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
-
+				obj=RomulanScout:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 			elseif object_type=="DestructorKlingon" then
-				obj=PlayerShip:new(space)
-				obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
+				obj=PlayerShip:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 			elseif object_type=="HealthObject" then
-				obj=HealthObject:new(space)
-				obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
+				obj=HealthObject:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 			elseif object_type=="WeaponObject" then
 				if tile.properties["weapon_type"]=="MACHINE_GUN" then
-					obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN)
-					obj:setPosition(self._map.tileWidth*x,self._map.tileHeight*y)
+					obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,self._map.tileWidth*x,self._map.tileHeight*y)
 				end
 			elseif object_type=="TileBlock" then
 					obj=TileBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)

@@ -172,6 +172,19 @@ function Space:removeSpaceObject(object)
 
 end
 
+--checks if so is x inbounds in the map, so can appear in the future
+function Space:isObjectEnabled(so)
+	local x=so:getPositionX()
+	local x_length=self:getXend()-self:getXinit()
+	local relative_x=self._bgActual*x_length*-1+self._bgPos
+	x=x+relative_x
+	if x>=self:getXinit() and x<=self:getXend() then
+		return true
+	else
+		return false
+	end
+end
+
 local _printBackground=function(self)
 
 	local size=self:getBackGroundWidth()
@@ -307,6 +320,12 @@ local _collisionCheck = function(self,soA,soB)
 	if soB:isEnemyShip() and soA:isHarvestableObject() then
 		return false
 	end
+
+	--tiles cant hit tiles
+	if soA:isTileBlock() and soB:isTileBlock() then
+		return false
+	end
+
 
 	if(soA==soB) then
 		return false

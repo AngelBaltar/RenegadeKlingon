@@ -3,16 +3,15 @@ require 'GameFrameWork/SpaceObject'
 HarvestableObject = class('GameFrameWork.Harverstables.HarvestableObject',SpaceObject)
 
 --constructor
-function HarvestableObject:initialize(space,drawable,health)
+function HarvestableObject:initialize(space,drawable,posx,posy,health)
   --3 health for the HarvestableObject
-  SpaceObject.initialize(self,space,drawable,20,20,health)
+  SpaceObject.initialize(self,space,drawable,posx,posy,health)
  local absolute_init_x=space:getXinit()
   local absolule_end_x=space:getXend()
 
   local absolute_init_y=space:getYinit()
   local absolule_end_y=space:getYend()
-  --place it in free space
-  space:placeOnfreeSpace(self,0,400,90,400)
+
   self._directionX=1
   self._directionY=1
   self._timer=0

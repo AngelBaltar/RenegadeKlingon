@@ -60,9 +60,10 @@ function TileBlock:pilot(dt)
         else
           self._timingCadence=5
         end
+        self:setPosition(x,y)
   end
 
-  self:setPosition(x,y)
+  
 
 end
 

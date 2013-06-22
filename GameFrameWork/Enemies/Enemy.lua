@@ -7,9 +7,9 @@ Enemy = class('GameFrameWork.Enemies.Enemy',SpaceObject)
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Enemy:initialize(space,drawable,health)
+function Enemy:initialize(space,drawable,posx,posy,health)
   --100 health for the enemy
-  SpaceObject.initialize(self,space, drawable,100,300,health)
+  SpaceObject.initialize(self,space, drawable,posx,posy,health)
   --place it in free space
  
 end
