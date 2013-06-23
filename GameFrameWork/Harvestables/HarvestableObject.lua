@@ -6,24 +6,18 @@ HarvestableObject = class('GameFrameWork.Harverstables.HarvestableObject',SpaceO
 function HarvestableObject:initialize(space,drawable,posx,posy,health)
   --3 health for the HarvestableObject
   SpaceObject.initialize(self,space,drawable,posx,posy,health)
- local absolute_init_x=space:getXinit()
-  local absolule_end_x=space:getXend()
 
-  local absolute_init_y=space:getYinit()
-  local absolule_end_y=space:getYend()
-
-  self._directionX=1
-  self._directionY=1
+  self._directionX=-1
+  self._directionY=-1
   self._timer=0
 end
 
-
 function HarvestableObject:collision(object,damage)
-    if not (object:isBullet()) and
-    not (object:isEnemyShip()) and 
-    not (object:isHarvestableObject())then
-      self:die()
-    end
+     if not (object:isBullet()) and
+     not (object:isEnemyShip()) and 
+     not (object:isHarvestableObject())then
+       self:die()
+     end
 end
 
 
@@ -53,9 +47,9 @@ function HarvestableObject:pilot(dt)
   math.randomseed(self:getHeight()*self:getWidth())
   math.randomseed(math.random())
   if(math.random()>0.5) then
-    if(self._timer>0.5) then
-      self._directionX=self._directionX*-1
-    end
+    -- if(self._timer>0.5) then
+    --   self._directionX=self._directionX*-1
+    -- end
 
     if(self._timer>1) then
       self._directionY=self._directionY*-1
@@ -66,10 +60,10 @@ function HarvestableObject:pilot(dt)
       self._directionY=self._directionY*-1
     end
 
-    if(self._timer<0.6) then
-      self._directionX=self._directionX*-1
-      self._timer=0
-    end
+    -- if(self._timer<0.6) then
+    --   self._directionX=self._directionX*-1
+    --   self._timer=0
+    -- end
   end
 
   if (math.abs(pos_x-x_i)<5) then

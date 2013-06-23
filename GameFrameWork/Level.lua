@@ -1,6 +1,7 @@
 require 'Utils/middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/Enemies/RomulanScout'
+require 'GameFrameWork/Enemies/RomulanNorexan'
 require 'GameFrameWork/Harvestables/HealthObject'
 require 'GameFrameWork/Harvestables/WeaponObject'
 require 'Utils/Debugging'
@@ -33,7 +34,7 @@ function Level:initialize(map_name,space)
 	for x, y, tile in self._map("primer_plano"):iterate() do
 		
 		--avoid repeated tiles
-		--if processed_tiles[y*self._map.width+x]==nil then
+		if processed_tiles[y*self._map.width+x]==nil then
 			object_type=tile.tileset.properties["object_type"]
 			if(tile.properties["object_type"]~=nil) then
 				object_type=tile.properties["object_type"]
@@ -45,8 +46,11 @@ function Level:initialize(map_name,space)
 				obj=RomulanScout:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 			elseif object_type=="DestructorKlingon" then
 				obj=PlayerShip:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+			elseif object_type=="RomulanNorexan" then
+				obj=RomulanNorexan:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 			elseif object_type=="HealthObject" then
 				obj=HealthObject:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+				DEBUG_PRINT("creating health object")
 			elseif object_type=="WeaponObject" then
 				if tile.properties["weapon_type"]=="MACHINE_GUN" then
 					obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,self._map.tileWidth*x,self._map.tileHeight*y)
@@ -55,7 +59,7 @@ function Level:initialize(map_name,space)
 					obj=TileBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
 			end
 			processed_tiles[y*self._map.width+x]=true
-		--end
+		end
 		
 	end
 

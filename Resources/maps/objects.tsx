@@ -22,4 +22,9 @@
    <property name="weapon_type" value="MACHINE_GUN"/>
   </properties>
  </tile>
+ <tile id="4">
+  <properties>
+   <property name="object_type" value="RomulanNorexan"/>
+  </properties>
+ </tile>
 </tileset>

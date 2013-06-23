@@ -32,7 +32,7 @@ function Enemy:collision(object,damage)
   and not object:isEnemyShip() and
   not object:isHarvestableObject() then
     SpaceObject.collision(self,object,damage)
-    DEBUG_PRINT("COLLIDING WITH DAMAGE "..damage.."\n")
+    --DEBUG_PRINT("COLLIDING WITH DAMAGE "..damage.."\n")
   end
 end
 

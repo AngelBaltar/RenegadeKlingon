@@ -86,6 +86,11 @@ function Space:updateBucketFor(so)
 	local delta_x=math.floor(so:getWidth()/BUCKET_SIZE)
 	local delta_y=math.floor(so:getHeight()/BUCKET_SIZE)
 
+	--do not update for disabled objects
+	if not so:isEnabled() then
+		return nil
+	end
+
 	--this object will die because an out of bounds
 	if bc_x_new<0 or bc_y_new<0 then
 		return
