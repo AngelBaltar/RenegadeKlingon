@@ -1,10 +1,4 @@
-require 'GameFrameWork/PlayerShip'
-require 'GameFrameWork/Space'
-require 'GameFrameWork/Enemies/RomulanScout'
 require 'GameFrameWork/Hud'
-require 'GameFrameWork/Harvestables/HealthObject'
-require 'GameFrameWork/Harvestables/WeaponObject'
-require 'GameFrameWork/TileBlock'
 require 'GameFrameWork/Level'
 require 'Utils/Debugging'
 
@@ -14,24 +8,7 @@ local mini_font=love.graphics.newFont( 12 )
 function GameScreen:initialize()
     self._space=Space:new()
     Hud:new(self._space)
-    -- self._space:addBackGroundImage("Resources/gfx/space-1.png")
-    -- self._space:addBackGroundImage("Resources/gfx/space-2.png")
-    -- self._space:addBackGroundImage("Resources/gfx/space-3.png")
-    -- self._space:addBackGroundImage("Resources/gfx/space-4.png")
     self._area=Level:new("map1.tmx",self._space)
-   
-    -- PlayerShip:new(self._space)
-    -- HealthObject:new(self._space)
-    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600,500)
-    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600-65,500)
-    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600-2*65,500)
-    -- TileBlock:new(self._space,"Resources/gfx/block1.png",600-3*65,500)
-    -- WeaponObject:new(self._space,WeaponObject.static.MACHINE_GUN)
-    -- RomulanScout:new(self._space)
-    -- RomulanScout:new(self._space)
-    -- RomulanScout:new(self._space)
-    -- RomulanScout:new(self._space)
-    -- RomulanScout:new(self._space)
     
 
 end

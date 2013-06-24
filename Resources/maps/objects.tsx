@@ -27,4 +27,9 @@
    <property name="object_type" value="RomulanNorexan"/>
   </properties>
  </tile>
+ <tile id="5">
+  <properties>
+   <property name="object_type" value="MineBlock"/>
+  </properties>
+ </tile>
 </tileset>

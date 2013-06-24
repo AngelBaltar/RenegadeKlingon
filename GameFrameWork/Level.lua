@@ -4,7 +4,10 @@ require 'GameFrameWork/Enemies/RomulanScout'
 require 'GameFrameWork/Enemies/RomulanNorexan'
 require 'GameFrameWork/Harvestables/HealthObject'
 require 'GameFrameWork/Harvestables/WeaponObject'
+require 'GameFrameWork/TileBlocks/TileBlock'
+require 'GameFrameWork/TileBlocks/MineBlock'
 require 'Utils/Debugging'
+
 local loader = require("Utils/Advanced-Tiled-Loader/Loader")
 
  -- Path to the tmx files. The file structure must be similar to how they are saved in Tiled
@@ -44,19 +47,27 @@ function Level:initialize(map_name,space)
 	   		--				x, y, tile.id,object_type,imagePath) )
 			if object_type=="RomulanScout" then
 				obj=RomulanScout:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+			
 			elseif object_type=="DestructorKlingon" then
 				obj=PlayerShip:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+			
 			elseif object_type=="RomulanNorexan" then
 				obj=RomulanNorexan:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+			
 			elseif object_type=="HealthObject" then
 				obj=HealthObject:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 				DEBUG_PRINT("creating health object")
+			
 			elseif object_type=="WeaponObject" then
 				if tile.properties["weapon_type"]=="MACHINE_GUN" then
 					obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,self._map.tileWidth*x,self._map.tileHeight*y)
 				end
+
 			elseif object_type=="TileBlock" then
 					obj=TileBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
+
+			elseif object_type=="MineBlock" then
+					obj=MineBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
 			end
 			processed_tiles[y*self._map.width+x]=true
 		end

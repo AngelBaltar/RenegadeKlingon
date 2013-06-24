@@ -1,11 +1,14 @@
 require 'GameFrameWork/SpaceObject'
 
-TileBlock = class('GameFrameWork.Harverstables.TileBlock',SpaceObject)
+TileBlock = class('GameFrameWork.TileBlocks.TileBlock',SpaceObject)
 
 --constructor
-function TileBlock:initialize(space,tile,x,y)
+function TileBlock:initialize(space,tile,x,y,health)
   self._tile=tile
-  SpaceObject.initialize(self,space,tile,x,y,5000)
+  if health==nil then
+    health=5000
+  end
+  SpaceObject.initialize(self,space,tile,x,y,health)
   self._timingCadence=1
 end
 
@@ -22,6 +25,10 @@ end
 --return the height of this shiplove.graphics.newImage("Resources/gfx/blue_TileBlock.png")
 function TileBlock:getHeight()
   return self._tile.height
+end
+
+function TileBlock:die()
+  SpaceObject.die(self)
 end
 
 function TileBlock:pilot(dt)
