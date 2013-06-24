@@ -195,6 +195,29 @@ local _printBackground=function(self)
     								+ size, 0) -- this is the right image
 end
 
+function Space:getBackGroundTimingCadence()
+
+
+	local player=self:getPlayerShip()
+	local delta_x=player:getPositionX()-self:getPlayerBackGroundScroll()
+	local timingCadence=0
+
+	if player==nil or player:getPositionX()<self:getPlayerBackGroundScroll() then
+		return 0
+	end
+  	-- scrolling the posX to the left
+  	if delta_x<=0 then
+		timingCadence=1
+	elseif delta_x<=40 then
+		timingCadence=2
+	elseif delta_x<=80 then
+		timingCadence=3
+	else
+		timingCadence=4
+	end
+	return timingCadence
+end
+
 local _updateBackGround=function(self,dt)
 	
 	local size=self:getBackGroundWidth()
@@ -223,18 +246,7 @@ local _updateBackGround=function(self,dt)
 
 
       	player_x=player:getPositionX()
-      	delta_x=player:getPositionX()-self:getPlayerBackGroundScroll()
-
-      	-- scrolling the posX to the left
-      	if delta_x<=0 then
-    		self._bgTimingCadence=1
-    	elseif delta_x<=40 then
-    		self._bgTimingCadence=2
-    	elseif delta_x<=80 then
-    		self._bgTimingCadence=3
-    	else
-    		self._bgTimingCadence=4
-    	end
+      	self._bgTimingCadence=self:getBackGroundTimingCadence()
     	--DEBUG_PRINT("translating "..self._bgActual*(-800)+self._bgPos.."\n")
     	
 	end
@@ -257,10 +269,12 @@ function Space:draw()
         love.graphics.print("PAUSE",100,100)
 	end
 
-	-- local player=self:getPlayerShip()
+	 local player=self:getPlayerShip()
+ 	
  -- 	if player:getPositionX()>=self:getPlayerBackGroundScroll() then
-	-- 		love.graphics.translate(self._bgPos, 0)
+	--  		love.graphics.translate(self._bgPos, 0)
 	-- end
+
 	for obj,_ in pairs(self._objectsList) do
 		if obj:isEnabled() then
 			obj:draw()
@@ -442,6 +456,7 @@ function Space:update(dt)
 	end
 
 	_updateBackGround(self,dt)
+
 	--pilot all the objects
 	for obj,k in pairs(self._objectsList) do
 		if obj:isEnabled() then

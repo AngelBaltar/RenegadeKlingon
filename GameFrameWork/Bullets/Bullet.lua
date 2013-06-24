@@ -44,8 +44,12 @@ end
 function Bullet:pilot(dt)
   local x=self:getPositionX(self)
   local y=self:getPositionY(self)
+  local my_space=self:getSpace()
 
   x=x+self._xStep
+  if(self._xStep<0) then
+    x=x-my_space:getBackGroundTimingCadence()
+  end
   y=y+self._yStep
 
  

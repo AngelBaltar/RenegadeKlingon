@@ -51,22 +51,7 @@ function TileBlock:pilot(dt)
         x=x-self._timingCadence
 
         player_x=player:getPositionX()
-        delta_x=player:getPositionX()-my_space:getPlayerBackGroundScroll()
-        
-
-
-        -- scrolling the posX to the left
-       -- scrolling the posX to the left
-        
-        if delta_x<=0 then
-          self._timingCadence=2
-        elseif delta_x<=40 then
-          self._timingCadence=3
-        elseif delta_x<=80 then
-          self._timingCadence=4
-        else
-          self._timingCadence=5
-        end
+        self._timingCadence=my_space:getBackGroundTimingCadence()+1
         self:setPosition(x,y)
   end
 
