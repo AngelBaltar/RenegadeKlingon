@@ -32,7 +32,7 @@ function TileBlock:die()
 end
 
 function TileBlock:pilot(dt)
-  
+  local step=20*dt
   local my_space=self:getSpace()
   local player=my_space:getPlayerShip()
   local x=self:getPositionX()
@@ -48,7 +48,7 @@ function TileBlock:pilot(dt)
   -- scrolling the posX to the left
   if  player_x>=my_space:getPlayerBackGroundScroll() then
 
-        x=x-self._timingCadence
+        x=x-self._timingCadence*step
 
         player_x=player:getPositionX()
         self._timingCadence=my_space:getBackGroundTimingCadence()+1

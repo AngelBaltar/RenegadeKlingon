@@ -219,7 +219,7 @@ function Space:getBackGroundTimingCadence()
 end
 
 local _updateBackGround=function(self,dt)
-	
+	local step=20*dt
 	local size=self:getBackGroundWidth()
 	local player=self:getPlayerShip()
 	local delta_x=0
@@ -231,7 +231,7 @@ local _updateBackGround=function(self,dt)
       and player~=nil 
       and player:getPositionX()>=self:getPlayerBackGroundScroll() then
 
-    	self._bgPos=self._bgPos-self._bgTimingCadence
+    	self._bgPos=self._bgPos-self._bgTimingCadence*step
 		
 
     	 --actualize disabled object

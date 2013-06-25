@@ -50,7 +50,7 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function PlayerShip:pilot(dt)
-   local step=4
+   local step=200*dt
   local position_x=SpaceObject.getPositionX(self)
   local position_y=SpaceObject.getPositionY(self)
   local my_space=SpaceObject.getSpace(self)
@@ -62,23 +62,23 @@ function PlayerShip:pilot(dt)
   local sup_x=my_space:getXend()-self:getWidth()-4
 
   if love.keyboard.isDown("up") then
-    if(position_y>inf_y)then
+    if(position_y-step>inf_y)then
       position_y=position_y-step
     end
    end
   if love.keyboard.isDown("down") then
-    if(position_y<sup_y)then
+    if(position_y+step<sup_y)then
       position_y=position_y+step
     end
    end
 
    if love.keyboard.isDown("left") then
-    if(position_x>inf_x)then
+    if(position_x-step>inf_x)then
       position_x=position_x-step
     end
    end
   if love.keyboard.isDown("right") then
-    if(position_x<sup_x)then
+    if(position_x+step<sup_x)then
       position_x=position_x+step
     end
    end

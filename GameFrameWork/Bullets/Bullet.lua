@@ -42,15 +42,16 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function Bullet:pilot(dt)
+  local global_step=70*dt
   local x=self:getPositionX(self)
   local y=self:getPositionY(self)
   local my_space=self:getSpace()
 
-  x=x+self._xStep
+  x=x+self._xStep*global_step
   if(self._xStep<0) then
     x=x-my_space:getBackGroundTimingCadence()
   end
-  y=y+self._yStep
+  y=y+self._yStep*global_step
 
  
   self:setPosition(x,y)
