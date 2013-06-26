@@ -11,7 +11,10 @@ You can try it for free, browse the code or report a bug using the issues. downl
 
 https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/master.zip
 
-For now its only for linux with love2d deploy system, a single .love file, to play the game you only need to download that zip file, uncompress it,
+LINUX
+===========
+
+For linux this game needs love2d system, a single .love file is provided , to play the game you only need to download that zip file, uncompress it,
 go to the directory linux and execute RenegadeKlingon.love with love2d.
 
 If you don't know love2d check it at:
@@ -19,7 +22,15 @@ If you don't know love2d check it at:
 https://love2d.org/
 
 Install it and you will be able to play this game following the previous instructions.
-    
+
+WINDOWS
+===========
+
+For windows a simple .exe is provided in windows directory
+
+MAC_OSX
+===========
+Comming soon...
 
 
 Need Help
