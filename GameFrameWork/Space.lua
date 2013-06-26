@@ -207,11 +207,11 @@ function Space:getBackGroundTimingCadence()
 	end
   	-- scrolling the posX to the left
   	if delta_x<=0 then
-		timingCadence=1
+		timingCadence=0.5
 	elseif delta_x<=40 then
-		timingCadence=2
+		timingCadence=1
 	elseif delta_x<=80 then
-		timingCadence=3
+		timingCadence=2
 	else
 		timingCadence=4
 	end

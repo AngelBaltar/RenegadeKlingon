@@ -51,7 +51,7 @@ function TileBlock:pilot(dt)
         x=x-self._timingCadence*step
 
         player_x=player:getPositionX()
-        self._timingCadence=my_space:getBackGroundTimingCadence()+1
+        self._timingCadence=my_space:getBackGroundTimingCadence()*2
         self:setPosition(x,y)
   end
 
