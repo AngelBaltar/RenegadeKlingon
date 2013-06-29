@@ -37,6 +37,12 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function RomulanNorexan:pilot(dt)
+
+  SpaceObject.pilot(self,dt)
+  if not self:isEnabled() then
+    return nil
+  end
+
   local my_space=self:getSpace()
   local x_i=my_space:getXend()/4
   local x_e=my_space:getXend()-self:getWidth()

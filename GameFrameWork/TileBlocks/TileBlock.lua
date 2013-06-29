@@ -9,7 +9,6 @@ function TileBlock:initialize(space,tile,x,y,health)
     health=5000
   end
   SpaceObject.initialize(self,space,tile,x,y,health)
-  self._timingCadence=1
 end
 
 
@@ -32,31 +31,18 @@ function TileBlock:die()
 end
 
 function TileBlock:pilot(dt)
-  local step=20*dt
-  local my_space=self:getSpace()
-  local player=my_space:getPlayerShip()
-  local x=self:getPositionX()
-  local y=self:getPositionY()
-
-  if(player==nil) then
+  SpaceObject.pilot(self,dt)
+  if not self:isEnabled() then
     return nil
   end
 
-  player_x=player:getPositionX()
-  local delta_x=0
+  local step=20*dt
+  local my_space=self:getSpace()
+  local x=self:getPositionX()
+  local y=self:getPositionY()
 
-  -- scrolling the posX to the left
- -- if  player_x>=my_space:getPlayerBackGroundScroll() then
-
-        x=x-self._timingCadence*step
-
-        player_x=player:getPositionX()
-        self._timingCadence=my_space:getBackGroundTimingCadence()*2
-        self:setPosition(x,y)
- -- end
-
-  
-
+  x=x-my_space:getBackGroundCadence()*step*2
+  self:setPosition(x,y)
 end
 
 --Draws the object in the screen

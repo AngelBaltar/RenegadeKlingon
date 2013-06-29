@@ -37,6 +37,11 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function RomulanScout:pilot(dt)
+  SpaceObject.pilot(self,dt)
+  if not self:isEnabled() then
+    return nil
+  end
+
   local step=50*dt
   local my_space=self:getSpace()
   local x_i=my_space:getXend()/2
