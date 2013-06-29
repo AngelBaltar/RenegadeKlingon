@@ -209,11 +209,11 @@ function Space:getBackGroundTimingCadence()
   	if delta_x<=0 then
 		timingCadence=0.5
 	elseif delta_x<=40 then
-		timingCadence=1
-	elseif delta_x<=80 then
 		timingCadence=2
-	else
+	elseif delta_x<=80 then
 		timingCadence=4
+	else
+		timingCadence=6
 	end
 	return timingCadence
 end
@@ -239,7 +239,7 @@ local _updateBackGround=function(self,dt)
 			if not obj:isEnabled() then
 				aux_x=obj:getPositionX()
 				aux_y=obj:getPositionY()
-				obj:setPosition(aux_x-self._bgTimingCadence,aux_y)
+				obj:setPosition(aux_x-self._bgTimingCadence*step*2,aux_y)
 				obj:setEnabled(self:isObjectEnabled(obj))
 			end
 		end
