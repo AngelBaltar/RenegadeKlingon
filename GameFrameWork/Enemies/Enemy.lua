@@ -51,7 +51,10 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function Enemy:pilot(dt)
-
+  SpaceObject.pilot(self,dt)
+  if not self:isEnabled() then
+    return nil
+  end
 end
 
 --Read from keyboard

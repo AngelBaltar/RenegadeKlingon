@@ -37,7 +37,7 @@ function Space:initialize()
     self._bgSize=0
     self._bgPos=0
     self._bgActual=0
-    self._bgTimingCadence=1
+    self._bgTimingCadence=0
 end
 
 function Space:removeFromBuckets(so)
@@ -195,7 +195,11 @@ local _printBackground=function(self)
     								+ size, 0) -- this is the right image
 end
 
-function Space:getBackGroundTimingCadence()
+function Space:getBackGroundCadence()
+	return self._bgTimingCadence
+end
+
+local _getBackGroundTimingCadence=function(self)
 
 
 	local player=self:getPlayerShip()
@@ -232,21 +236,9 @@ local _updateBackGround=function(self,dt)
       and player:getPositionX()>=self:getPlayerBackGroundScroll() then
 
     	self._bgPos=self._bgPos-self._bgTimingCadence*step
-		
-
-    	 --actualize disabled object
-		for obj,_ in pairs(self._objectsList) do
-			if not obj:isEnabled() then
-				aux_x=obj:getPositionX()
-				aux_y=obj:getPositionY()
-				obj:setPosition(aux_x-self._bgTimingCadence*step*2,aux_y)
-				obj:setEnabled(self:isObjectEnabled(obj))
-			end
-		end
-
 
       	player_x=player:getPositionX()
-      	self._bgTimingCadence=self:getBackGroundTimingCadence()
+      	self._bgTimingCadence=_getBackGroundTimingCadence(self)
     	--DEBUG_PRINT("translating "..self._bgActual*(-800)+self._bgPos.."\n")
     	
 	end
@@ -255,6 +247,13 @@ local _updateBackGround=function(self,dt)
       self._bgPos = 0
       self._bgActual=(self._bgActual+1)%self._bgSize
     end
+
+  	 --actualize disabled object
+	for obj,_ in pairs(self._objectsList) do
+		if not obj:isEnabled() then
+			obj:setEnabled(self:isObjectEnabled(obj))
+		end
+	end
 
 end
 
@@ -459,9 +458,7 @@ function Space:update(dt)
 
 	--pilot all the objects
 	for obj,k in pairs(self._objectsList) do
-		if obj:isEnabled() then
-			obj:pilot(dt)
-		end
+		obj:pilot(dt)
 	end
 
 	--new collision system based in spacial hashing and buckets

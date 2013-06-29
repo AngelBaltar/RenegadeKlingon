@@ -50,7 +50,11 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function PlayerShip:pilot(dt)
-   local step=200*dt
+   SpaceObject.pilot(self,dt)
+  if not self:isEnabled() then
+    return nil
+  end
+  local step=200*dt
   local position_x=SpaceObject.getPositionX(self)
   local position_y=SpaceObject.getPositionY(self)
   local my_space=SpaceObject.getSpace(self)

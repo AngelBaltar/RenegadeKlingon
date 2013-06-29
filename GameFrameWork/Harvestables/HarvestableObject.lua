@@ -32,7 +32,11 @@ function HarvestableObject:getHeight()
 end
 
 function HarvestableObject:pilot(dt)
-
+  SpaceObject.pilot(self,dt)
+  if not self:isEnabled() then
+    return nil
+  end
+  
   local my_space=self:getSpace()
   local x_i=my_space:getXinit()
   local x_e=my_space:getXend()-self:getWidth()
