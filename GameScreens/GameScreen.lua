@@ -24,11 +24,11 @@ end
 function GameScreen:draw()
    local player=self._space:getPlayerShip()
    local memory = _round(collectgarbage("count")/1024,2) -- Kb to Mb
-   self._space:draw()
    if(player==nil)then
     love.graphics.setColor(255,0,0,255)
     love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
    end
+   self._space:draw()
   if getDebug() then
     font_ant=love.graphics.getFont()
     love.graphics.setFont(mini_font)
@@ -54,8 +54,8 @@ end
 function GameScreen:update(dt)
   local player=self._space:getPlayerShip()
    --if player dead!
-   if(player==nil)then
-   		
+  if(player==nil)then
+   		return nil
   else
       self._space:update(dt)
   end

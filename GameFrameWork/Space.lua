@@ -231,8 +231,12 @@ local _updateBackGround=function(self,dt)
 	local aux_x=0
 	local aux_y=0
 
-	if (not self._pause)
-      and player~=nil 
+
+	-- if (self._pause) then
+	-- 	return nil
+	-- end
+
+	if player~=nil 
       and player:getPositionX()>=self:getPlayerBackGroundScroll() then
 
     	self._bgPos=self._bgPos-self._bgTimingCadence*step
@@ -266,6 +270,7 @@ function Space:draw()
 	if(self._pause) then
 		love.graphics.setColor(255,0,0,255)
         love.graphics.print("PAUSE",100,100)
+        love.graphics.setColor(255,255,255,255)
 	end
 
 	 local player=self:getPlayerShip()
