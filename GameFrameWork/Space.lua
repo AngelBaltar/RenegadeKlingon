@@ -238,7 +238,6 @@ local _updateBackGround=function(self,dt)
     	self._bgPos=self._bgPos-self._bgTimingCadence*step
 
       	player_x=player:getPositionX()
-      	self._bgTimingCadence=_getBackGroundTimingCadence(self)
     	--DEBUG_PRINT("translating "..self._bgActual*(-800)+self._bgPos.."\n")
     	
 	end
@@ -254,6 +253,7 @@ local _updateBackGround=function(self,dt)
 			obj:setEnabled(self:isObjectEnabled(obj))
 		end
 	end
+	self._bgTimingCadence=_getBackGroundTimingCadence(self)
 
 end
 

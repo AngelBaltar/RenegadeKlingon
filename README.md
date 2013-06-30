@@ -28,9 +28,9 @@ Windows
 
 For windows a simple .exe is provided in windows directory
 
-Mac_osx
+Mac osx
 ===========
-Comming soon...
+For Mac there is a simple .app provided in mac directory
 
 
 Need Help
