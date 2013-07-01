@@ -20,14 +20,14 @@ path_act=`pwd`
 
 #lets deploy a .love for LINUX
 echo "deploying for linux..."
-test rm $path_linux/*
+rm $path_linux/*
 test zip  $path_linux/RenegadeKlingon.zip -r $necesary_files
 test mv $path_linux/RenegadeKlingon.zip $path_linux/RenegadeKlingon.love
 echo "deploy for linux OK"
 
 #lets deploy a .exe for WINDOWS
 echo "deploying for windows..."
-test rm $path_windows/*
+rm $path_windows/*
 test cp $path_linux/RenegadeKlingon.love $path_windows/game.love
 test cp -R ../RenegadeKlingonDeploy/love-0.8.0-win-x86/* $path_windows/
 test cat $path_windows/love.exe $path_windows/game.love > $path_windows/RenegadeKlingon.exe
@@ -36,7 +36,7 @@ echo "deploy for windows OK"
 
 #lets deploy a .app for MAC OSX
 echo "deploying for mac..."
-test rm -rf $path_mac/*
+rm -rf $path_mac/*
 test cp -R ../RenegadeKlingonDeploy/love.app $path_mac/RenegadeKlingon.app
 test cp $path_linux/RenegadeKlingon.love $path_mac/RenegadeKlingon.app/Contents/Resources/
 test sed -i 's/>org.love2d.love</>com.with2balls.RenegadeKlingon</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
