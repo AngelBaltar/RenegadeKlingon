@@ -95,3 +95,7 @@ end
 function HarvestableObject:isHarvestableObject()
 	return true
 end
+
+function HarvestableObject:toString()
+  return "harvestable"
+end

@@ -10,3 +10,7 @@ function HealthObject:initialize(space,posx,posy)
 
   HarvestableObject.initialize(self,space,HealthObject.static.HEALTH_IMG,posx,posy,-5)
 end
+
+function HealthObject:toString()
+	return "health"
+end

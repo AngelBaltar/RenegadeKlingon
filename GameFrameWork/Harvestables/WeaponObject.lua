@@ -61,3 +61,7 @@ function WeaponObject:draw()
 
   self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom) 
 end
+
+function WeaponObject:toString()
+  return "weapon"
+end

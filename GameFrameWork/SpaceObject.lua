@@ -140,6 +140,10 @@ function SpaceObject:setBucket(x,y)
 	self._bucket_y=y
 end
 
+function SpaceObject:toString()
+	return "spaceobject"
+end
+
 --the PlayerShip class must extend this class and overwritte this method returning true
 function SpaceObject:isPlayerShip()
 	return false

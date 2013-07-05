@@ -28,6 +28,7 @@ function GameScreen:draw()
     love.graphics.setColor(255,0,0,255)
     love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
    end
+   --DEBUG_PRINT("space draw")
    self._space:draw()
   if getDebug() then
     font_ant=love.graphics.getFont()
@@ -57,6 +58,7 @@ function GameScreen:update(dt)
   if(player==nil)then
    		return nil
   else
+      --DEBUG_PRINT("space update")
       self._space:update(dt)
   end
 end

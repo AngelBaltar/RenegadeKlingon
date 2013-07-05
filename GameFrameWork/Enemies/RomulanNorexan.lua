@@ -59,6 +59,8 @@ function RomulanNorexan:pilot(dt)
   local rnd3=0
   local dir1=1
   local dir2=1
+  local iter=0
+  local iter_max=10
   
   self._weapon:fire()
 
@@ -98,7 +100,9 @@ end
     end
   end
 
-while collision do
+iter=0
+while collision and iter<iter_max do
+  iter=iter+1
   rnd1=math.random(5)
   rnd2=math.random()
   rnd3=math.random()

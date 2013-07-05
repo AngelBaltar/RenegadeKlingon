@@ -41,6 +41,7 @@ function Space:initialize()
 end
 
 function Space:removeFromBuckets(so)
+	DEBUG_PRINT("removeFromBuckets")
 	local bc_x=-1
 	local bc_y=-1
 	bc_x,bc_y=so:getBucket(so)
@@ -73,6 +74,7 @@ function Space:removeFromBuckets(so)
 	so:setBucket(-1,-1)
 end
 function Space:updateBucketFor(so)
+	DEBUG_PRINT("updateBucketFor:"..so:toString())
 	local bc_x_old=0
 	local bc_y_old=0
 	bc_x_old,bc_y_old=so:getBucket()
@@ -156,6 +158,7 @@ function Space:getPlayerBackGroundScroll()
 end
 --adds a new SpaceObject to the space
 function Space:addSpaceObject(object)
+	DEBUG_PRINT("addSpaceObject")
 	self._objectsList[object]=true
 	self:updateBucketFor(object)
 end
@@ -172,6 +175,7 @@ function Space:exists(so)
 end
 --removes a object from the space
 function Space:removeSpaceObject(object)
+	DEBUG_PRINT("removeSpaceObject")
 	self:removeFromBuckets(object)
 	self._objectsList[object]=nil
 
@@ -179,6 +183,7 @@ end
 
 --checks if so is x inbounds in the map, so can appear in the future
 function Space:isObjectEnabled(so)
+	DEBUG_PRINT("isObjectEnabled")
 	local x=so:getPositionX()
 	if x>=self:getXinit() and x<=self:getXend() then
 		return true

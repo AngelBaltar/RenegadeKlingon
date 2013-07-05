@@ -59,6 +59,8 @@ function RomulanScout:pilot(dt)
   local rnd3=0
   local dir1=1
   local dir2=1
+  local iter=0
+  local iter_max=10
   
   self._weapon:fire()
 
@@ -98,7 +100,10 @@ if(self._timer>0.5) then
     end
   end
 
-while collision do
+iter=0
+while collision and iter<iter_max do
+
+  iter=iter+1
   rnd1=math.random(5)
   rnd2=math.random()
   rnd3=math.random()
@@ -129,4 +134,8 @@ while collision do
   end
 end
 
+end
+
+function RomulanScout:toString()
+  return "RomulanScout"
 end

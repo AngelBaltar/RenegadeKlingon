@@ -66,3 +66,7 @@ end
 function Enemy:isEnemyShip()
 	return true
 end
+
+function Enemy:toString()
+  return "Enemy"
+end

@@ -57,3 +57,7 @@ end
 function TileBlock:isTileBlock()
 	return true
 end
+
+function TileBlock:toString()
+  return "tile"
+end

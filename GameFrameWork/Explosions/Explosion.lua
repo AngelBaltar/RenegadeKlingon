@@ -35,3 +35,7 @@ end
 function Explosion:isExplosion()
 	return true
 end
+
+function Explosion:toString()
+  return "explosion"
+end

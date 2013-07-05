@@ -71,3 +71,7 @@ end
 function Bullet:isBullet()
 	return true
 end
+
+function Bullet:toString()
+  return "Bullet"
+end

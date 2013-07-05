@@ -2,6 +2,7 @@ require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Explosions/AnimatedExplosion'
 require 'GameFrameWork/Weapons/DestructorKlingonBasicWeapon'
 require 'GameFrameWork/Weapons/MachineGunWeapon'
+require 'Utils/Debugging'
 
 PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 
@@ -96,6 +97,10 @@ end
 function PlayerShip:keypressed(key, unicode)
 
  
+end
+
+function PlayerShip:toString()
+  return "player"
 end
 
 --im the player, ovewritting from SpaceObject
