@@ -38,10 +38,11 @@ function Space:initialize()
     self._bgPos=0
     self._bgActual=0
     self._bgTimingCadence=0
+    self._backgroundDistance=5
 end
 
 function Space:removeFromBuckets(so)
-	DEBUG_PRINT("removeFromBuckets")
+	--DEBUG_PRINT("removeFromBuckets")
 	local bc_x=-1
 	local bc_y=-1
 	bc_x,bc_y=so:getBucket(so)
@@ -74,7 +75,7 @@ function Space:removeFromBuckets(so)
 	so:setBucket(-1,-1)
 end
 function Space:updateBucketFor(so)
-	DEBUG_PRINT("updateBucketFor:"..so:toString())
+	--DEBUG_PRINT("updateBucketFor:"..so:toString())
 	local bc_x_old=0
 	local bc_y_old=0
 	bc_x_old,bc_y_old=so:getBucket()
@@ -158,7 +159,7 @@ function Space:getPlayerBackGroundScroll()
 end
 --adds a new SpaceObject to the space
 function Space:addSpaceObject(object)
-	DEBUG_PRINT("addSpaceObject")
+	--DEBUG_PRINT("addSpaceObject")
 	self._objectsList[object]=true
 	self:updateBucketFor(object)
 end
@@ -175,7 +176,7 @@ function Space:exists(so)
 end
 --removes a object from the space
 function Space:removeSpaceObject(object)
-	DEBUG_PRINT("removeSpaceObject")
+	--DEBUG_PRINT("removeSpaceObject")
 	self:removeFromBuckets(object)
 	self._objectsList[object]=nil
 
@@ -183,7 +184,7 @@ end
 
 --checks if so is x inbounds in the map, so can appear in the future
 function Space:isObjectEnabled(so)
-	DEBUG_PRINT("isObjectEnabled")
+	--DEBUG_PRINT("isObjectEnabled")
 	local x=so:getPositionX()
 	if x>=self:getXinit() and x<=self:getXend() then
 		return true
@@ -211,24 +212,25 @@ local _getBackGroundTimingCadence=function(self)
 	local delta_x=player:getPositionX()-self:getPlayerBackGroundScroll()
 	local timingCadence=0
 
+
 	if player==nil or player:getPositionX()<self:getPlayerBackGroundScroll() then
 		return 0
 	end
   	-- scrolling the posX to the left
   	if delta_x<=0 then
-		timingCadence=0.5
+		timingCadence=0.2
 	elseif delta_x<=40 then
-		timingCadence=2
+		timingCadence=0.5
 	elseif delta_x<=80 then
-		timingCadence=4
+		timingCadence=2
 	else
-		timingCadence=6
+		timingCadence=3
 	end
 	return timingCadence
 end
 
 local _updateBackGround=function(self,dt)
-	local step=20*dt
+	local step=100*dt/self._backgroundDistance
 	local size=self:getBackGroundWidth()
 	local player=self:getPlayerShip()
 	local delta_x=0

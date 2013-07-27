@@ -51,7 +51,6 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function PlayerShip:pilot(dt)
-   SpaceObject.pilot(self,dt)
   if not self:isEnabled() then
     return nil
   end
