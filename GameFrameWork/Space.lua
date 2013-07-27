@@ -38,7 +38,7 @@ function Space:initialize()
     self._bgPos=0
     self._bgActual=0
     self._bgTimingCadence=0
-    self._backgroundDistance=5
+    self._backgroundDistance=4
 end
 
 function Space:removeFromBuckets(so)
