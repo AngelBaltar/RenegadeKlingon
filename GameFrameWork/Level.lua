@@ -22,6 +22,8 @@ function Level:initialize(map_name,space)
 	local quad=nil
 	local obj=nil
 	local processed_tiles={}
+	local step_bg=1
+	local n_bgs=4
 
 	self._map=loader.load(map_name)
 	local ordered_paths={}
@@ -33,46 +35,53 @@ function Level:initialize(map_name,space)
 	for _,path in pairs(ordered_paths) do
 		space:addBackGroundImage(path)
 	end
-	--first plane objects
-	for x, y, tile in self._map("primer_plano"):iterate() do
-		
-		--avoid repeated tiles
-		if processed_tiles[y*self._map.width+x]==nil then
-			object_type=tile.tileset.properties["object_type"]
-			if(tile.properties["object_type"]~=nil) then
-				object_type=tile.properties["object_type"]
-			end
-			imagePath=tile.tileset.imagePath
-	   		--print( string.format("Tile at (%d,%d) has an id of %d %s %s",
-	   		--				x, y, tile.id,object_type,imagePath) )
-			if object_type=="RomulanScout" then
-				obj=RomulanScout:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
-			
-			elseif object_type=="DestructorKlingon" then
-				obj=PlayerShip:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
-			
-			elseif object_type=="RomulanNorexan" then
-				obj=RomulanNorexan:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
-			
-			elseif object_type=="HealthObject" then
-				obj=HealthObject:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
-				DEBUG_PRINT("creating health object")
-			
-			elseif object_type=="WeaponObject" then
-				if tile.properties["weapon_type"]=="MACHINE_GUN" then
-					obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,self._map.tileWidth*x,self._map.tileHeight*y)
+	--all plane objects
+	for plane=1,n_bgs do
+		--DEBUG_PRINT("plano_"..plane)
+		if self._map("plano_"..plane)~=nil then
+			for x, y, tile in self._map("plano_"..plane):iterate() do
+				
+				obj=nil
+				--avoid repeated tiles
+				if processed_tiles[y*self._map.width+x]==nil then
+					object_type=tile.tileset.properties["object_type"]
+					if(tile.properties["object_type"]~=nil) then
+						object_type=tile.properties["object_type"]
+					end
+					imagePath=tile.tileset.imagePath
+			   		--print( string.format("Tile at (%d,%d) has an id of %d %s %s",
+			   		--				x, y, tile.id,object_type,imagePath) )
+					if object_type=="RomulanScout" then
+						obj=RomulanScout:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+					
+					elseif object_type=="DestructorKlingon" then
+						obj=PlayerShip:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+					
+					elseif object_type=="RomulanNorexan" then
+						obj=RomulanNorexan:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+					
+					elseif object_type=="HealthObject" then
+						obj=HealthObject:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+						DEBUG_PRINT("creating health object")
+					
+					elseif object_type=="WeaponObject" then
+						if tile.properties["weapon_type"]=="MACHINE_GUN" then
+							obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,self._map.tileWidth*x,self._map.tileHeight*y)
+						end
+
+					elseif object_type=="TileBlock" then
+							obj=TileBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
+
+					elseif object_type=="MineBlock" then
+							obj=MineBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
+					end
+					processed_tiles[y*self._map.width+x]=true
 				end
-
-			elseif object_type=="TileBlock" then
-					obj=TileBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
-
-			elseif object_type=="MineBlock" then
-					obj=MineBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
+				if(obj~=nil) then
+					obj:setBackGroundDistance(plane*step_bg)
+				end
 			end
-			processed_tiles[y*self._map.width+x]=true
 		end
-		
 	end
-
 
 end

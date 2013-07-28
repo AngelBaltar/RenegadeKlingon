@@ -13,6 +13,7 @@ function SpaceObject:initialize(space,draw_object,posx,posy,health)
   self._yPos=posy
   self._bucket_x=-1
   self._bucket_y=-1
+  self._backgroundDistance=1
   self._isEnabled=space:isObjectEnabled(self)
   space:addSpaceObject(self)
 end
@@ -29,7 +30,7 @@ end
 function SpaceObject:pilot(dt)
   
   if(not self:isEnabled()) then
-	  local step=100*dt
+	  local step=100*dt/1
 	  local my_space=self:getSpace()
 	  local x=self:getPositionX()
 	  local y=self:getPositionY()
@@ -137,6 +138,15 @@ function SpaceObject:setBucket(x,y)
 	self._bucket_x=x
 	self._bucket_y=y
 end
+
+function SpaceObject:getBackGroundDistance()
+	return self._backgroundDistance
+end
+
+function SpaceObject:setBackGroundDistance(bd)
+	self._backgroundDistance=bd
+end
+
 
 function SpaceObject:toString()
 	return "spaceobject"

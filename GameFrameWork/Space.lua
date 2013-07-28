@@ -216,15 +216,11 @@ local _getBackGroundTimingCadence=function(self)
 	if player==nil or player:getPositionX()<self:getPlayerBackGroundScroll() then
 		return 0
 	end
-  	-- scrolling the posX to the left
-  	if delta_x<=0 then
-		timingCadence=0.2
-	elseif delta_x<=40 then
+ --  	-- scrolling the posX to the left
+  	if delta_x<=50 then
 		timingCadence=0.5
-	elseif delta_x<=80 then
-		timingCadence=2
 	else
-		timingCadence=3
+		timingCadence=0.8
 	end
 	return timingCadence
 end
@@ -271,7 +267,10 @@ end
 --draws all the objects in the space
 function Space:draw()
 
-
+	local player=self:getPlayerShip()
+	local step_bg=1
+	local n_bgs=4
+	local dst=0
  	_printBackground(self)
 
 	if(self._pause) then
@@ -279,16 +278,16 @@ function Space:draw()
         love.graphics.print("PAUSE",100,100)
         love.graphics.setColor(255,255,255,255)
 	end
-
-	 local player=self:getPlayerShip()
  	
  -- 	if player:getPositionX()>=self:getPlayerBackGroundScroll() then
 	--  		love.graphics.translate(self._bgPos, 0)
 	-- end
-
-	for obj,_ in pairs(self._objectsList) do
-		if obj:isEnabled() then
-			obj:draw()
+	for plane=n_bgs,0,-1 do
+		dst=plane*step_bg
+		for obj,_ in pairs(self._objectsList) do
+			if obj:isEnabled() and obj:getBackGroundDistance()==dst then
+				obj:draw()
+			end
 		end
 	end
 end
@@ -310,6 +309,11 @@ local _collisionCheck = function(self,soA,soB)
 	
 	--some of this checks are implemented in subclasses method collision
 	--but returning false here we get more performance
+
+	--objects in diferent planes do not collide
+	if(soA:getBackGroundDistance()~=soB:getBackGroundDistance()) then
+		return false
+	end
 
 	--bullets do not collide
 	if soA:isBullet() and soB:isBullet() then
@@ -412,6 +416,11 @@ end
 --bullets collide bullets ...
 function Space:naturalCollisionCheck(soA,soB)
 
+	--objects in diferent planes do not collide
+	if(soA:getBackGroundDistance()~=soB:getBackGroundDistance()) then
+		return false
+	end
+	
 	if(soA==soB) then
 		return false
 	end
@@ -469,6 +478,7 @@ function Space:update(dt)
 	_updateBackGround(self,dt)
 
 	--pilot all the objects
+
 	for obj,k in pairs(self._objectsList) do
 		obj:pilot(dt)
 	end
