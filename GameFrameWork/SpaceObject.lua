@@ -30,12 +30,13 @@ end
 function SpaceObject:pilot(dt)
   
   if(not self:isEnabled()) then
-	  local step=100*dt/1
+	  local step=100*dt/self:getBackGroundDistance()
 	  local my_space=self:getSpace()
 	  local x=self:getPositionX()
 	  local y=self:getPositionY()
 
 	  x=x-my_space:getBackGroundCadence()*step
+	  --x=x-1*step
 	  self:setPosition(x,y)
   end
 end

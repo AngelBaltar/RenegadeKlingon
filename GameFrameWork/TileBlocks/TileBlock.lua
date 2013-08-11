@@ -44,6 +44,7 @@ function TileBlock:pilot(dt)
     local y=self:getPositionY()
 
     x=x-my_space:getBackGroundCadence()*step
+    --x=x-1*step
     self:setPosition(x,y)
   end
 end

@@ -213,7 +213,7 @@ local _getBackGroundTimingCadence=function(self)
 	local timingCadence=0
 
 
-	if player==nil or player:getPositionX()<self:getPlayerBackGroundScroll() then
+	if player==nil or player:getPositionX()<=self:getPlayerBackGroundScroll() then
 		return 0
 	end
  --  	-- scrolling the posX to the left
@@ -254,13 +254,15 @@ local _updateBackGround=function(self,dt)
       self._bgActual=(self._bgActual+1)%self._bgSize
     end
 
-  	 --actualize disabled object
+  	
+	self._bgTimingCadence=_getBackGroundTimingCadence(self)
+
+	--actualize disabled object
 	for obj,_ in pairs(self._objectsList) do
 		if not obj:isEnabled() then
 			obj:setEnabled(self:isObjectEnabled(obj))
 		end
 	end
-	self._bgTimingCadence=_getBackGroundTimingCadence(self)
 
 end
 
@@ -477,11 +479,14 @@ function Space:update(dt)
 
 	_updateBackGround(self,dt)
 
+
 	--pilot all the objects
 
 	for obj,k in pairs(self._objectsList) do
 		obj:pilot(dt)
 	end
+
+
 
 	--new collision system based in spacial hashing and buckets
 

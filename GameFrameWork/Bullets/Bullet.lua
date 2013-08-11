@@ -26,7 +26,6 @@ function Bullet:die()
   if my_space:isInBounds(self) then
     ParticleExplosion:new(my_space,x,y,0.25,"Resources/gfx/fire.png")
   end
-  
   SpaceObject.die(self)
 end
 
@@ -36,6 +35,8 @@ function Bullet:collision(object,damage)
     and not( object:isEnemyShip() and self._emmiter:isEnemyShip())
     and not( object:isPlayerShip() and self._emmiter:isPlayerShip())
     and not (object:isHarvestableObject()) then
+    --bullet will die, lets die in the middle of the object to cause a properly explosion
+    SpaceObject.setPosition(self,object:getPositionX(),object:getPositionY())
     SpaceObject.collision(self,object,damage)
   end
 end
