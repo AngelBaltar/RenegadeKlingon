@@ -8,7 +8,7 @@ local mini_font=love.graphics.newFont( 12 )
 function GameScreen:initialize()
     self._space=Space:new()
     Hud:new(self._space)
-    self._area=Level:new("map1.tmx",self._space)
+    load_level("map1.tmx",self._space)
     
 
 end

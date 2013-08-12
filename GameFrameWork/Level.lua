@@ -14,10 +14,7 @@ local loader = require("Utils/Advanced-Tiled-Loader/Loader")
  -- Path to the tmx files. The file structure must be similar to how they are saved in Tiled
 loader.path = "Resources/maps/"
 
-Level = class('GameFrameWork.Level')
-
---constructor
-function Level:initialize(map_name,space)
+function load_level(map_name,space)
 	local object_type=""
 	local imagePath=""
 	local quad=nil
@@ -26,11 +23,11 @@ function Level:initialize(map_name,space)
 	local step_bg=1
 	local n_bgs=4
 
-	self._map=loader.load(map_name)
+	local map=loader.load(map_name)
 	local ordered_paths={}
 	local max_x=0
 	--backgrounds
-	for x, y, tile in self._map("fondo"):iterate() do
+	for x, y, tile in map("fondo"):iterate() do
 		ordered_paths[x]=tile.properties["img_path"]
 	end
 	for _,path in pairs(ordered_paths) do
@@ -39,12 +36,12 @@ function Level:initialize(map_name,space)
 	--all plane objects
 	for plane=1,n_bgs do
 		--DEBUG_PRINT("plano_"..plane)
-		if self._map("plano_"..plane)~=nil then
-			for x, y, tile in self._map("plano_"..plane):iterate() do
+		if map("plano_"..plane)~=nil then
+			for x, y, tile in map("plano_"..plane):iterate() do
 				
 				obj=nil
 				--avoid repeated tiles
-				if processed_tiles[y*self._map.width+x]==nil then
+				if processed_tiles[y*map.width+x]==nil then
 					object_type=tile.tileset.properties["object_type"]
 					if(tile.properties["object_type"]~=nil) then
 						object_type=tile.properties["object_type"]
@@ -53,33 +50,33 @@ function Level:initialize(map_name,space)
 			   		--print( string.format("Tile at (%d,%d) has an id of %d %s %s",
 			   		--				x, y, tile.id,object_type,imagePath) )
 					if object_type=="RomulanScout" then
-						obj=RomulanScout:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+						obj=RomulanScout:new(space,map.tileWidth*x,map.tileHeight*y)
 					
 					elseif object_type=="DestructorKlingon" then
-						obj=PlayerShip:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+						obj=PlayerShip:new(space,map.tileWidth*x,map.tileHeight*y)
 					
 					elseif object_type=="RomulanWarBird" then
-						obj=RomulanWarBird:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+						obj=RomulanWarBird:new(space,map.tileWidth*x,map.tileHeight*y)
 
 					elseif object_type=="RomulanNorexan" then
-						obj=RomulanNorexan:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+						obj=RomulanNorexan:new(space,map.tileWidth*x,map.tileHeight*y)
 					
 					elseif object_type=="HealthObject" then
-						obj=HealthObject:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+						obj=HealthObject:new(space,map.tileWidth*x,map.tileHeight*y)
 						DEBUG_PRINT("creating health object")
 					
 					elseif object_type=="WeaponObject" then
 						if tile.properties["weapon_type"]=="MACHINE_GUN" then
-							obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,self._map.tileWidth*x,self._map.tileHeight*y)
+							obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,map.tileWidth*x,map.tileHeight*y)
 						end
 
 					elseif object_type=="TileBlock" then
-							obj=TileBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
+							obj=TileBlock:new(space,tile,map.tileWidth*x,map.tileHeight*y)
 
 					elseif object_type=="MineBlock" then
-							obj=MineBlock:new(space,tile,self._map.tileWidth*x,self._map.tileHeight*y)
+							obj=MineBlock:new(space,tile,map.tileWidth*x,map.tileHeight*y)
 					end
-					processed_tiles[y*self._map.width+x]=true
+					processed_tiles[y*map.width+x]=true
 				end
 				if(obj~=nil) then
 					obj:setBackGroundDistance(plane*step_bg)

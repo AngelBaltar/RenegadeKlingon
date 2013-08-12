@@ -3,6 +3,7 @@ require 'GameFrameWork/Explosions/AnimatedExplosion'
 require 'GameFrameWork/Weapons/DestructorKlingonBasicWeapon'
 require 'GameFrameWork/Weapons/MachineGunWeapon'
 require 'Utils/Debugging'
+require 'Utils/GameConfig'
 
 PlayerShip = class('GameFrameWork.PlayerShip',SpaceObject)
 
@@ -65,28 +66,30 @@ function PlayerShip:pilot(dt)
   local sup_y=my_space:getYend()-self:getHeight()-4
   local sup_x=my_space:getXend()-self:getWidth()-4
 
-  if love.keyboard.isDown("up") then
+  local config=GameConfig.getInstance()
+
+  if config:isDownUp() then
     if(position_y-step>inf_y)then
       position_y=position_y-step
     end
    end
-  if love.keyboard.isDown("down") then
+  if config:isDownDown() then
     if(position_y+step<sup_y)then
       position_y=position_y+step
     end
    end
 
-   if love.keyboard.isDown("left") then
+   if config:isDownLeft() then
     if(position_x-step>inf_x)then
       position_x=position_x-step
     end
    end
-  if love.keyboard.isDown("right") then
+  if config:isDownRight() then
     if(position_x+step<sup_x)then
       position_x=position_x+step
     end
    end
-  if love.keyboard.isDown("a") then
+  if config:isDownFire() then
     self._basic_weapon:fire()
    end
    self:setPosition(position_x,position_y)

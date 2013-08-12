@@ -2,6 +2,12 @@ require 'GameScreens/Screen'
 
 ControlsScreen = class('ControlsScreen', Screen)
 
+local NONE_OPTION=0
+local UP_OPTION=1
+local DOWN_OPTION=2
+local RIGHT_OPTION=3
+local LEFT_OPTION=4
+local FIRE_OPTION=5
 
 function ControlsScreen:initialize()
   self._xPos=0
