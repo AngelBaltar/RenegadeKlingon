@@ -155,7 +155,7 @@ end
 --returns the x axis position that makes background to
 --move
 function Space:getPlayerBackGroundScroll()
-	return (self:getBackGroundWidth()/2)
+	return (self:getBackGroundWidth()/4)
 end
 --adds a new SpaceObject to the space
 function Space:addSpaceObject(object)
@@ -219,8 +219,12 @@ local _getBackGroundTimingCadence=function(self)
  --  	-- scrolling the posX to the left
   	if delta_x<=50 then
 		timingCadence=0.5
-	else
+	elseif delta_x<=120 then
 		timingCadence=0.8
+	elseif delta_x<=230 then
+		timingCadence=1
+	else
+		timingCadence=1.7
 	end
 	return timingCadence
 end

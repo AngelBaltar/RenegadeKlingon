@@ -32,4 +32,9 @@
    <property name="object_type" value="MineBlock"/>
   </properties>
  </tile>
+<tile id="6">
+  <properties>
+   <property name="object_type" value="RomulanWarBird"/>
+  </properties>
+ </tile>
 </tileset>

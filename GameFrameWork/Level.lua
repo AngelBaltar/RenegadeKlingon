@@ -2,6 +2,7 @@ require 'Utils/middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/Enemies/RomulanScout'
 require 'GameFrameWork/Enemies/RomulanNorexan'
+require 'GameFrameWork/Enemies/RomulanWarBird'
 require 'GameFrameWork/Harvestables/HealthObject'
 require 'GameFrameWork/Harvestables/WeaponObject'
 require 'GameFrameWork/TileBlocks/TileBlock'
@@ -57,6 +58,9 @@ function Level:initialize(map_name,space)
 					elseif object_type=="DestructorKlingon" then
 						obj=PlayerShip:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 					
+					elseif object_type=="RomulanWarBird" then
+						obj=RomulanWarBird:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
+
 					elseif object_type=="RomulanNorexan" then
 						obj=RomulanNorexan:new(space,self._map.tileWidth*x,self._map.tileHeight*y)
 					

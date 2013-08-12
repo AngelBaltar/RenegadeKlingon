@@ -36,7 +36,7 @@ function Bullet:collision(object,damage)
     and not( object:isPlayerShip() and self._emmiter:isPlayerShip())
     and not (object:isHarvestableObject()) then
     --bullet will die, lets die in the middle of the object to cause a properly explosion
-    SpaceObject.setPosition(self,object:getPositionX(),object:getPositionY())
+    SpaceObject.setPosition(self,object:getPositionX()+object:getWidth()/2,object:getPositionY()+object:getHeight()/2)
     SpaceObject.collision(self,object,damage)
   end
 end
