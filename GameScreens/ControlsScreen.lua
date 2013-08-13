@@ -17,7 +17,7 @@ local ESCAPE_OPTION=8
 local config=GameConfig.getInstance()
 
 local _loadMenus=function(self)
-  self._controlsMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/4)
+  self._controlsMenu=Menu:new(love.graphics.getWidth()/4,love.graphics.getHeight()/4)
   self._controlsMenu:addItem("Up----->"..config:getKeyUp())
   self._controlsMenu:addItem("Down--->"..config:getKeyDown())
   self._controlsMenu:addItem("Left--->"..config:getKeyLeft())
@@ -41,7 +41,7 @@ function ControlsScreen:draw()
 		self._controlsMenu:print()
 	else
 		
-		love.graphics.print("Press the key...", love.graphics.getWidth()/2,love.graphics.getHeight()/4)
+		love.graphics.print("Press the key...", love.graphics.getWidth()/4,love.graphics.getHeight()/4)
 	end
 end
 
@@ -62,7 +62,7 @@ function ControlsScreen:readPressed()
       self._selectedOption=self._controlsMenu:readPressed()
       return 1
   elseif (self._selectedOption==UP_OPTION) then
-      config:setKeyUp(key)
+        config:setKeyUp(key)
   elseif (self._selectedOption==DOWN_OPTION) then
       config:setKeyDown(key)
   elseif (self._selectedOption==LEFT_OPTION) then
@@ -70,7 +70,12 @@ function ControlsScreen:readPressed()
   elseif (self._selectedOption==RIGHT_OPTION) then
       config:setKeyRight(key)
   elseif (self._selectedOption==FIRE_OPTION) then
-      config:setKeyFire(key)
+      if(key~=nil) then
+        config:setKeyFire(key)
+      end
+      if(joypad~=nil and joypadbutton~=nil) then
+        config:setKeyFire(joypad, joypadbutton )
+      end
   elseif (self._selectedOption==PAUSE_OPTION) then
       config:setKeyPause(key)
   elseif (self._selectedOption==ENTER_OPTION) then

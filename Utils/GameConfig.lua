@@ -6,7 +6,7 @@ local _instance=nil
 --constructor
 
 local __initialize = function(self)
-	self._joypadOn=false
+	
 	self._keyUp="up"
 	self._keyDown="down"
 	self._keyLeft="left"
@@ -16,13 +16,9 @@ local __initialize = function(self)
 	self._keyEnter="return"
 	self._keyEscape="escape"
 
-	self._joyUp={joy_num=0,joy_button=0}
-	self._joyDown={joy_num=0,joy_button=0}
-	self._joyLeft={joy_num=0,joy_button=0}
-	self._joyRight={joy_num=0,joy_button=0}
-	self._joyFire={joy_num=0,joy_button=0}
-	self._joyEnter={joy_num=0,joy_button=0}
-	self._joyEscape={joy_num=0,joy_button=0}
+	self._joyFire={joy_num=-1,joy_button=-1}
+	self._joyEnter={joy_num=-1,joy_button=-1}
+	self._joyEscape={joy_num=-1,joy_button=-1}
 
 end
 
@@ -38,12 +34,6 @@ end
 function GameConfig:setKeyUp(keyUp)
 	self._keyUp=keyUp
 end
-
-function GameConfig:setKeyUp(joystick, button )
-	self._joyUp.joy_num=joystick
-	self._joyUp.joy_button=button
-end
-
 
 function GameConfig:setKeyDown(keyDown)
 	self._keyDown=keyDown
@@ -62,6 +52,11 @@ end
 
 function GameConfig:setKeyFire(keyFire)
 	self._keyFire=keyFire
+end
+
+function GameConfig:setKeyFire(joystick, button )
+	self._joyFire.joy_num=joystick
+	self._joyFire.joy_button=button
 end
 
 function GameConfig:setKeyPause(keyPause)
@@ -98,7 +93,14 @@ end
 
 
 function GameConfig:getKeyFire()
-	return self._keyFire
+	ret=self._keyFire
+
+	if(self._joyFire.joy_num~=-1 and self._joyFire.joy_button~=-1) then
+		name = love.joystick.getName(self._joyFire.joy_num)
+		ret=ret..name.." B"..self._joyFire.joy_button
+	end
+
+	return ret
 end
 
 function GameConfig:getKeyPause()
@@ -115,23 +117,29 @@ end
 
 
 function GameConfig:isDownUp()
-	return love.keyboard.isDown(self._keyUp)
+	direction = love.joystick.getAxis( 1, 2 )
+	--DEBUG_PRINT("direction:"..direction)
+	return love.keyboard.isDown(self._keyUp) or direction==-1 
 end
 
 function GameConfig:isDownDown()
-	return love.keyboard.isDown(self._keyDown)
+	direction = love.joystick.getAxis( 1, 2 )
+	return love.keyboard.isDown(self._keyDown) or direction==1
 end
 
 function GameConfig:isDownRight()
-	return love.keyboard.isDown(self._keyRight)
+	direction = love.joystick.getAxis( 1, 1 )
+	return love.keyboard.isDown(self._keyRight) or direction==1
 end
 
 function GameConfig:isDownLeft()
-	return love.keyboard.isDown(self._keyLeft)
+	direction = love.joystick.getAxis( 1, 1 )
+	return love.keyboard.isDown(self._keyLeft) or direction==-1
 end
 
 function GameConfig:isDownFire()
-	return love.keyboard.isDown(self._keyFire)
+	return love.keyboard.isDown(self._keyFire)	
+			or love.joystick.isDown( self._joyFire.joy_num,self._joyFire.joy_button)
 end
 
 function GameConfig:isDownPause()
