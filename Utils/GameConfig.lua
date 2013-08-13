@@ -15,6 +15,15 @@ local __initialize = function(self)
 	self._keyPause="p"
 	self._keyEnter="return"
 	self._keyEscape="escape"
+
+	self._joyUp={joy_num=0,joy_button=0}
+	self._joyDown={joy_num=0,joy_button=0}
+	self._joyLeft={joy_num=0,joy_button=0}
+	self._joyRight={joy_num=0,joy_button=0}
+	self._joyFire={joy_num=0,joy_button=0}
+	self._joyEnter={joy_num=0,joy_button=0}
+	self._joyEscape={joy_num=0,joy_button=0}
+
 end
 
 --return the width of this ship
@@ -28,6 +37,11 @@ end
 
 function GameConfig:setKeyUp(keyUp)
 	self._keyUp=keyUp
+end
+
+function GameConfig:setKeyUp(joystick, button )
+	self._joyUp.joy_num=joystick
+	self._joyUp.joy_button=button
 end
 
 
