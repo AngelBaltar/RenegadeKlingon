@@ -35,7 +35,7 @@ function Menu:print()
     end
 end
 
-function Menu:keypressed(key, unicode)
+function Menu:readPressed()
 	i=0
 	if(config:isDownDown()) then
 		self._focus=self._focus+1

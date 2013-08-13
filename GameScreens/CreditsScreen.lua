@@ -23,7 +23,7 @@ function CreditsScreen:update(dt)
 	self._yPos=self._yPos+1
 end
 
-function CreditsScreen:keypressed(key, unicode)
+function CreditsScreen:readPressed()
 	if config:isDownEscape() then
 		self._xPos=0
 		self._yPos=0

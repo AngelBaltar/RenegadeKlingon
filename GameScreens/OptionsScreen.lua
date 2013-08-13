@@ -45,7 +45,7 @@ function OptionsScreen:update(dt)
 	return 1
 end
 
-function OptionsScreen:keypressed(key, unicode)
+function OptionsScreen:readPressed()
 	if(self._selectedOption==NONE_OPTION) then
 
 		if config:isDownEscape() then
@@ -53,15 +53,15 @@ function OptionsScreen:keypressed(key, unicode)
 		    return Screen:getExitMark()
 		end
 		
-		self._selectedOption=self._optionsMenu:keypressed(key, unicode)
+		self._selectedOption=self._optionsMenu:readPressed()
 	else
 		if(self._selectedOption==CREDITS_OPTION) then
-			if self._credits:keypressed(key,unicode)==Screen:getExitMark() then
+			if self._credits:readPressed()==Screen:getExitMark() then
 				self._selectedOption=NONE_OPTION
 			end
 		end
 		if(self._selectedOption==CONTROLS_OPTION) then
-			if self._controls:keypressed(key,unicode)==Screen:getExitMark() then
+			if self._controls:readPressed(key,unicode)==Screen:getExitMark() then
 				self._selectedOption=NONE_OPTION
 			end
 		end

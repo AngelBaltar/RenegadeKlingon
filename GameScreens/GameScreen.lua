@@ -70,7 +70,7 @@ function GameScreen:update(dt)
   end
 end
 
-function GameScreen:keypressed(key, unicode)
+function GameScreen:readPressed(key, unicode)
 	if config:isDownEscape() then
     	return Screen:getExitMark()
    end

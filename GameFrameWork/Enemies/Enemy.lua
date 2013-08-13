@@ -57,11 +57,6 @@ function Enemy:pilot(dt)
   end
 end
 
---Read from keyboard
-function Enemy:keypressed(key, unicode)
-
-end
-
 --im the enemy, ovewritting from SpaceObject
 function Enemy:isEnemyShip()
 	return true

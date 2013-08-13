@@ -14,7 +14,7 @@ function Screen:update(dt)
 
 end
 
-function Screen:keypressed(key, unicode)
+function Screen:readPressed()
 end
 
 function Screen.static:getExitMark()

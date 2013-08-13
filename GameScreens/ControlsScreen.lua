@@ -46,29 +46,29 @@ function ControlsScreen:update(dt)
 	return 1
 end
 
-function ControlsScreen:keypressed(key, unicode)
-
-   if(self._selectedOption==NONE_OPTION) then
-   	if config:isDownEscape() then
-    	return Screen:getExitMark()
-    end
-   	self._selectedOption=self._controlsMenu:keypressed(key, unicode)
-	return 1
+function ControlsScreen:readPressed()
+    if(self._selectedOption==NONE_OPTION) then
+      if config:isDownEscape() then
+        return Screen:getExitMark()
+      end
+      self._selectedOption=self._controlsMenu:readPressed()
+    return 1
    elseif (self._selectedOption==UP_OPTION) then
-   		config:setKeyUp(key)
+      config:setKeyUp(key)
    elseif (self._selectedOption==DOWN_OPTION) then
-   		config:setKeyDown(key)
+      config:setKeyDown(key)
    elseif (self._selectedOption==LEFT_OPTION) then
-   		config:setKeyLeft(key)
+      config:setKeyLeft(key)
    elseif (self._selectedOption==RIGHT_OPTION) then
-   		config:setKeyRight(key)
+      config:setKeyRight(key)
    elseif (self._selectedOption==FIRE_OPTION) then
-   		config:setKeyFire(key)
+      config:setKeyFire(key)
    elseif (self._selectedOption==ENTER_OPTION) then
-		config:setKeyEnter(key)
+    config:setKeyEnter(key)
    elseif (self._selectedOption==ESCAPE_OPTION) then
-		config:setKeyEscape(key)
+    config:setKeyEscape(key)
    end
    _loadMenus(self)
    return 1
+
 end

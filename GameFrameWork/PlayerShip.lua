@@ -95,12 +95,6 @@ function PlayerShip:pilot(dt)
    self:setPosition(position_x,position_y)
 end
 
---Read from keyboard
-function PlayerShip:keypressed(key, unicode)
-
- 
-end
-
 function PlayerShip:toString()
   return "player"
 end

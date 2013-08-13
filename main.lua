@@ -60,6 +60,35 @@ function love.draw()
     end
 end
 
+local _readPressed=function ()
+     if(selected_option==NONE_OPTION) then
+        if(config:isDownEscape()) then
+          love.event.push("quit")   -- actually causes the app to quit
+        end
+        selected_option=mainMenu:readPressed()
+        if(selected_option==PLAY_OPTION) then
+            --create new instance of the game
+            play=GameScreen:new()
+        end
+    else
+        if(selected_option==PLAY_OPTION) then
+             if play:readPressed()==Screen:getExitMark() then
+                selected_option=NONE_OPTION
+             end
+        else
+           if(selected_option==OPTIONS_OPTION) then
+              if optionsMenu:readPressed()==Screen:getExitMark() then
+                  selected_option=NONE_OPTION
+              end
+          end
+        end
+    end
+end
+
+function love.joystickpressed( joystick, button )
+   _readPressed()
+end
+
 function love.keypressed(key, unicode)
 
     if(key=='o') then
@@ -69,26 +98,5 @@ function love.keypressed(key, unicode)
         enableDebug()
       end
     end
-    if(selected_option==NONE_OPTION) then
-        if(config:isDownEscape()) then
-          love.event.push("quit")   -- actually causes the app to quit
-        end
-        selected_option=mainMenu:keypressed(key, unicode)
-        if(selected_option==PLAY_OPTION) then
-            --create new instance of the game
-            play=GameScreen:new()
-        end
-    else
-      if(selected_option==PLAY_OPTION) then
-           if play:keypressed(key,unicode)==Screen:getExitMark() then
-              selected_option=NONE_OPTION
-           end
-      else
-         if(selected_option==OPTIONS_OPTION) then
-            if optionsMenu:keypressed(key, unicode)==Screen:getExitMark() then
-                selected_option=NONE_OPTION
-            end
-        end
-      end
-    end
+    _readPressed()
 end

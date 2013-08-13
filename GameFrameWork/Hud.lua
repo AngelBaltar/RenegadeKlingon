@@ -48,11 +48,6 @@ function Hud:draw()
   SpaceObject.draw(self)
 end
 
---Read from keyboard
-function Hud:keypressed(key, unicode)
-
-end
-
 --im the Hud, ovewritting from SpaceObject
 function Hud:isHud()
 	return true
