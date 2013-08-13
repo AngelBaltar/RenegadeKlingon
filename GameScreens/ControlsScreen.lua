@@ -9,6 +9,8 @@ local DOWN_OPTION=2
 local LEFT_OPTION=3
 local RIGHT_OPTION=4
 local FIRE_OPTION=5
+local ENTER_OPTION=6
+local ESCAPE_OPTION=7
 
 local config=GameConfig.getInstance()
 
@@ -19,6 +21,8 @@ local _loadMenus=function(self)
   self._controlsMenu:addItem("Left--->"..config:getKeyLeft())
   self._controlsMenu:addItem("Right-->"..config:getKeyRight())
   self._controlsMenu:addItem("Fire--->"..config:getKeyFire())
+  self._controlsMenu:addItem("Enter-->"..config:getKeyEnter())
+  self._controlsMenu:addItem("Escape->"..config:getKeyEscape())
   self._selectedOption=NONE_OPTION
 end
 
@@ -45,7 +49,7 @@ end
 function ControlsScreen:keypressed(key, unicode)
 
    if(self._selectedOption==NONE_OPTION) then
-   	if key=="escape" then
+   	if config:isDownEscape() then
     	return Screen:getExitMark()
     end
    	self._selectedOption=self._controlsMenu:keypressed(key, unicode)
@@ -60,6 +64,10 @@ function ControlsScreen:keypressed(key, unicode)
    		config:setKeyRight(key)
    elseif (self._selectedOption==FIRE_OPTION) then
    		config:setKeyFire(key)
+   elseif (self._selectedOption==ENTER_OPTION) then
+		config:setKeyEnter(key)
+   elseif (self._selectedOption==ESCAPE_OPTION) then
+		config:setKeyEscape(key)
    end
    _loadMenus(self)
    return 1

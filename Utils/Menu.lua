@@ -43,7 +43,7 @@ function Menu:keypressed(key, unicode)
 	if(config:isDownUp()) then
 		self._focus=self._focus-1
 	end
-	if(key=="return") then
+	if(config:isDownEnter()) then
 		return self._focus+1
 	end
 	self._focus=self._focus%self._insertAt

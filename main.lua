@@ -3,9 +3,10 @@ require("Utils/Menu")
 require("GameScreens/OptionsScreen")
 require("GameScreens/Screen")
 require("GameScreens/GameScreen")
-
+require("Utils/GameConfig")
 
 local selected_option=0
+local config=GameConfig.getInstance()
 
 local NONE_OPTION=0
 local PLAY_OPTION=1
@@ -69,7 +70,7 @@ function love.keypressed(key, unicode)
       end
     end
     if(selected_option==NONE_OPTION) then
-        if(key=="escape") then
+        if(config:isDownEscape()) then
           love.event.push("quit")   -- actually causes the app to quit
         end
         selected_option=mainMenu:keypressed(key, unicode)

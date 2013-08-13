@@ -3,6 +3,8 @@ require 'GameScreens/Screen'
 require 'GameScreens/CreditsScreen'
 require 'GameScreens/ControlsScreen'
 
+local config=GameConfig.getInstance()
+
 OptionsScreen = class('OptionsScreen', Screen)
 
 local NONE_OPTION=0
@@ -46,7 +48,7 @@ end
 function OptionsScreen:keypressed(key, unicode)
 	if(self._selectedOption==NONE_OPTION) then
 
-		if love.keyboard.isDown("escape") then
+		if config:isDownEscape() then
 			self._selectedOption=NONE_OPTION
 		    return Screen:getExitMark()
 		end

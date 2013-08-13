@@ -1,10 +1,14 @@
 require 'GameFrameWork/Hud'
 require 'GameFrameWork/Level'
 require 'Utils/Debugging'
+require 'Utils/GameConfig'
 
 GameScreen = class('GameScreen',Screen)
 
 local mini_font=love.graphics.newFont( 12 )
+local config=GameConfig.getInstance()
+
+
 function GameScreen:initialize()
     self._space=Space:new()
     Hud:new(self._space)
@@ -67,7 +71,7 @@ function GameScreen:update(dt)
 end
 
 function GameScreen:keypressed(key, unicode)
-	if key=="escape" then
+	if config:isDownEscape() then
     	return Screen:getExitMark()
    end
    self._space:keypressed(key,unicode)

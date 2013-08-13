@@ -2,6 +2,8 @@ require 'GameScreens/Screen'
 
 CreditsScreen = class('CreditsScreen', Screen)
 
+local config=GameConfig.getInstance()
+
 
 function CreditsScreen:initialize()
   self._xPos=0
@@ -22,7 +24,7 @@ function CreditsScreen:update(dt)
 end
 
 function CreditsScreen:keypressed(key, unicode)
-	if key=="escape" then
+	if config:isDownEscape() then
 		self._xPos=0
 		self._yPos=0
     	return Screen:getExitMark()
