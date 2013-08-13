@@ -4,9 +4,12 @@ require("GameScreens/OptionsScreen")
 require("GameScreens/Screen")
 require("GameScreens/GameScreen")
 require("Utils/GameConfig")
+require("Utils/ButtonRead")
 
 local selected_option=0
 local config=GameConfig.getInstance()
+local button_read=ButtonRead.getInstance()
+
 
 local NONE_OPTION=0
 local PLAY_OPTION=1
@@ -86,6 +89,7 @@ local _readPressed=function ()
 end
 
 function love.joystickpressed( joystick, button )
+   button_read:setJoyButton(joystick, button)
    _readPressed()
 end
 
@@ -98,5 +102,6 @@ function love.keypressed(key, unicode)
         enableDebug()
       end
     end
+    button_read:setKey(key,unicode)
     _readPressed()
 end

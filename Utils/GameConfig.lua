@@ -12,6 +12,7 @@ local __initialize = function(self)
 	self._keyLeft="left"
 	self._keyRight="right"
 	self._keyFire="a"
+	self._keyPause="p"
 	self._keyEnter="return"
 	self._keyEscape="escape"
 end
@@ -49,6 +50,10 @@ function GameConfig:setKeyFire(keyFire)
 	self._keyFire=keyFire
 end
 
+function GameConfig:setKeyPause(keyPause)
+	self._keyPause=keyPause
+end
+
 function GameConfig:setKeyEnter(keyEnter)
 	self._keyEnter=keyEnter
 end
@@ -82,6 +87,10 @@ function GameConfig:getKeyFire()
 	return self._keyFire
 end
 
+function GameConfig:getKeyPause()
+	return self._keyPause
+end
+
 function GameConfig:getKeyEnter()
 	return self._keyEnter
 end
@@ -109,6 +118,10 @@ end
 
 function GameConfig:isDownFire()
 	return love.keyboard.isDown(self._keyFire)
+end
+
+function GameConfig:isDownPause()
+	return love.keyboard.isDown(self._keyPause)
 end
 
 function GameConfig:isDownEnter()

@@ -1,5 +1,6 @@
 require 'Utils/middleclass/middleclass'
 require 'Utils/Debugging'
+require 'Utils/GameConfig'
 
 Space = class('GameFrameWork.Space')
 
@@ -524,10 +525,10 @@ function Space:update(dt)
 
 end
 
-function Space:keypressed(key, unicode)
+function Space:readPressed()
 	local i=0
 	local j=0
-	if (key=="p") then
+	if (GameConfig.getInstance():isDownPause()) then
 		self._pause= not self._pause
 	end
 
@@ -536,7 +537,7 @@ function Space:keypressed(key, unicode)
 	end
 
 	for obj,_ in pairs(self._objectsList) do
-		obj:keypressed(key,unicode)
+		obj:readPressed()
 		i=i+1
 	end
 end

@@ -49,7 +49,7 @@ function SpaceObject:draw()
 end
 
 --Read from keyboard
-function SpaceObject:keypressed(key, unicode)
+function SpaceObject:readPressed()
 end
 
 function SpaceObject:die()
