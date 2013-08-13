@@ -1,38 +1,66 @@
 require 'GameScreens/Screen'
+require 'Utils/GameConfig'
 
 ControlsScreen = class('ControlsScreen', Screen)
 
 local NONE_OPTION=0
 local UP_OPTION=1
 local DOWN_OPTION=2
-local RIGHT_OPTION=3
-local LEFT_OPTION=4
+local LEFT_OPTION=3
+local RIGHT_OPTION=4
 local FIRE_OPTION=5
 
+local config=GameConfig.getInstance()
+
+local _loadMenus=function(self)
+  self._controlsMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2)
+  self._controlsMenu:addItem("Up----->"..config:getKeyUp())
+  self._controlsMenu:addItem("Down--->"..config:getKeyDown())
+  self._controlsMenu:addItem("Left--->"..config:getKeyLeft())
+  self._controlsMenu:addItem("Right-->"..config:getKeyRight())
+  self._controlsMenu:addItem("Fire--->"..config:getKeyFire())
+  self._selectedOption=NONE_OPTION
+end
+
 function ControlsScreen:initialize()
-  self._xPos=0
-  self._yPos=50
+  self._selectedOption=NONE_OPTION
+  _loadMenus(self)
 end 
 
 
 function ControlsScreen:draw()
 
-	 love.graphics.setColor(255,0,0,255)
-	 love.graphics.print("Up------>move ship up\n"..
-	 					 "Down---->move ship down\n"..
-	 					 "Left---->move ship left\n"..
-	 					 "Right--->move shio rigth\n"..
-	 					 "a------->fire\n"
-	 					,love.graphics.getWidth()/2-60,love.graphics.getHeight()/2-60)
+	if(self._selectedOption==NONE_OPTION) then
+		self._controlsMenu:print()
+	else
+		
+		love.graphics.print("Press the key...", love.graphics.getWidth()/2,love.graphics.getHeight()/2)
+	end
 end
 
 function ControlsScreen:update(dt)
-
+	return 1
 end
 
 function ControlsScreen:keypressed(key, unicode)
-	if key=="escape" then
+
+   if(self._selectedOption==NONE_OPTION) then
+   	if key=="escape" then
     	return Screen:getExitMark()
+    end
+   	self._selectedOption=self._controlsMenu:keypressed(key, unicode)
+	return 1
+   elseif (self._selectedOption==UP_OPTION) then
+   		config:setKeyUp(key)
+   elseif (self._selectedOption==DOWN_OPTION) then
+   		config:setKeyDown(key)
+   elseif (self._selectedOption==LEFT_OPTION) then
+   		config:setKeyLeft(key)
+   elseif (self._selectedOption==RIGHT_OPTION) then
+   		config:setKeyRight(key)
+   elseif (self._selectedOption==FIRE_OPTION) then
+   		config:setKeyFire(key)
    end
+   _loadMenus(self)
    return 1
 end

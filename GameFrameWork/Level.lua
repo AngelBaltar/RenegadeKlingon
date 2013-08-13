@@ -63,7 +63,6 @@ function load_level(map_name,space)
 					
 					elseif object_type=="HealthObject" then
 						obj=HealthObject:new(space,map.tileWidth*x,map.tileHeight*y)
-						DEBUG_PRINT("creating health object")
 					
 					elseif object_type=="WeaponObject" then
 						if tile.properties["weapon_type"]=="MACHINE_GUN" then

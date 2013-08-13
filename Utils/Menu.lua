@@ -1,6 +1,9 @@
 require 'Utils/middleclass/middleclass'
+require	'Utils/GameConfig'
 
 Menu = class('Menu') 
+
+local config=GameConfig.getInstance()
 
 function Menu:initialize(X,Y)
 	self._itemsList={}
@@ -34,10 +37,10 @@ end
 
 function Menu:keypressed(key, unicode)
 	i=0
-	if(key=="down") then
+	if(config:isDownDown()) then
 		self._focus=self._focus+1
 	end
-	if(key=="up") then
+	if(config:isDownUp()) then
 		self._focus=self._focus-1
 	end
 	if(key=="return") then
