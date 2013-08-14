@@ -18,6 +18,7 @@ function OptionsScreen:initialize()
   self._selectedOption=NONE_OPTION
   self._credits=CreditsScreen:new()
   self._controls=ControlsScreen:new()
+  Screen.initialize(self)
 end 
 
 
@@ -61,7 +62,7 @@ function OptionsScreen:readPressed()
 			end
 		end
 		if(self._selectedOption==CONTROLS_OPTION) then
-			if self._controls:readPressed(key,unicode)==Screen:getExitMark() then
+			if self._controls:readPressed()==Screen:getExitMark() then
 				self._selectedOption=NONE_OPTION
 			end
 		end

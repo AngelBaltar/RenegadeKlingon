@@ -46,14 +46,10 @@ function ControlsScreen:draw()
 end
 
 function ControlsScreen:update(dt)
-	return 1
+  return 1
 end
 
 function ControlsScreen:readPressed()
-
-  local key=ButtonRead.getInstance():getKey()
-  local joypad=ButtonRead.getInstance():getJoyPad()
-  local joypadbutton=ButtonRead.getInstance():getJoyPadButton()
 
   if(self._selectedOption==NONE_OPTION) then
       if config:isDownEscape() then
@@ -61,7 +57,12 @@ function ControlsScreen:readPressed()
       end
       self._selectedOption=self._controlsMenu:readPressed()
       return 1
-  elseif (self._selectedOption==UP_OPTION) then
+  end
+  
+  local key=ButtonRead.getInstance():getKey()
+  local joypad,joypadbutton=ButtonRead.getInstance():getJoys()
+
+  if (self._selectedOption==UP_OPTION) then
         config:setKeyUp(key)
   elseif (self._selectedOption==DOWN_OPTION) then
       config:setKeyDown(key)
@@ -77,11 +78,26 @@ function ControlsScreen:readPressed()
         config:setKeyFire(joypad, joypadbutton )
       end
   elseif (self._selectedOption==PAUSE_OPTION) then
-      config:setKeyPause(key)
+      if(key~=nil) then
+        config:setKeyPause(key)
+      end
+      if(joypad~=nil and joypadbutton~=nil) then
+        config:setKeyPause(joypad, joypadbutton )
+      end
   elseif (self._selectedOption==ENTER_OPTION) then
-    config:setKeyEnter(key)
+      if(key~=nil) then
+        config:setKeyEnter(key)
+      end
+      if(joypad~=nil and joypadbutton~=nil) then
+        config:setKeyEnter(joypad, joypadbutton )
+      end
   elseif (self._selectedOption==ESCAPE_OPTION) then
-    config:setKeyEscape(key)
+    if(key~=nil) then
+        config:setKeyEscape(key)
+      end
+      if(joypad~=nil and joypadbutton~=nil) then
+        config:setKeyEscape(joypad, joypadbutton )
+      end
   end
    _loadMenus(self)
    return 1
