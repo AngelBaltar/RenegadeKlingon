@@ -7,6 +7,31 @@ local _instance=nil
 local button_read=ButtonRead.getInstance()
 --constructor
 
+-- local _setPropertiesOrdered=function(self)
+-- 	self._properties_ordered={
+-- 								self._keyUp,
+-- 								self._keyDown,
+-- 								self._keyLeft,
+-- 								self._keyRight,
+-- 								self._keyFire,
+-- 								self._keyPause,
+-- 								self._keyEnter,
+-- 								self._keyEscape,
+								
+-- 								self._joyFire.joy_num,
+-- 								self._joyFire.joy_button,
+
+-- 								self._joyPause.joy_num,
+-- 								self._joyPause.joy_button,
+
+-- 								self._joyEnter.joy_num,
+-- 								self._joyEnter.joy_button,
+
+-- 								self._joyEscape.joy_num,
+-- 								self._joyEscape.joy_button,
+-- 								nil}
+-- end
+
 local __initialize = function(self)
 	
 	self._keyUp="up"
@@ -36,7 +61,36 @@ local __initialize = function(self)
 		end
 		i=i+1
 	end
-	DEBUG_PRINT("ACTIVE PAD IS: "..self._activepad)
+	DEBUG_PRINT("ACTIVE PAD IS: "..self["_activepad"])
+	--_setPropertiesOrdered(self)
+
+end
+
+local _writeConfigFile=function(self)
+	local File conf_file=love.filesystem.newFile("RenegadeKlingon.conf")
+	conf_file:open('w')
+	
+	--_setPropertiesOrdered(self)
+	local i=1
+	
+	for k,obj in pairs(self) do
+		if type(obj) == "table" then 
+			 for k1,obj1 in pairs(obj) do
+			 	if(type(obj1)~="table") then
+			 		conf_file:write(k..k1.."="..obj1.."\n\r")
+			 	end
+			 end
+		else
+			conf_file:write(k.."="..obj.."\n\r")
+		end
+	end
+
+	-- while (self._properties_ordered[i]~=nil) do
+	-- 	conf_file:write(self._properties_ordered[i].."\n\r")
+	-- 	i=i+1
+	-- end
+
+	conf_file:close()
 
 end
 
@@ -51,20 +105,24 @@ end
 
 function GameConfig:setKeyUp(keyUp)
 	self._keyUp=keyUp
+	_writeConfigFile(self)
 end
 
 function GameConfig:setKeyDown(keyDown)
 	self._keyDown=keyDown
+	_writeConfigFile(self)
 end
 
 
 function GameConfig:setKeyRight(keyRight)
 	self._keyRight=keyRight
+	_writeConfigFile(self)
 end
 
 
 function GameConfig:setKeyLeft(keyLeft)
 	self._keyLeft=keyLeft
+	_writeConfigFile(self)
 end
 
 function GameConfig:setKeyFire(joystick_key, button_nil )
@@ -75,6 +133,7 @@ function GameConfig:setKeyFire(joystick_key, button_nil )
 		self._joyFire.joy_num=joystick_key
 		self._joyFire.joy_button=button_nil
 	end
+	_writeConfigFile(self)
 	
 end
 
@@ -86,6 +145,7 @@ function GameConfig:setKeyPause(joystick_key, button_nil )
 		self._joyPause.joy_num=joystick_key
 		self._joyPause.joy_button=button_nil
 	end
+	_writeConfigFile(self)
 	
 end
 
@@ -97,6 +157,7 @@ function GameConfig:setKeyEnter(joystick_key, button_nil )
 		self._joyEnter.joy_num=joystick_key
 		self._joyEnter.joy_button=button_nil
 	end
+	_writeConfigFile(self)
 	
 end
 
@@ -108,6 +169,7 @@ function GameConfig:setKeyEscape(joystick_key, button_nil )
 		self._joyEscape.joy_num=joystick_key
 		self._joyEscape.joy_button=button_nil
 	end
+	_writeConfigFile(self)
 	
 end
 

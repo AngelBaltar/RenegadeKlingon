@@ -7,4 +7,5 @@ function love.conf(t)
     t.screen.height = 600
     t.screen.fullscreen = false
    	t.screen.vsync = true
+   	t.identity = "RenegadeKlingonSaveGames"            -- The name of the save directory (string)
 end
