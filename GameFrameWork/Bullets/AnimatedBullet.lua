@@ -8,7 +8,7 @@ AnimatedBullet.static.BLUE_ANIMATED = love.graphics.newImage("Resources/gfx/anim
 AnimatedBullet.static.PINK_ANIMATED = love.graphics.newImage("Resources/gfx/animated_bullet2.png")
 
 local animation_tab={}
-animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=64,size_y=64,n_steps=5,mode="loop"}
+animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=100,size_y=84,n_steps=4,mode="bounce"}
 animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=64,size_y=64,n_steps=4,mode="bounce"}
 
 --constructor
