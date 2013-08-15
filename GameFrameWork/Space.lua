@@ -322,6 +322,12 @@ local _collisionCheck = function(self,soA,soB)
 		return false
 	end
 
+	--nothing can hit an explosion
+	if soA:isExplosion() or soB:isExplosion() then
+		return false
+	end
+
+
 	--bullets do not collide
 	if soA:isBullet() and soB:isBullet() then
 		return false
@@ -425,6 +431,11 @@ function Space:naturalCollisionCheck(soA,soB)
 
 	--objects in diferent planes do not collide
 	if(soA:getBackGroundDistance()~=soB:getBackGroundDistance()) then
+		return false
+	end
+
+	--nothing can hit an explosion
+	if soA:isExplosion() or soB:isExplosion() then
 		return false
 	end
 	

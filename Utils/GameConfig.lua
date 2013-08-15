@@ -224,7 +224,9 @@ function GameConfig:getKeyFire()
 
 	if(self._joyFire_num~=-1 and self._joyFire_button~=-1) then
 		name = love.joystick.getName(self._joyFire_num)
-		ret=ret.." OR "..name.." B"..self._joyFire_button
+		if(name~=nil) then
+			ret=ret.." OR "..name.." B"..self._joyFire_button
+		end
 	end
 
 	return ret
@@ -235,7 +237,9 @@ function GameConfig:getKeyPause()
 
 	if(self._joyPause_num~=-1 and self._joyPause_button~=-1) then
 		name = love.joystick.getName(self._joyPause_num)
-		ret=ret.." OR "..name.." B"..self._joyPause_button
+		if(name~=nil) then
+			ret=ret.." OR "..name.." B"..self._joyPause_button
+		end
 	end
 
 	return ret
@@ -246,7 +250,9 @@ function GameConfig:getKeyEnter()
 
 	if(self._joyEnter_num~=-1 and self._joyEnter_button~=-1) then
 		name = love.joystick.getName(self._joyEnter_num)
-		ret=ret.." OR "..name.." B"..self._joyEnter_button
+		if(name~=nil) then
+			ret=ret.." OR "..name.." B"..self._joyEnter_button
+		end
 	end
 
 	return ret
@@ -257,7 +263,9 @@ function GameConfig:getKeyEscape()
 
 	if(self._joyEscape_num~=-1 and self._joyEscape_button~=-1) then
 		name = love.joystick.getName(self._joyEscape_num)
-		ret=ret.." OR "..name.." B"..self._joyEscape_button
+		if(name~=nil) then
+			ret=ret.." OR "..name.." B"..self._joyEscape_button
+		end
 	end
 
 	return ret

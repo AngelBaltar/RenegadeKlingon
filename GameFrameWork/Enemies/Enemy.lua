@@ -44,8 +44,10 @@ function Enemy:die()
   --it only causes explosion if dies because a collision
   --no by out of bounds
   SpaceObject.die(self)
+  local explo=nil
   if my_space:isInBounds(self) then
-    AnimatedExplosion:new(my_space,x,y)
+    explo=AnimatedExplosion:new(my_space,x,y)
+    explo:setZoom(self:getStimatedSize()/explo:getStimatedSize())
   end
 end
 

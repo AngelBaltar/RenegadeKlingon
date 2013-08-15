@@ -28,16 +28,30 @@ local N_EXPLOSIONS=2
 --constructor
 function AnimatedExplosion:initialize(space,x,y)
   
-  local random_explosion=math.random(N_EXPLOSIONS)-1
-  self._animation = newAnimation(explosions_tab[random_explosion].sprite,
-                                explosions_tab[random_explosion].size_x,
-                                explosions_tab[random_explosion].size_y,
-                                explosions_tab[random_explosion].delay,
-                                explosions_tab[random_explosion].n_steps)
+  self._random_explosion=math.random(N_EXPLOSIONS)-1
+  self._animation = newAnimation(explosions_tab[self._random_explosion].sprite,
+                                explosions_tab[self._random_explosion].size_x,
+                                explosions_tab[self._random_explosion].size_y,
+                                explosions_tab[self._random_explosion].delay,
+                                explosions_tab[self._random_explosion].n_steps)
 
-  self._animation:setMode(explosions_tab[random_explosion].mode)
-  Explosion.initialize(self,space,x,y,explosions_tab[random_explosion].sprite)
-  self._zoom=explosions_tab[random_explosion].zoom
+  self._animation:setMode(explosions_tab[self._random_explosion].mode)
+  self._zoom=explosions_tab[self._random_explosion].zoom
+  Explosion.initialize(self,space,x,y,explosions_tab[self._random_explosion].sprite)
+end
+
+--return the width of this explosion
+function AnimatedExplosion:getWidth()
+  return explosions_tab[self._random_explosion].size_x*self._zoom
+end
+
+--return the height of this explosion
+function AnimatedExplosion:getHeight()
+  return explosions_tab[self._random_explosion].size_y*self._zoom
+end
+
+function AnimatedExplosion:setZoom(zoom)
+  self._zoom=zoom
 end
 
 --Performs movements changing the position of the object, firing AnimatedExplosions...
