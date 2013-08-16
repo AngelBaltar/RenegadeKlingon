@@ -37,4 +37,10 @@
    <property name="object_type" value="RomulanWarBird"/>
   </properties>
  </tile>
+<tile id="7">
+  <properties>
+      <property name="object_type" value="WeaponObject"/>
+      <property name="weapon_type" value="DOUBLE_BLUE"/>
+  </properties>
+ </tile>
 </tileset>

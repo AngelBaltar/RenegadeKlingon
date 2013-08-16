@@ -8,17 +8,19 @@ AnimatedBullet.static.BLUE_ANIMATED = love.graphics.newImage("Resources/gfx/anim
 AnimatedBullet.static.PINK_ANIMATED = love.graphics.newImage("Resources/gfx/animated_bullet2.png")
 
 local animation_tab={}
-animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=100,size_y=84,n_steps=4,mode="bounce"}
-animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=64,size_y=64,n_steps=4,mode="bounce"}
+animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=32,size_y=32,n_steps=8,mode="loop",zoom=1,health=6}
+animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=64,size_y=64,n_steps=4,mode="bounce",zoom=1,health=20}
 
 --constructor
 function AnimatedBullet:initialize(space,emmiter,x,y,stepx,stepy,AnimatedBullet_type)
   --3 health for the AnimatedBullet
+  self._AnimatedBullet_type=AnimatedBullet_type
+
   self._animation = newAnimation(AnimatedBullet_type,
   					animation_tab[AnimatedBullet_type].size_x,
   					animation_tab[AnimatedBullet_type].size_y, 0.2, animation_tab[AnimatedBullet_type].n_steps)
   self._animation:setMode(animation_tab[AnimatedBullet_type].mode)
-  Bullet.initialize(self,space,emmiter,x,y,stepx,stepy,6,AnimatedBullet_type)
+  Bullet.initialize(self,space,emmiter,x,y,stepx,stepy,animation_tab[AnimatedBullet_type].health,AnimatedBullet_type)
 end
 
 
@@ -38,5 +40,6 @@ end
 
 function AnimatedBullet:draw()
 
-  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,1) 
+  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,
+                      animation_tab[self._AnimatedBullet_type].zoom) 
 end

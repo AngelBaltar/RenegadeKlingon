@@ -1,11 +1,15 @@
 require 'GameFrameWork/Harvestables/HarvestableObject'
 require 'GameFrameWork/Weapons/MachineGunWeapon'
+require 'GameFrameWork/Weapons/DoubleWeapon'
 require 'Utils/Animation'
 
 WeaponObject = class('GameFrameWork.Harverstables.WeaponObject',HarvestableObject)
 
 WeaponObject.static.MACHINE_GUN = love.graphics.newImage("Resources/gfx/crystal_pink.png")
+WeaponObject.static.DOUBLE_BLUE = love.graphics.newImage("Resources/gfx/crystal_blue.png")
+
 local WP_MACHINEGUN=1
+local WP_DOUBLE_BLUE=2
 
 
 local weapons_tab={}
@@ -17,6 +21,15 @@ weapons_tab[WeaponObject.static.MACHINE_GUN]={
                         delay=0.3,
                         zoom=3,
 												weapon=WP_MACHINEGUN}
+
+weapons_tab[WeaponObject.static.DOUBLE_BLUE]={
+                        size_x=17,
+                        size_y=18,
+                        n_steps=4,
+                        mode="loop",
+                        delay=0.3,
+                        zoom=3,
+                        weapon=DOUBLE_BLUE}
 
 --constructor
 function WeaponObject:initialize(space,weapon_type,posx,posy)
@@ -31,6 +44,11 @@ function WeaponObject:initialize(space,weapon_type,posx,posy)
   if(weapons_tab[weapon_type].weapon==WP_MACHINEGUN) then
   	self._weapon=MachineGunWeapon:new(nil)
   end
+
+  if(weapons_tab[weapon_type].weapon==DOUBLE_BLUE) then
+    self._weapon=DoubleWeapon:new(nil)
+  end
+
   self._zoom=weapons_tab[weapon_type].zoom
   HarvestableObject.initialize(self,space,weapon_type,posx,posy,0)
 
