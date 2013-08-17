@@ -9,9 +9,9 @@ AnimatedBullet.static.GREEN_ANIMATED = love.graphics.newImage("Resources/gfx/bul
 AnimatedBullet.static.PINK_ANIMATED = love.graphics.newImage("Resources/gfx/bullet_machinegun.png")
 
 local animation_tab={}
-animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=32,size_y=32,n_steps=8,mode="loop",zoom=0.7,health=6}
+animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=32,size_y=32,n_steps=8,mode="loop",zoom=1,health=6}
 animation_tab[AnimatedBullet.static.GREEN_ANIMATED]={size_x=32,size_y=32,n_steps=8,mode="loop",zoom=1,health=12}
-animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=64,size_y=64,n_steps=4,mode="bounce",zoom=1,health=20}
+animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=32,size_y=32,n_steps=4,mode="bounce",zoom=2,health=20}
 
 --constructor
 function AnimatedBullet:initialize(space,emmiter,x,y,stepx,stepy,AnimatedBullet_type)

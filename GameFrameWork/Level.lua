@@ -29,6 +29,7 @@ function load_level(map_name,space)
 	--backgrounds
 	for x, y, tile in map("fondo"):iterate() do
 		ordered_paths[x]=tile.properties["img_path"]
+		--DEBUG_PRINT(tile.tileset.name)
 	end
 	for _,path in pairs(ordered_paths) do
 		space:addBackGroundImage(path)
