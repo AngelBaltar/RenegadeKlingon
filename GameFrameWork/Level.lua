@@ -71,6 +71,9 @@ function load_level(map_name,space)
 						if tile.properties["weapon_type"]=="DOUBLE_BLUE" then
 							obj=WeaponObject:new(space,WeaponObject.static.DOUBLE_BLUE,map.tileWidth*x,map.tileHeight*y)
 						end
+						if tile.properties["weapon_type"]=="DOUBLE_GREEN" then
+							obj=WeaponObject:new(space,WeaponObject.static.DOUBLE_GREEN,map.tileWidth*x,map.tileHeight*y)
+						end
 
 					elseif object_type=="TileBlock" then
 							obj=TileBlock:new(space,tile,map.tileWidth*x,map.tileHeight*y)

@@ -4,8 +4,9 @@ require 'GameFrameWork/Bullets/AnimatedBullet'
 DoubleWeapon = class('GameFrameWork.Weapons.DoubleWeapon',Weapon)
 
 --constructor
-function DoubleWeapon:initialize(destructor_klingon)
-	Weapon.initialize(self,destructor_klingon,0.12)
+function DoubleWeapon:initialize(destructor_klingon,bullet)
+	self._bullet=bullet
+   Weapon.initialize(self,destructor_klingon,0.12)
 end
 
 function DoubleWeapon:doFire()
@@ -21,9 +22,9 @@ function DoubleWeapon:doFire()
    local emit_delta=15
 
    AnimatedBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y-my_ship:getHeight()/2-emit_delta,
-                     6+x_relative_step,0+y_relative_step,AnimatedBullet.static.BLUE_ANIMATED)
+                     6+x_relative_step,0+y_relative_step,self._bullet)
 
     AnimatedBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y+my_ship:getHeight()/2-emit_delta,
-                     6+x_relative_step,0+y_relative_step,AnimatedBullet.static.BLUE_ANIMATED)
+                     6+x_relative_step,0+y_relative_step,self._bullet)
    
 end
