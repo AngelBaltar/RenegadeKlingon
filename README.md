@@ -17,13 +17,13 @@ https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/master.zip
 Linux
 ===========
 
-For linux this game needs love2d system, a single .love file is provided , to play the game you only need 
-to download that zip file, uncompress it,
-go to the directory linux and execute RenegadeKlingon.love with love2d.
-
 Download link for linux is:
 
 https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/linux.zip
+
+For linux this game needs love2d system, a single .love file is provided , to play the game you only need 
+to download that zip file, uncompress it,
+go to the directory linux and execute RenegadeKlingon.love with love2d.
 
 If you don't know love2d check it at:
 
@@ -34,20 +34,21 @@ Install it and you will be able to play this game following the previous instruc
 Windows
 ===========
 
-For windows a simple .exe is provided in windows directory
-
 Download link for windows is:
 
 https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/windows.zip
 
+For windows a simple .exe is provided in windows directory
+
 
 Mac osx
 ===========
-For Mac there is a simple .app provided in mac directory
 
 Download link for mac is:
 
 https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/windows.zip
+
+For Mac there is a simple .app provided in mac directory
 
 
 Need Help
