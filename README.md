@@ -4,6 +4,11 @@ RenegadeKlingon
 Creating a love2d and lua based game just for fun, need to return back to arcade games. RenegadeKlingon is a r-type style game,
 it is under construction now.
 
+ScreenShoots
+=============
+
+Some screens from the game
+
 Download It
 ===========
 
