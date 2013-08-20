@@ -1,0 +1,450 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Nombre del trabajo, 
+% título,
+% autores
+% fechas, 
+% comentarios, etc.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%\input miscomandos.tex % Comandos definidos por el autor
+
+%\documentclass[a4paper,12pt]{book} 
+
+%% Incluir los paquetes necesarios 
+%\usepackage[latin1]{inputenc} % Caracteres con acentos. 
+%\usepackage[spanish]{babel}
+%\usepackage{latexsym} % Simbolos 
+%\usepackage[pdftex=true,colorlinks=true,plainpages=false]{hyperref} % Soporte hipertexto
+%\usepackage[pdftex]{graphicx} %Inclusión de gráficos PDFLaTeX
+%\DeclareGraphicsExtensions{.png,.pdf,.jpg}
+%\renewcommand{\baselinestretch}{1.5} %espacio entre lineas
+%\sloppy % suaviza las reglas de ruptura de líneas de LaTeX
+
+% Título, autor, fecha. 
+\title{capitulo4} 
+\author{Angel Baltar Diaz}
+\date{\Large Enero, 2013} 
+
+%\begin{document} % Inicio del documento
+%capitulo 4 LLVM
+\chapter {Fundamentos teóricos}
+\label{capitulo3}
+
+En este capítulo explicaremos las principales características, partes y funcionamiento del compilador LLVM, que es el utilizado en el desarrollo de este proyecto. También haremos una breve introducción para explicar conceptos básicos de compilación.
+
+\section{Infraestructura de compilación LLVM:}
+
+\subsection{Introducción a los compiladores}
+Vamos a explicar algunos términos que serán de ayuda para la comprensión del funcionamiento de LLVM. 
+Además de los aquí explicados, sería de gran ayuda revisar las definiciones de los términos AST, CFG, DDG, CG, etc. explicadas en el glosario de términos \{cap.~\ref{glosario}\} 
+
+%------------------------------------------------------------------
+%------------------------------------------------------------------
+\subsubsection*{Representación Static Single Assignment (SSA)}
+
+En el diseño de compiladores, la representación SSA es una representación intermedia en la cual cada variable se asigna una única vez. Las variables existentes en el código original, en general, son versionadas y sustituidas por nuevas variables que se componen del nombre original y un subíndice de tal manera que cada definición tiene su propia versión. En la representación SSA, las cadenas de uso-definición son explícitas y cada una de ellas contiene un solo elemento.
+Un algoritmo para la construcción eficiente de SSA fué desarrollado por Ron Cytron, Jeanne Ferrante, Barry Rosen, Mark Wegman y Ken Zadeck, todos ellos investigadores de IBM en la década de los 80.
+
+\begin{figure}[t]
+\begin{center}
+\subfigure[Código Fuente]{
+  \scalebox{0.7}{\includegraphics{includes/images/ssa_intro_source.pdf}}
+\label{fig:ssa_ejemplo1a}
+}
+\hspace{2em}
+\subfigure[Grafo de Control de Flujo (CFG)]{
+  \scalebox{0.7}{\includegraphics{includes/images/ssa_intro_1.pdf}}
+\label{fig:ssa_ejemplo1b}
+}
+\caption{Transformación del código fuente de un programa a su representación SSA. Pasos a y b.}
+\label{FIG:intro:ssa_ejemplo1}
+\end{center}
+\end{figure}
+%
+
+La transformación de un código fuente en su representación SSA consta básicamente de dos pasos. Primero se reemplaza cada asignación de variable con una nueva variable (nueva versión de variable para ser exactos) y segundo, se reemplaza cada uso de cada variable con la ``versión''  correspondiente que alcanza en ese punto del grafo de control de flujo (CFG). Por ejemplo, consideremos el código fuente de la Figura~\ref{fig:ssa_ejemplo1a} y su correspondiente grafo de control de flujo de la Figura~\ref{fig:ssa_ejemplo1b}. A continuación se crean nuevas variables (p.ej. \scvar{x$_1$} y \scvar{x$_2$}) cada una de las cuales se asigna una única vez y se establecen subíndices para distinguir las referencias de estas variables, obteniendo el código resultante que se muestra en la Figura~\ref{fig:ssa_ejemplo2}.
+%
+\begin{figure}[t]
+\begin{center}
+\setcounter{subfigure}{2}
+\subfigure[Renombrado de variables]{
+  \scalebox{0.7}{\includegraphics{includes/images/ssa_intro_2.pdf}}
+\label{fig:ssa_ejemplo2c}
+}
+%
+%\hspace{2em}
+\subfigure[Ubicación de nodos $\phi$]{
+  \scalebox{0.7}{\includegraphics{includes/images/ssa_intro_3.pdf}}
+\label{fig:ssa_ejemplo2d}
+}
+\caption{Transformación del código fuente de un programa a su representación SSA. Pasos c y d.}
+\label{fig:ssa_ejemplo2}
+\end{center}
+\end{figure}
+%
+De esta forma se ha establecido la definición que se corresponde con cada uso, excepto para el caso de los usos de la variable \scvar{y} en el último bloque básico del CFG, ya que éstos pueden referirse tanto a \scvar{y$_1$} como a \scvar{y$_2$}, dependiendo de cómo haya transcurrido el flujo de control hasta llegar a ese punto.
+Así, con objeto de determinar que definición (\scvar{y$_1$} o \scvar{y$_2$}) alcanza ese punto de confluencia en el grafo de control de flujo del programa, se añaden nuevas sentencias que contienen unos operadores especiales denominados nodos $\phi$. Estos operadores se insertan al comienzo del bloque básico ubicado en el punto de confluencia del CFG. En el ejemplo se crea una nueva sentencia \scvar{y$_3$ = $\phi$(y$_1$, y$_2$)} que da lugar a una nueva definición de la variable \scvar{y}, denominada \scvar{y$_3$} y que recoge las definiciones \scvar{y$_1$} o \scvar{y$_2$} que potencialmente pueden alcanzar ese punto del programa en función de la rama de control que se ejecute.
+
+En la Figura~\ref{fig:ssa_ejemplo2d} se aprecia como los usos de la variable \scvar{y}, en el último bloque básico, referencian directamente la variable \scvar{y$_3$}, obteniéndose siempre el valor correcto. Nótese que para la variable \scvar{x} no es necesario añadir un nuevo operador $\phi$ ya que existe una única definición \scvar{x$_2$} que puede alcanzar el bloque básico ubicado en el punto de confluencia del CFG, independientemente de la rama de control que se ejecute.
+
+
+%
+\subsubsection*{Representación Gated Single Assignment (GSA)}
+La representación de programas Gated Single Assignment (GSA) es una extensión de SSA que fué introducida por Balance, Maccabe y Ottenstein como parte de una representación más compleja denominada Program Dependence Web [Arenaz et al. 2008a].
+%
+%
+\begin{figure}[t]
+\begin{center}
+\scalebox{0.7}{\includegraphics{includes/images/gsa_intro.pdf}}
+\caption{Transformación del código SSA de la Figura~\ref{fig:ssa_ejemplo2d} en su forma GSA.}
+\label{fig:gsa_ejemplo}
+\end{center}
+\end{figure}
+%
+
+En la representación SSA, los operadores $\phi$ son insertados en los nodos de confluencia del CFG del programa para representar las diferentes definiciones de una variable que alcanzan el nodo de confluencia desde las diferentes ramas de entrada.
+Estos operadores $\phi$ no reflejan el tipo de construcción del programa (p.ej., bucle, \emph{if-then-else}) asociada al nodo de confluencia en el CFG. Además, afectan sólo a las variables escalares y no capturan los predicados de las sentencias condicionales que determinan si una definición alcanza o no un nodo de confluencia. La representación GSA supera estas limitaciones mediante la introducción de diferentes tipos de operadores $\phi$. Dichos operadores son:
+%
+\begin{itemize}
+\item $\mu$, ubicados en las cabeceras de los bucles, seleccionan o bien el valor que tiene la variable antes del bucle, o bien el que tiene al final de cada iteración del bucle.
+\item $\gamma$, ubicados en los nodos de confluencia, asociados con las sentencias condicionales del programa (p.ej., \emph{if-then-else}), capturan la condición que determina qué definición llega al nodo de confluencia.
+\item $\alpha$, reemplazan las sentencias de asignaciones de arrays ubicadas dentro de los bloques básicos.
+\item $\eta$, determinan el valor de la variable en la salida de los bucles.
+\end{itemize}
+
+Como se puede apreciar en la Figura~\ref{fig:gsa_ejemplo}, el operador $\phi$ del último bloque básico de la Figura~\ref{fig:ssa_ejemplo2d} ha sido sustituido por un operador $\gamma$ que además de recoger las definiciones \scvar{y$_1$ e y$_2$}, recoge también el predicado de la sentencia condicional \scvar{x$_2$ $<$ 3}, proporcionando de esta manera información más precisa del comportamiento del programa que puede ser útil en la implementación de diversas técnicas de optimización.
+
+Gracias a la información suministrada por estos nuevos operadores, GSA proporciona información más precisa sobre el comportamiento de los programas. Esta información añadida a la forma genérica de SSA resulta muy útil para que a través de LLVM se puedan manipular estructuras como arrays como si fuesen escalares. De esta manera se pueden normalizar muchas variantes sintácticas que representan la misma semántica.
+
+%
+\subsection{Introducción a LLVM}
+El Proyecto LLVM es una colección de compiladores modulares y reutilizables y tecnologías de cadena de herramientas. A pesar de su nombre, LLVM tiene poco que ver con las tradicionales máquinas virtuales, aunque sí proporciona bibliotecas útiles que pueden ser usados para construirlas.
+
+LLVM comenzó como un proyecto de investigación en la Universidad de Illinois, con el objetivo de ofrecer una estrategia moderna basada en SSA para proporcionar compilación, tanto estática, como dinámica de lenguajes de programación arbitrarios. Desde entonces, LLVM ha crecido hasta convertirse en un proyecto global que consiste en una serie de subproyectos diferentes, muchos de los cuales están siendo utilizados en la producción de una amplia variedad de proyectos comerciales y de código abierto, además de ser ampliamente utilizado en la investigación académica. El proyecto LLVM está licenciado bajo la "UIUC" licencia no privativa BSD y desarrollado en el lenguaje de programación C++.
+
+Precisamente, el hecho de ser software no privativo, hace que LLVM sea una plataforma altamente atractiva para la realización de nuevos proyectos tanto comerciales como académicos.
+Entre los lenguajes soportados por la infraestructura de compilación LLVM se encuentran por ejemplo  Ada, C, C++, D o Fortran. En concreto en este proyecto se emplea la infraestructura LLVM como compilador de código C. 
+
+Gracias a este uso de LLVM tenemos mucho camino recorrido para la implementación de una herramienta de paralelización de programas secuenciales. Usando la API de LLVM podemos añadir nuestro código C++ a una nueva pasada del compilador en la que podremos hacer el debido trabajo. 
+
+Además, de este modo, podemos tener acceso a multitud de estructuras que el compilador ya ha ido construyendo en pasadas previas. Ejemplos típicos de estas estructuras manejadas en compilación son: el árbol de dominación, el de post-dominación, el CG, el RegionInfo u otras estructuras que LLVM nos proporciona como representación en memoria de bucles, funciones, módulos de un programa etc.
+
+Como ya se ha mencionado previamente, la infraestructura LLVM empleada está construida en C++ y hace un profuso uso de la orientación a objetos de este lenguaje, así como de las buenas prácticas en OO y los patrones de diseño de OO. Por otra parte, vía web se puede encontrar la documentación de la infraestructura LLVM, sin la cual el uso de la API se volvería muchísimo más costoso. Podemos acceder a esta documentación desde \href{http://llvm.org/docs/}{http://llvm.org/docs/}.
+
+Parte de la documentación accesible desde la página anteriormente comentada ha sido generada a partir del propio código fuente de LLVM debidamente comentado. La herramienta que automatiza esta generación de documentación a partir de código comentado se llama Doxygen, el cual ya ha sido anteriormente comentado.
+
+En la figura \ref{fig:LoopLLVM} podemos ver un diagrama ejemplo de la documentación de LLVM accesible vía web y generada por Doxygen.
+
+%figura diagrama llvm
+\begin{figure}[tph]
+\centering
+\includegraphics[scale=0.55]{includes/images/llvm_doc.png}
+\caption{Diagramas de la clase Loop de LLVM}
+\label{fig:LoopLLVM}
+\end{figure}
+
+\subsection{Integración del traductor en LLVM}
+%
+\begin{figure}[tph]
+\begin{center}
+\scalebox{0.35}{\includegraphics{includes/images/llvm_toolchain.png}}
+\caption{LLVM Tool-chain}
+\label{fig:intro:llvm_toolchain}
+\end{center}
+\end{figure}
+%
+
+Como podemos observar en la figura \ref{fig:intro:llvm_toolchain}, el traductor se sirve de varias herramientas proporcionadas por LLVM. 
+Entre ellas está el compilador \textbf{Clang}, que es el encargado de transformar el código de entrada (C secuencial, en este proyecto) en una representación intermedia (IR) que LLVM es capaz de comprender.
+El \textbf{Optimizer} es la parte de LLVM que recibe un fichero .o  proporcionado por \emph{Clang} y lo representa en memoria. Dicha representación en memoria será utilizada para manipular, a través de la API de LLVM, el código y así poder realizar los diferentes análisis para obtener información sobre cómo realizar las debidas transformaciones de código y paralelizarlo, sobre cómo reconstruir el código lo más fielmente posible, etc. El \textbf{Optimizer} es capaz de ejecutar pasadas de optimización, tanto estándar como definidas por el programador. 
+Entre las pasadas estándar están por ejemplo:
+\begin{itemize}
+\item  -mem2reg:  Que transforma el código en representación SSA.
+\end{itemize}
+Y como pasadas definidas por el programador::
+\begin{itemize}
+\item  -myTranslatorPass: Que incluye la transformación de código SSA a GSA, la creación de la KIR, la creación del Scheduler, el Backend...
+\item  -break: Que corta el proceso de compilación para que no se genere un ejecutable. Necesario para poder reescribir el código anotado con directivas.
+\end{itemize}
+
+
+\subsection{Representación intermedia de LLVM}
+
+La IR de LLVM se estructura como se muestra en la figura ~\ref{fig:module}. Cada fichero de código de alto nivel de un programa (ej. C, Fortran...) es representado como un objeto Module en LLVM. Nuestro traductor, trabajará únicamente con un módulo por ejecución para realizar los análisis, transformaciones, paralelizaciones, reescrituras, etc. El objeto Module, además de otros atributos, contiene una lista de las funciones que pertenecen a dicho módulo. Como en la mayoría de los compiladores, las funciones se componen de bloques básicos; que no son más que agrupaciones de instrucciones (bosque de AST's). Los bloques básicos tienen relaciones ``sucesor'' y ``predecesor'' que son los que establecen el flujo de control del programa (CFG). 
+
+Con los métodos y objetos disponibles a través de la API de LLVM, podemos recorrer estas estructuras y manipularlas a nuestro antojo. Suelen recorrerse mediante iteradores proporcionados por la propia API. 
+
+%Modulo y contenido
+\begin{figure}[tph]
+\begin{center}
+\scalebox{0.65}{\includegraphics{includes/images/module.png}}
+\caption{Representación intermedia de LLVM}
+\label{fig:module}
+\end{center}
+\end{figure}
+%
+
+Un ejemplo de la jerarquía de clases de LLVM es el que se muestra a continuación en la figura   ~\ref{fig:llvm_hierarchy}.
+
+Hay que resaltar que en LLVM todo son valores (Value); tanto las instrucciones, como los bloques básicos, como las constantes, etc. Esto facilita el uso de los métodos de la API. De esta manera, las instrucciones, cuyos operadores son a su vez values, se pueden construir de muchas maneras diferentes. Por ejemplo, una instrucción de salto (br label \%1) tendrá como operando 0 un valor que será un bloque básico. Sin embargo en otros casos, como por ejemplo en la instrucción de comparación (\%2 = icmp sle i32 \%k.0, 1000000), los operandos pueden ser constantes u otras instrucciones que produzcan un valor con el tipo aceptado por la instrucción en cuestión. 
+Esta forma de representación ayuda mucho al manejo de los objetos al poder comprobar en cualquier momento con qué tipo de Value estamos trabajando (BasicBlock, Instruction...).
+
+%
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=\linewidth]{includes/images/llvm_hierarchy.png}
+\caption{Diagrama representativo de la jerarquía de clases de LLVM}
+\label{fig:llvm_hierarchy}
+\end{center}
+\end{figure}
+%
+
+\subsection{Código generado con LLVM}
+
+A continuación se muestra un pequeño código de ejemplo ~\ref{fig:sample_code} y las representaciones que tienen en función de las diferentes pasadas de LLVM. Como se puede comprobar, es un sencillo código con un bucle que inicializa todos los elementos de un array A a 10000.
+
+% Example código
+\begin{figure}[tph]
+\begin{center}
+\scalebox{0.55}{\includegraphics{includes/images/example_code.png}}
+\caption{Código sencillo de ejemplo}
+\label{fig:sample_code}
+\end{center}
+\end{figure}
+%
+
+Tras compilar con Clang, se obtiene el código de la figura ~\ref{fig:code_IR}. Este código está en formato legible, pero lo que en realidad recibe a LLVM a la entrada es un fichero .o, que contiene esta información en un formato compresible por la herramienta.
+
+% Example código IR
+\begin{figure}[tph]
+\begin{center}
+\scalebox{0.46}{\includegraphics{includes/images/example_code_IR.png}}
+\caption{Código generado por Clang}
+\label{fig:code_IR}
+\end{center}
+\end{figure}
+%
+
+Con la pasada -mem2reg de LLVM, obtenemos la salida que se puede observar en la figura ~\ref{fig:code_SSA}. Esta pasada transforma el código de la figura ~\ref{fig:code_IR} en su representación SSA. Y la pasada -MyTranslatorPass (implementada como pasada de programador de LLVM) obtiene la representación GSA del código (figura ~\ref{fig:code_GSA}).
+
+% Example código SSA y GSA
+\begin{figure}[tph]
+\begin{center}
+\subfigure[Código SSA generado con pasada -mem2reg por LLVM]{
+  \scalebox{0.50}{\includegraphics{includes/images/example_code_SSA.png}}
+\label{fig:code_SSA}
+}
+%
+%\hspace{2em}
+\subfigure[Código GSA generado con la pasada -MyTranslatorPass por LLVM]{
+  \scalebox{0.50}{\includegraphics{includes/images/example_code_GSA.png}}
+\label{fig:code_GSA}
+}
+\caption{Código en SSA y GSA}
+\label{fig:SSA_GSA}
+\end{center}
+\end{figure}
+
+Además de transformar el código SSA a su representación GSA, esta pasada es la encargada de realizar los debidos análisis para conseguir generar una KIR, el Scheduler y el Backend, que serán explicados en posteriores capítulos.
+
+\section {GPU Graphics Processing Unit}
+\label{capitulo3:gpu}
+
+En esta parte de la memoria explicamos más detenidamente lo que es una GPU, la evolución histórica de estos dispositivos, los medios y herramientas que existen para programarlos así como una breve explicación de su arquitectura.
+
+\subsection{Los coprocesadores gráficos o GPUs}
+
+\subsubsection*{Introducción a la GPU: Graphics processing unit}
+
+La unidad de procesamiento gráfico o GPU (Graphics Processing Unit) es un coprocesador dedicado al procesamiento de gráficos u operaciones de coma flotante, para aligerar la carga de trabajo del procesador central en aplicaciones como los videojuegos y o aplicaciones 3D interactivas. De esta forma, mientras gran parte de lo relacionado con los gráficos se procesa en la GPU, la unidad central de procesamiento (CPU) puede dedicarse a otro tipo de cálculos.
+Esta es una definición típica de la GPU, no obstante en cuanto a sus aplicaciones y usos se queda bastante corta, cierto es que su diseño está completamente orientado a procesamiento de gráficos e imágenes, y en un primer momento era su principal objetivo [Kirk et al. 2010]. 
+
+Irónicamente debido a este primer objetivo de aplicación, las GPUs fueron diseñadas con una cantidad de paralelismo hardware y recursos muy altos, y debido a ésto se emplean en la actualidad para la ejecución de algoritmos y cálculos que en muchos casos nada tienen que ver con los videojuegos o los gráficos 3d.
+Su uso en computación de altas prestaciones está motivado por la aceleración de cálculo que se puede conseguir empleándolas y aprovechando el paralelismo y recursos que nos ofrecen, como ya comentábamos.
+
+Para entender mejor el porqué de este uso que comentamos debemos ahondar más en la arquitectura y diseño de una GPU típica, ahora hablaremos de este aspecto sin entrar tampoco en excesivo detalle.
+La arquitectura de una GPU, pensada para cálculos sobre píxeles y vértices trata de resolver muchos de los problemas en estos ámbitos empleando la fuerza bruta ,es decir, si tenemos un algoritmo que ha de aplicarse a todos los píxeles de una imagen y el tratamiento de cada uno es independiente del del resto (condición que se da habitualmente), entonces podremos hacerlo todo en paralelo, de forma simultánea el algoritmo se aplica a cada píxel. Para poder aplicar lo anterior hemos de tener una cantidad grande de procesadores o núcleos en los que poder ejecutar el algoritmo particularizado en cada caso para un píxel concreto.
+
+Basándose en esta sencilla idea de aplicar el paralelismo a una escala tan grande las GPUs modernas se diseñan con dos niveles de paralelismo que se corresponden a las dos dimensiones de una imagen. De este modo, y tratando este aspecto desde una perspectiva de programación tendremos una creación de threads etiquetada por dos componentes (x,y), de tal modo que teniendo una imagen en dos dimensiones podremos mapear perfectamente la ejecución de un algoritmo sobre cada píxel a este conjunto de threads etiquetados en 2D, de modo que a cada thread le corresponda únicamente el cálculo  para un solo píxel. Idealmente si asumimos que todos estos threads se ejecutan de forma paralela, y despreciamos otros overheads podríamos reducir drásticamente el tiempo de cómputo del siguiente modo:
+
+\begin{equation}
+   T_{CPU}=T_{EJECPIXEL}*(X_{PIXELS}*Y_{PIXELS})
+ \end{equation}
+ 
+ \begin{equation}
+ T_{GPU}=T_{EJECPIXEL}
+ \end{equation}
+ 
+Ya que en GPU los (X*Y) pixels son procesados todos a la vez, frente a la CPU donde se procesan uno a uno.
+Esto evidentemente no es así en la práctica y existen múltiples overheads que hacen que no se obtenga un rendimiento tan alto, algunos de ellos pueden ser:
+
+\begin{itemize}
+\item Creación de los threads: La creación de threads de los que hemos estado hablando consume tiempo. Es cierto que los threads en GPU son mucho más ligeros que en CPU y su creación y destrucción más rápidas, no obstante este overhead existe.
+
+\item Transferencias GPU-CPU: Si optimizamos cálculos y algoritmos empleando CPU y GPU, las partes de computación intensa será lógico ejecutarlas en paralelo en la GPU, pero para ello hemos en muchos casos de tomar datos de la CPU y transferir resultados a la misma cuando hayan sido computados por la GPU. El coste temporal de estas transferencias no es nada despreciable y de hecho es un cuello de botella que los programadores han de tener siempre presente.
+
+\item Problemas de localidad de memoria: Al igual que en las CPUs, en las GPUs es crucial que se explote la localidad de la jerarquía de memoria existente, además en GPU ésto tiene una problemática distinta debida a la ejecución paralela y a los accesos a memoria paralelos o coalescentes, este tema será tratado en explicaciones posteriores.
+
+\item Problemas de divergencia: Las GPUs emplean un modelo SIMD (single Instruction Multiple Data) ésto quiere decir que se ejecutan en paralelo las mismas instrucciones pero sobre datos distintos, de la misma manera que como lo explicamos con el algoritmo sobre muchos píxeles independientes. La arquitectura GPU está pensada de esta manera pero si en el código paralelo cada thread toma un camino diferente al tomar distintas ramas de un if han de ejecutarse instrucciones distintas en cada thread, lo que genera pérdidas de rendimiento, ya que como decíamos las GPUs obtienen su máximo rendimiento en SIMD. Por este problema puede perderse rendimiento si paralelizamos una región de código que contiene muchos ifs cuya condición depende de una manera u otra del thread que la ejecute.
+
+\end{itemize}
+
+Continuando con nuestra introducción a las GPUs y al mundo que las rodea es fundamental hablar del hardware y arquitectura de estos dispositivos, que se presenta a continuación.
+
+\subsubsection*{Evolución Histórica y arquitectura:}
+
+Ya hemos hecho una breve introducción a las GPUs, ahora en esta sección ahondaremos más en su evolución histórica y su arquitectura.
+
+Comenzando por la evolución histórica de las GPUs debemos decir que, al contrario que las CPU, las GPU comenzaron siendo dispositivos de propósito muy específico (dedicadas a computo sobre imágenes y gráficos) y por tanto no eran una opción aconsejable en la ejecución de código genérico ya que su flexibilidad era muy limitada.  Por la contra, los procesadores convencionales eran ya maduros y flexibles con respecto a esta cuestión.
+
+Realizando un breve repaso histórico por las generaciones de GPU tenemos:
+
+\begin{itemize}
+
+\item La primera de generación (1998), que comprende la familia nVidia Riva TNT2, ATI Rage 128, y 3DFX Voodoo3, implementaban el conjunto de características de DirectX 6. 
+
+\item La segunda generación (1999 - 2000), que incluye a las Radeon 7200 y GeForce, GeForce2, Radeon 7500, eran capaces de llevar a cabo transformaciones de geometría e iluminación sobre los vértices de la escena eliminando carga a la CPU. Esta generación de GPUs se corresponde con DirectX 7.
+
+\item La tercera generación surge en torno a 2001. A ella pertenecen GeForce3, GeForce4, Radeon 8500 y Radeon 9000. Implementaban las  características de DirectX 8.
+
+\item La cuarta generación (2002-2006) comienza con la familia GeForce Fx y
+Radeon 9700, implementan DirectX 9 y son las primeras en ofrecer soporte de programación a nivel de vértice y de píxel, lo que aumenta
+enormemente su adecuación para descargar tareas de la CPU y realizar efectos avanzados. Recordemos lo expuesto sobre programación a nivel de píxel en la sección sobre GPUs en el capítulo de estado del arte.
+
+
+\item La quinta generación (2007 hasta la actualidad) se corresponde con DirectX 10 y comienza con las GeForce 8800 y Radeon 2900. Permiten mayor flexibilidad del procesado a nivel de píxeles y vértices, además de adoptador una arquitectura unificada.
+
+
+\end{itemize}
+
+
+Expuesta la evolución histórica haremos ahora una breve explicación del hardware GPU para entender el porqué de su alto rendimiento y su amplio uso en paralelización de aplicaciones. Para comenzar con la explicación empecemos por hacer notar una diferencia muy grande entre CPU y GPU: Si consideramos una CPU de forma aislada, con un solo núcleo que ejecuta un solo flujo de instrucciones y accede a una única memoria tenemos la arquitectura clásica definida por John von Neumann, esto se corresponde con una arquitectura SISD (single instruction single data), se procesa una instrucción o dato cada vez. Sin embargo en una GPU esto no es así, una GPU posee una arquitectura SIMD (single instruction multiple data), es decir cada vez se ejecuta una instrucción pero esa instrucción puede ser ejecutada sobre múltiples datos de entrada produciendo múltiples datos de salida.
+De esta manera una GPU tiene múltiples procesadores, cada uno de ellos contiene múltiples núcleos capaces de ejecutar el mismo conjunto de instrucciones dado pero sobre datos diferentes, este esquema se representa a continuación en la figura ~\ref{fig:arquitecturaGPU}:
+
+%figura eclipse
+\begin{figure}[tph]
+\centering
+\includegraphics[width=\linewidth]{includes/images/arquitectura_gpu.png}
+\caption{Esquema general gpu}
+\label{fig:arquitecturaGPU}
+\end{figure}
+
+Los núcleos de cada procesador ejecutan el mismo código no pudiendo acabar la ejecución conjunta de ese código sobre múltiples datos hasta que el más lento de ellos haya acabado.
+Nótese que ejecutando todos las mismas instrucciones simultáneamente el contador de programa podría ser el mismo para todos los núcleos así como el proceso de captación de cada instrucción, siendo esto así se ahorra mucho tiempo en la captación de las instrucciones, pensemos que la captación de una instrucción se hace una sola vez pero se ejecuta en un número grande de núcleos, este es otro modo en el que las GPUs ganan rendimiento, y a la vez es la razón de que se produzcan pérdidas de rendimiento en códigos donde la ejecución SIMD pasa a convertirse en MIMD (Multiple Instruction Multiple Data), es decir cuando se da que por las características del código y los datos cada núcleo debe tomar una rama distinta en el programa y por tanto pueden ejecutarse instrucciones diferentes en cada uno de ellos. Las GPU alcanzan su máximo rendimiento en modo SIMD de modo que la ejecución MIMD debe evitarse, este problema se conoce como divergencia en la ejecución.
+
+Además de estas consideraciones hemos de tener en cuenta la gestión de threads que las GPUs realizan, en primer lugar debemos decir que los threads GPU son mucho más ligeros que los CPU y su coste de creación y destrucción es menor, esto no puede ser de otra forma ya que en GPU los threads son un factor crucial en el rendimiento.
+
+Por otra parte una GPU esta diseñada para ejecutar un gran número de threads de forma simultánea, además la arquitectura GPU se aprovecha de esto para enmascarar las latencias de acceso a memoria cambiando el thread activo cada vez que se produce una espera debida a un acceso a memoria. Observemos en la figura ~\ref{fig:arquitecturaGPU} que las unidades de procesamiento UP, en un núcleo concreto, no pueden acceder a memoria directamente como lo hacen a los registros sino que para acceder a memoria lo hacen a través de un interfaz específico enviando las peticiones de acceso a memoria a unidades dedicadas en el hardware. Gracias a ello pueden emplearse cachés entre memoria principal y los procesadores.
+
+Existen por tanto dos tipos de acceso a memoria, desde caché y sin caché. La diferencia principal es que el acceso sin caché permite (a costa de ser más lento) la escritura a posiciones arbitrarias de memoria, mientras que si se escribe en caché sólo se puede escribir a posiciones del dominio del thread.
+
+
+Para dar aun más rendimiento enmascarando tiempos, las GPUs emplean otras técnicas heredadas de procesadores convencionales como son el pipelining o el multithreading.
+
+Revisando esta breve explicación de la arquitectura GPU, teniendo en cuenta las técnicas de enmascaramiento de latencias y el grado de paralelismo hardware que estos dispositivos tienen, es de esperar que sean realmente potentes en cuanto a capacidad de cálculo y que sean capaces de acelerar notablemente algoritmos que en CPU tienen un consumo de tiempo mas allá de lo razonable.
+
+Por todos estos motivos y además porque las GPUs son en nuestros días más flexibles en cuanto a los tipos de códigos que pueden ejecutar es comprensible que sean dispositivos cada vez más empleados en HPC.
+
+\subsection{OpenACC: Paralelización de aplicaciones sobre GPU}
+
+OpenACC es un estándar de anotación de aplicaciones basado en directivas similares a las de OpenMP, de hecho, las similitudes sintácticas son muchas, aunque el concepto es radicalmente distinto. En OpenMP la paralelización se logra a través de la creación de múltiples threads destinados a correr paralelamente en un computador con varios procesadores [OpenACC 2013].
+ 
+En OpenACC la idea no es explotar el paralelismo en la CPU sino en las modernas GPUs, que desde hace ya tiempo vienen usándose para realizar computaciones pesadas con buenos resultados. Hasta ahora la programación de GPUs para realización de cálculo o algoritmos numéricos se hacia en CUDA, no obstante ese es un lenguaje específico y complejo de manejar de forma avanzada, OpenACC ha sido desarrollado para paliar este problema y es una solución conjunta de las empresas Cray, CAPS, Nvidia y PGI.
+
+El modelo de programación que OpenAcc propone es básicamente realizar las operaciones computacionalmente ligeras en la CPU, transfiriendo las operaciones computacionalmente complejas y grandes y con posibilidad de paralelizarse a la GPU. De esta manera la latencia de los programas puede reducirse notablemente, y las aplicaciones más evidentes de esta herramienta son los programas de computación numérica y cálculo avanzado.
+
+Ahora introduciremos algunas de las directivas más importantes de OpenAcc con la esperanza de que el lector comprenda los usos de OpenACC:
+
+\begin{itemize}
+
+\item Directiva Data: La directiva data se emplea para transferir datos entre CPU y GPU. Estas transferencias pueden hacerse de diversas formas, una de ellas puede ser DMA (Direct Memory Access), aún así ha de tenerse en cuenta que estas transferencias de datos son el cuello de botella en estos programas ya que la cantidad de paralelismo que podemos obtener en una GPU es muy alta y habitualmente lo que limita el rendimiento son precisamente estas transferencias.
+
+ La sección data es una transferencia explícita de los datos, sin embargo podría omitirse y el compilador la hará como crea oportuno, aunque para mayor optimización deberíamos escribirla.
+ 
+ El aspecto de una sección data típica es:
+ 
+ \begin{figure}[tph]
+ \begin{lstlisting}
+		#pragma acc data create(Anew) pcopy(A_par)
+\end{lstlisting}
+\caption{Directiva Data en OpenAcc}
+\label{FIG:DataOpenAcc}
+\end{figure}
+
+
+En esta sección data se indica que se cree en la GPU la variable Anew (create), ya que solo se requiere en la GPU, y que se tome A\_par si está presente en la GPU, o si no lo está que se copie de la CPU y cuando la computación en la GPU se complete, se vuelva a transferir a la CPU para obtener en ella los resultados (pcopy=present or copy).
+
+\item Directiva Kernels: La directiva Kernels indica al compilador que inmediatamente a continuación viene una zona de cómputo que debe realizarse en la GPU, lo lógico es que la directiva kernels se encuentre justo encima de varios bucles anidados. En GPU tenemos 2 niveles de paralelización, que se corresponden con las 2 dimensiones de una pantalla, recordemos que todo el hardware de una GPU estaba originalmente diseñado para la computación sobre gráficos y visualización en pantallas.
+
+De este modo una operación dentro de un anidamiento de bucles de nivel 2 puede transformarse en GPU en una operación sin bucle alguno, por ejemplo sobre un array de 2 dimensiones se repartiría el trabajo de forma que a cada par (Threadx,Thready) le corresponda una única operación. Esto se hace gracias al hardware pensado para el procesamiento 2d sobre imágenes como comentamos.
+
+Veamos un ejemplo de directiva kernels con otras directivas:
+
+\begin{figure}[t]
+\begin{lstlisting}
+#pragma acc kernels loop gang reduction(max:error)
+for( j = 1; j < n-1; j++)
+{
+	#pragma acc loop worker
+	for( i = 1; i < m-1; i++)
+		...
+}
+\end{lstlisting}
+\caption{Directiva Kernels en OpenAcc}
+\label{FIG:KernelsOpenAcc}
+\end{figure}
+
+En esta directiva se indica que los bucles a continuación anidados pueden paralelizarse sobre el hardware de la GPU, el loop justo a continuación de kernels, es equivalente a poner \#pragma acc loop. Algunas directivas pueden ponerse directamente unas después de otras para abreviar. El loop indica el bucle paralelo, a continuación se indica gang para que dicho bucle se paralelice a nivel de “cuadrilla” (primer nivel de paralelismo), además se indica que en dicho bucle existe una operación de reducción de tipo máximo sobre la variable error.
+
+Por su parte en el bucle anidado se indica loop worker, es decir, aquí es donde tenemos el segundo nivel de paralelismo.
+Tanto en Gang como en worker puede especificarse un número que indica el tamaño de los grupos, por ejemplo worker(32) creará grupos de trabajadores de 32. De este modo se puede especificar el reparto trabajo a cada nivel, gang el primer nivel y worker el segundo.
+De modo que los dos bucles vistos anteriormente podrían reducir drásticamente su número de iteraciones aprovechando este paralelismo en 2 niveles.
+
+\item Directiva Loop: Como ya hemos visto indica que el bucle es paralelizable, además puede contener directivas anidadas como reduction, o como la siguiente que presentamos.
+
+\item Directiva Independent: En una directiva loop indica que el bucle es completamente independiente entre sus iteraciones de modo que puede ser completamente paralelizado.
+
+\begin{figure}[tph]
+\begin{lstlisting}
+#pragma acc loop independent
+\end{lstlisting}
+\caption{Directiva Loop con el flag independent}
+\label{FIG:LoopIndependentOpenAcc}
+\end{figure}
+
+Cuando usamos esta directiva el compilador puede llegar a eliminar por completo hasta 2 anidamientos de bucle, basándose en el paralelismo 2d que ya hemos comentado.
+
+\end{itemize}
+
+
+Vistas las principales directivas, y con una idea más clara de lo que es OpenAcc pasamos ahora a comentar una cuestión fundamental para el rendimiento en OpenAcc y en GPU en general, la coalescencia.
+
+Consideremos la siguiente distribución de un array 2D en memoria tal y como se presenta en la figura ~\ref{fig:Array2D}
+
+\begin{figure}[tph]
+\centering
+\includegraphics[width=\linewidth]{includes/images/acceso_memoria.png}
+\caption{Array 2D en CPU y GPU respectivamente}
+\label{fig:Array2D}
+\end{figure}
+
+La coalescencia en GPU es un concepto similar a la explotación de la localidad de memoria en CPUs. Consideremos un lenguaje en el que los elementos de un array 2d se almacenan por filas, de ese modo la forma óptima de recorrer dicho array es recorriendo en el bucle interior posiciones de memoria adyacentes, es decir la segunda dimensión, una fila completa, para luego pasar en el bucle exterior a otra fila.
+
+En GPU podría pensarse en aplicar el mismo razonamiento, ahora bien, en GPU los bucles se paralelizan, lo que se marca en la figura en el caso de GPU son los threads creados. Fijémonos ahora que para explotar la localidad de memoria, cada thread debe ocuparse, como se indica, de una columna de este modo, estando los threads sincronizados, los 4 threads de la figura accederán en cada momento a la posición que les toca en una única fila, la misma para todos, de modo que la lectura de esa fila es óptima conjuntamente entre todos los threads.
+
+Esto es así porque el hardware de la GPU observa los accesos a memoria, y “solapa” varios accesos en uno, es decir realmente los 4 accesos a memoria de los 4 threads se solaparían en uno solo al ser adyacentes, esto se denomina coalescencia.
+
+Como veíamos en el apartado anterior los núcleos en un procesador GPU acceden a memoria mediante una interfaz y empleando hardware dedicado a esta tarea, es de este modo como se hace posible ver accesos coalescentes y agruparlos en uno solo aumentando así la eficiencia.
+
+Es fundamental que los programas OpenAcc exploten la coalescencia de lo contrario se pierde mucho rendimiento, tengamos en cuenta que lo que se paralelizan son regiones de computación muy grandes con muchas iteraciones, de modo que puede haber muchísimos accesos a memoria.
+
+%%
+%%
+%\begin{figure}
+%\begin{center}
+%\scalebox{0.32}{\includegraphics{includes/images/Diagrama_traductor.png}}
+%\caption{traductor}
+%\label{fig:traductor}
+%\end{center}
+%\end{figure}
+%%
+

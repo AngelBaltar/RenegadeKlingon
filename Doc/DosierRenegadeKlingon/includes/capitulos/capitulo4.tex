@@ -1,0 +1,144 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Nombre del trabajo, 
+% t�tulo,
+% autores
+% fechas, 
+% comentarios, etc.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%\input miscomandos.tex % Comandos definidos por el autor
+
+%\documentclass[a4paper,12pt]{book} 
+
+%% Incluir los paquetes necesarios 
+%\usepackage[latin1]{inputenc} % Caracteres con acentos. 
+%\usepackage[spanish]{babel}
+%\usepackage{latexsym} % Simbolos 
+%\usepackage[pdftex=true,colorlinks=true,plainpages=false]{hyperref} % Soporte hipertexto
+%\usepackage[pdftex]{graphicx} %Inclusión de gr�ficos PDFLaTeX
+%\DeclareGraphicsExtensions{.png,.pdf,.jpg}
+%\renewcommand{\baselinestretch}{1.5} %espacio entre lineas
+%\sloppy % suaviza las reglas de ruptura de l�neas de LaTeX
+
+% T�tulo, autor, fecha. 
+\title{capitulo3} 
+\author{Angel baltar Diaz}
+\date{\Large Enero, 2010} 
+
+%\begin{document} % Inicio del documento
+%capitulo 1 introduccion
+\chapter {Fundamentos tecnológicos}
+\label{capitulo4}
+
+En este capítulo haremos una breve explicación de las herramientas empleadas en el desarrollo y documentación de este proyecto, se introducirán las herramientas de desarrollo integradas IDEs con las que el proyecto se ha construído, así como la herramienta empleada para generación de documentación del proyecto.
+
+
+\section{Generación de documentación: Doxygen}
+
+Doxygen es una herramienta de documentación automática que permite generar documentación a cerca de código fuente escrito en diversos lenguajes, como son java, C, Phyton o como en el caso que nos ocupa C++.
+
+La herramienta simplemente toma un directorio o directorios, donde el código del proyecto se ubica y simplemente los escanea, pudiendo hacerlo de forma recursiva para encontrar ficheros fuente a partir de los que documenta las clases, funciones, etc, para finalmente crear una salida que puede ser en diversos formatos, entre los más interesantes:
+
+\begin{itemize}
+
+\item HTML: Generando así una documentación conexa mediante links entre las páginas html de documentación, con un índice etc.
+
+\item LATEX: Es capaz de generar código latex compilable a partir del cual se puede extraer la documentación en otros formatos interesantes como son PDF o PostScript.
+
+\item Man pages: También es posible generar documentación en el popular formato man pages, que se usa mediante el comando man.
+
+\end{itemize}
+
+Además existen plugins que integran doxygen en eclipse, para el desarrollo hemos usado eclipse, que comentaremos más profundamente en otro apartado, y nos hemos beneficiado de uno de estos plugins llamado eclox para realizar esta integración.
+
+Este plugin es software muy ligero, simplemente nos ayuda en una tarea fundamental, la configuración del propio doxygen, que se configura a través de un simple fichero de texto en formato pares clave=valor que permiten configurar completamente como generaremos nuestra documentación, aquí tenemos un pequeño ejemplo, tomado del fichero real de configuración de doxygen:
+
+ \begin{figure}[t]
+ \begin{lstlisting}
+		# if the GENERATE_MAN tag is set to YES
+		# (the default) Doxygen will
+	
+ 		# generate man pages 
+		
+		GENERATE_MAN = YES
+\end{lstlisting}
+\caption{Configuración de doxygen para generar páginas man}
+\label{FIG:DoxygenConfig}
+\end{figure}
+
+Trabajando de modo convencional sin el plugin deberíamos escribir este fichero a mano, y como podemos esperar el número de claves a las que dar valor para la generación de la documentación puede ser bastante elevado dependiendo de lo que queramos hacer. Con el plugin eclox de integración para eclipse podemos asignar a un proyecto un fichero de configuración de Doxygen, que podremos editar con un visor especializado para estos ficheros y en el que podemos establecer todas las opciones a través de una cómoda interfaz de usuario sin tener que conocer el fichero de configuración Doxygen que por debajo realmente se genera.
+
+Para finalizar con la explicación de esta útil herramienta  presentamos ahora en la figura ~\ref{fig:manpagesDoxygen} un ejemplo de salida en formato man pages generada también por doxygen.
+
+%figura doxygen
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{includes/images/doxygen_man_output.png}
+\caption{Formato Man generado por Doxygen}
+\label{fig:manpagesDoxygen}
+\end{figure}
+
+
+\section{IDE Empleado:Eclipse}
+
+El código desarrollado en este proyecto ha sido escrito empleando la plataforma Eclipse para la edición del código fuente, eclipse es un muy popular IDE que integra muchas utilidades empleadas usualmente en proyectos software, a continuación comentamos de estas ventajas las que resultaron más útiles y usadas en este proyecto:
+
+\begin{itemize}
+
+\item Posibilidad de realizar tareas de depuración y seguimiento de la ejecución del programa.
+
+\item Edición de otros archivos que no son propiamente código fuente como el fichero de makefile o scripts necesarios para el programa, u otros scripts o códigos.
+
+
+\item Cuenta con herramientas de búsqueda esenciales tratándose de un proyecto grande en el que buscar llamadas a funciones o variables es importante en muchas ocasiones. Asimismo permite navegar de una llamada a una función o método a su definición etc, resultando estas funcionalidades de gran utilidad para el desarrollador.
+
+\item Corrector ortográfico de idioma inglés: La versión de eclipse usada emplea un marcado de palabras no correctas en idioma inglés. Considero esta utilidad bastante útil ya que en un proyecto de estas características los comentarios de código suelen hacerse en inglés.
+
+\end{itemize}
+
+Además como ya hemos comentado previamente existe un plugin “Eclox” que integra la herramienta de documentación Doxygen con eclipse, este plugin conjuntamente con eclipse nos ha facilitado mucho la generación automática de documentación.
+
+Además del uso de eclipse para el desarrollo, esta herramienta ha sido usada para editar otro tipo de código que no pertenece propiamente al proyecto. Es el caso de los códigos empleados para un proceso previo de aprendizaje de OpenAcc, herramienta de paralelización de aplicaciones empleada en el desarrollo. En posteriores secciones comentamos en detalle esta herramienta.
+
+Aquí en la figura ~\ref{fig:Eclipse} podemos ver una captura de eclipse editando un fichero con anotaciones OpenAcc:
+
+%figura eclipse
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{includes/images/eclipse_openacc.png}
+\caption{Captura de pantalla del editor de Eclipse}
+\label{fig:Eclipse}
+\end{figure}
+
+La versión de eclipse que hemos empleado se llama Helios.
+
+\section{GIT: Repositorio y control de versiones}
+
+GIT es un software de control de versiones inicialmente pensado para funcionar como núcleo de programas de control de versiones que pudieran emplearlo ofreciendo interfaces propios de cara al usuario, sin embargo GIT se ha convertido por sí mismo en un sistema de control de versiones completamente funcional y de mucho éxito [Vogel et al. 2011]. Tanto es así, que muchos y muy buenos proyectos lo emplean, tenemos un claro ejemplo de esto en que GIT es usado en el grupo de programación del núcleo linux.
+
+El funcionamiento de GIT es sencillo, tal y como lo usamos en este proyecto se basa en lo siguiente. Tenemos un repositorio maestro, con el cual nuestro repositorio local ha de estar sincronizado, trabajaremos en local subiendo los cambios al repositorio maestro cuando estos sean funcionales y estables. GIT trabaja en torno al concepto de branch, un branch es una línea de trabajo del proyecto es decir contiene todos los ficheros del proyecto representando una rama del proyecto o variación del mismo, habitualmente se crean branches cuando vamos a probar cambios de los que no estamos a priori seguros, de esta manera siempre podremos descartar el branch y volver atrás.
+Así pues como ya habíamos introducido nuestra forma de trabajar es teniendo un branch maestro en un servidor, sincronizando este branch maestro del servidor con un branch maestro local, y también en local crearemos distintos branches para las distintas funciones que se vayan introduciendo para así solo tener en el maestro funcionalidades estables y probadas. Así pues un branch local en el que desarrollamos cierta funcionalidad sera combinado (merge) al branch maestro local cuando sea estable y  haya sido probado y del maestro local podrá ser subido al maestro en el servidor.
+
+Es un modo sencillo de trabajar que nos garantiza varias cuestiones fundamentales:
+
+\begin{itemize}
+
+\item El branch maestro del servidor se mantiene completamente estable.
+
+\item Si durante el desarrollo realizamos cambios perjudiciales siempre podremos volver atrás. Podemos volver atrás al branch maestro, o remontarnos varios commits atrás según sea conveniente. Incluso restaurando un solo fichero, varios etc. GIT es muy completo en cuanto a esta funcionalidad.
+
+\item Redundancia de la información del proyecto: Por el propio modo de trabajar tenemos el proyecto en local y además en un servidor GIT. De este modo aunque se pierda el proyecto en uno de los dos seguiremos teniendo una copia. Si este modo de trabajo se extiende a varios desarrolladores la seguridad aumenta ya que se aumenta el número de estaciones que tienen copia del proyecto.
+
+\item Seguimiento del proyecto: GIT además lleva cuenta de un log de commits en el que se apuntan los commits de cada desarrollador sobre la rama o branch principal del proyecto, de este modo teniendo una política razonable en cuanto a comentar apropiadamente cada commit, se puede hacer seguimiento del desarrollo.
+
+\item Centralización de operaciones sobre el proyecto: Las operaciones de mantenimiento relacionadas con el proyecto se pueden centralizar en el servidor GIT, es el caso de las copias de seguridad.
+
+\item En nuestro caso, la existencia de un servidor GIT también nos proporciona la ventaja de que los directores y tutores del proyecto puedan comprobar en todo momento el estado del mismo.
+
+\end{itemize}
+
+
+En definitiva GIT nos aporta el control de versiones básico que todo proyecto de software debe tratar, ayudándonos a remontarnos atrás en versiones, organizar los ficheros fuente, sincronizar a diversos miembros de un equipo etc.
+
+
+
+%\end{document} % Fin del documento

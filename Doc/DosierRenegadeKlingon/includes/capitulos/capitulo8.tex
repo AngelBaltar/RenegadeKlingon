@@ -1,0 +1,120 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Nombre del trabajo, 
+% t�tulo,
+% autores
+% fechas, 
+% comentarios, etc.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%\input miscomandos.tex % Comandos definidos por el autor
+
+%\documentclass[a4paper,12pt]{book} 
+
+%% Incluir los paquetes necesarios 
+%\usepackage[latin1]{inputenc} % Caracteres con acentos. 
+%\usepackage[spanish]{babel}
+%\usepackage{latexsym} % Simbolos 
+%\usepackage[pdftex=true,colorlinks=true,plainpages=false]{hyperref} % Soporte hipertexto
+%\usepackage[pdftex]{graphicx} %Inclusión de gr�ficos PDFLaTeX
+%\DeclareGraphicsExtensions{.png,.pdf,.jpg}
+%\renewcommand{\baselinestretch}{1.5} %espacio entre lineas
+%\sloppy % suaviza las reglas de ruptura de l�neas de LaTeX
+
+% T�tulo, autor, fecha. 
+\title{capitulo8} 
+\author{Angel baltar Diaz}
+\date{\Large Enero, 2010} 
+
+%\begin{document} % Inicio del documento
+%capitulo 1 introduccion
+\chapter {Conclusiones y contraste de objetivos}
+\label{capitulo8}
+
+En este último capítulo haremos una valoración final del proyecto, las conclusiones que aquí se presentan son expuestas desde el punto de vista del autor del proyecto y en ellas se reflejan sus opiniones y experiencias personales y profesionales fruto de la realización de este proyecto.
+
+\section{Conclusiones}
+
+En primer lugar debo mencionar las muchas lecciones aprendidas gracias al estudio y desarrollos necesarios para hacer posible la presentación de este proyecto las más importantes son:
+
+\begin{itemize}
+
+\item El trabajo en equipo: El trabajo en equipo ha sido completamente fundamental en la realización de este proyecto. El proyecto ha sido desarrollado en el seno de un equipo de desarrollo sin el que este proyecto hubiera sido completamente imposible, existen muchas partes del traductor desarrollado que en este proyecto se presentan como cajas negras, pero que puedo asegurar son realmente complejas.
+No tengo más que palabras de agradecimiento hacia todo el equipo que ha hecho posible el traductor completo.
+
+\item Infraestructuras de compilación y compiladores modernos: Si algo está claro después de este desarrollo es que los compiladores son herramientas muy complejas y que la complejidad debe ser dividida en fases diferenciadas, es por ello que los compiladores dividen muchos problemas aplicando la máxima divide y vencerás, esto se refleja en su diseño en pasadas de compilación, la inclusión de Representaciones intermedias de código etc. Puede decirse que después de este desarrollo soy mucho más consciente de todas estas cuestiones.
+
+\item A lo largo de toda la carrera, en muchas asignaturas, se ven conceptos y técnicas de análisis y diseño orientados a objetos. También se estudian diferentes patrones arquitecturales de este campo. La tecnología en la que habitualmente se emplean estas técnicas y conceptos es la del desarrollo de aplicaciones de alto nivel (por ej. aplicaciones de escritorio o aplicaciones Web). Y aunque los compiladores, tradicionalmente, no se sirven de esta metodología, hemos hecho un esfuerzo para integrarla en este proyecto y así hacer mucho más mantenible la herramienta desarrollada que se presenta. 
+
+\item Paralelización de aplicaciones: Además de lidiar con la complejidad de la integración del proyecto en una infraestructura de compilación previamente existente también se ha tenido que realizar un esfuerzo por aprender y aplicar técnicas de paralelización de aplicaciones, entender en profundidad el lenguaje de directivas a generar y manejar la complejidad de su generación automática. Debemos decir que para satisfacer los requisitos de conocimiento en todas estas técnicas de paralelización y lenguajes de directivas fue necesario un proceso de estudio y prácticas de paralelización manual de algoritmos.
+
+\end{itemize}
+
+
+
+Por otra parte debemos decir que la faceta innovadora de este proyecto es razonablemente alta, aunque este modesto proyecto sea muy mejorable tiene una linea de trabajo clara, conseguir que la paralelización de aplicaciones pueda llegar a ser completamente automática. 
+
+En los últimos años se han hecho grandes esfuerzos en la mejora de los componentes hardware, los procesadores, las modernas GPUs son cada vez más potentes e incluso existen supercomputadores que emplean conjuntamente todas estas tecnologías, no obstante las mejoras en hardware cada vez van más de la mano de la replicación hardware,el paralelismo y la vectorización por lo que al final será tarea de los desarrolladores o mejor dicho del software que todo este paralelismo hardware sea explotado.
+
+Es previsible que el gran esfuerzo de desarrollo en el apartado hardware anteriormente citado conlleve a otro esfuerzo de desarrollo esta vez centrado en el software para permitir que la gran capacidad de cómputo que hoy en día nos ofrecen los dispositivos pueda ser explotada de manera cada vez más sencilla. 
+
+
+\subsection{Objetivos alcanzados}
+Como se puede comprobar en el capítulo \ref{capitulo1}, en el apartado de objetivos, se pretendían alcanzar una serie de metas. A continuación vamos a tratarlos uno a uno y justificar en qué parte de la memoria de este proyecto se demuestra el cumplimiento de cada uno de ellos.
+
+\begin{itemize}
+\item Soporte de lenguaje de entrada C. El cumplimiento de este objetivo se garantiza mediante las pruebas experimentales realizadas en el capítulo \ref{capitulo7}.
+\item Generación de código C paralelo para sistemas de memoria compartida que cosiste en códigos anotados con directivas OpenACC. Igual que el objetivo anterior, éste está justificado en el capítulo \ref{capitulo7}.
+\item Implementación del traductor de código usando la infraestructura de compilación LLVM. Como ya hemos justificado en varios capítulos, ésta es la infraestructura de compilación en la que se apoya todo el desarrollo de este Proyecto de Fin de Carrera.
+\item Desarrollo, diseño e implementación de la jerarquía de clases necesaria para representar las directivas OpenACC y las transformaciones de código a implementar. Se han explicado detenidamente, tanto la jerarquía de \textit{CodeTransform}, como la de \textit{CodeGenerator} en el capítulo \ref{capitulo6}.
+\item Validación y medición del rendimiento del traductor con al menos tres algoritmos clásicos en computación: Algoritmo de Laplace 2D, Filtro de Sobel y Multiplicación de matrices. Resultados ampliamente discutidos en el capítulo \ref{capitulo7}. 
+\item La Implementación de transformaciones de código estándar (Desenrrollamiento de Bucles, Intercambio de Bucles y Fisión de bucles) están discutidas minuciosamente a lo largo del capítulo \ref{capitulo6}. 
+\end{itemize}
+
+
+\section{Líneas futuras de trabajo}
+
+En esta sección haremos un breve repaso de los logros de este proyecto, enlazándolos con extensiones y mejoras abordables en nuevos proyectos y que conseguirían dotar de funcionalidades muy atractivas a la herramienta.
+
+En primer lugar debemos mencionar que la fase de filtro de la herramienta que detecta funcionalidades no soportadas parando la ejecución y advirtiendo al usuario es una fase fundamental, ya que proponerse soportar toda la variabilidad existente en el conjunto de todos los programas que pueden ser escritos en lenguaje C simplemente sería un error, ya que tratar de lograr esto es demasiado complejo, no obstante lo que si es razonable es que este filtro filtre cada vez menos características en sucesivas versiones de la herramienta, para ello no solo ha de modificarse el filtro sino en general todas las fases de normalización de código de la herramienta para soportar las nuevas construcciones sintácticas, algunas de las características que podrían ser objeto de estudio para ser soportadas serían:
+
+\begin{itemize}
+
+\item El uso de estructuras y tipos definidos por usuario :Typedefs y Structs
+
+\item El uso convencional sin restricciones de variables globales: El mayor problema que supone esta característica es el análisis de efectos colaterales a los que este tipo de variables pueden dar lugar.
+
+\item Mayor soporte de punteros y reserva dinámica de memoria: Malloc y Calloc
+
+\item Mayor libertad a la hora de definir los algoritmos, en este momento el compilador analiza una sola función para ser paralelizada lo que restringe las posibles formas de organizar los algoritmos haciendo uso de distintas funciones auxiliares. Aunque algunas de estas formas se soportan, no hay una libertad completa respecto a ello.
+
+\end{itemize}
+
+Otro aspecto fundamental es el código generado y el análisis del programa que se realiza para poder generar este código, en este proyecto el código generado es OpenAcc, no obstante debemos ser conscientes de que el análisis del programa es genérico y no solo orientado a la generación de OpenAcc esto abre las puertas a la implementación de traductores al estilo del que aquí se presenta pero que generen cualquier otro formato de código paralelo, alternativas muy interesantes a la generación de OpenAcc son:
+
+\begin{itemize}
+
+\item OpenMP: Es un estándar de directivas para programación de sistemas de memoria compartida, se basa en un modelo de programación fork-join, las tareas pesadas se dividen en N hilos de ejecución (fork) y realizada la tarea con alto coste computacional los hilos vuelven a unirse en uno solo (join). Este estándar puede usarse para explotar todos los procesadores de máquinas donde no exista una GPU pero si varios procesadores.
+
+El desarrollo de un traductor similar al que en este proyecto se presenta, pero generando OpenMp puede consultarse en el proyecto de, Adrián Brañas Castro, un compañero de equipo de desarrollo, dicho proyecto se titula "Desarrollo de un traductor de programas secuenciales C en programas paralelos C/OpenMP utilizando el compilador LLVM".
+
+
+\item MPI (Message Passing Interface): Esta es una librería de paso de mensajes entre diferentes nodos de cómputo interconectados mediante una red [MPI 2013]. He aquí la diferencia fundamental con OpenMp, en OpenMp la comunicación se hace mediante la memoria, ya que está orientado a sistemas de memoria compartida, sin embargo es sabido que la escalabilidad de estos sistemas es limitada, por la contra MPI se orienta a sistemas de memoria distribuida en los que el trabajo puede repartirse desde un nodo maestro a múltiples nodos mediante un protocolo de comunicaciones. Los grandes computadores con cientos o miles de nodos de cómputo emplean en general el paradigma de la memoria distribuida, aunque cada nodo puede ser un sistema de varios núcleos en los que la memoria compartida también esté presente, por tanto la generación de código MPI es muy interesante para lograr alcanzar este tipo de sistemas.
+
+\end{itemize}
+
+En relación a la generación de código hemos contemplado 3 alternativas, la tratada en este proyecto ,OpenAcc, y las dos que acabamos de presentar OpenMp y MPI, no obstante debemos hacer notar que estos tres modelos no son excluyentes, es decir pueden usarse de forma combinada, esto supondría un reto importante pero no insalvable y aportaría muchas ventajas. 
+Pensemos por un momento en un caso práctico, debemos programar un supercomputador con múltiples nodos de computo interconectados mediante una red, en el que cada nodo contiene varios procesadores pero además varias GPUs, el problema es, que modelo de programación hemos de usar para explotar toda la potencia que el supercomputador nos ofrece, si pensamos como sacar rendimiento a cada elemento del sistema tenemos:
+
+\begin{itemize}
+
+\item Varios procesadores por nodo: Podemos hacer uso de la memoria del nodo como memoria compartida entre estos procesadores y emplear en este nivel OpenMp.
+
+\item Varias GPUs por nodo: Para emplear GPU tendríamos que usar OpenAcc.
+
+\item Varios nodos en el supercomputador: Para llegar a usar los beneficios de la gran cantidad de nodos disponibles debemos distribuir el trabajo desde un nodo maestro a todos los demás, es un caso en el que necesitaremos una librería de paso de mensajes como MPI.
+
+\end{itemize}
+
+Como vemos este caso precisa del uso de los tres modelos de programación paralela combinados, y hemos de hacer notar que este no es un caso estraño, actualmente este tipo de supercomputadores ganan más terreno, de hecho en la lista top500 de Noviembre de 2012 el primer puesto lo ocupa Titan, un supercomputador Cray , que emplea una arquitectura similar a la que acabamos de introducir para destacar la importancia de la programación heterogénea y lo útil que resultaría que un compilador paralelizador automático fuera capaz de generarla.
+
+
+%\end{document} % Fin del documento

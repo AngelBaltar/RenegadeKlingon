@@ -1,0 +1,258 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% Nombre del trabajo, 
+% t�tulo,
+% autores
+% fechas, 
+% comentarios, etc.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+%\input miscomandos.tex % Comandos definidos por el autor
+
+%\documentclass[a4paper,12pt]{book} 
+
+%% Incluir los paquetes necesarios 
+%\usepackage[latin1]{inputenc} % Caracteres con acentos. 
+%\usepackage[spanish]{babel}
+%\usepackage{latexsym} % Simbolos 
+%\usepackage[pdftex=true,colorlinks=true,plainpages=false]{hyperref} % Soporte hipertexto
+%\usepackage[pdftex]{graphicx} %Inclusión de gr�ficos PDFLaTeX
+%\DeclareGraphicsExtensions{.png,.pdf,.jpg}
+%\renewcommand{\baselinestretch}{1.5} %espacio entre lineas
+%\sloppy % suaviza las reglas de ruptura de l�neas de LaTeX
+
+% T�tulo, autor, fecha. 
+\title{capitulo7} 
+\author{Angel baltar Diaz}
+\date{\Large Enero, 2010} 
+
+%\begin{document} % Inicio del documento
+%capitulo 1 introduccion
+\chapter {Resultados experimentales}
+\label{capitulo7}
+
+Expuesto en el capítulo anterior el diseño e implementación de las directivas así como de las diversas transformaciones de código, en este capítulo pretendemos llevar el traductor a la práctica presentando ejemplos de algoritmos que consiguen ser paralelizados de manera automática empleando el traductor. Los algoritmos ejemplo que trataremos durante todo este capítulo son Algoritmo de Laplace 2D, Filtro de Sobel y Multiplicación de matrices que como ya se adelantaba en el capítulo ~\ref{capitulo1} son benchmarks objetivo de este proyecto.
+
+\section{Plataforma experimental}
+
+En esta sección presentaremos en general todas las herramientas empleadas para el test del desarrollo realizado, comenzaremos por las especificaciones técnicas de la máquina donde han sido ejecutadas todas las pruebas que en este capítulo se presentan.
+
+Las pruebas han sido ejecutadas en un supercomputador cluster que consta de multitud de nodos. Como en este proyecto nos centramos en generación de código OpenAcc solo se explotará paralelismo a nivel de nodo, en concreto a nivel de GPU, por tanto nos centraremos en la arquitectura de un único nodo que es la que se presenta en la figura \ref{fig:TestsMachine}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{includes/images/compute_node.png}
+\caption{Arquitectura máquina de pruebas}
+\label{fig:TestsMachine}
+\end{figure}
+
+El nodo de cómputo, como podemos ver en la figura \ref{fig:TestsMachine}, consta de dos procesadores intel Xeon, comunicados mediante un enlace punto a punto QPI (Intel Quick Path Interconect) y que poseen 12 GB de RAM cada uno. Cada procesador es un quad-core es decir consta de cuatro núcleos. De este modo se cuenta con múcho paralelismo a nivel de CPU, en este proyecto dicho paralelismo no es explotado ya que generamos código OpenAcc. Lo que el código generado con nuestro traductor si explotará son las GPUs que el computador posee; se trata de dos GPUs modelo Nvidia Tesla C1060. Todos estos componentes trabajan sobre un placa base Intel S5560.
+
+El modelo de GPU Nvidia Tesla C1060 cuenta con 240 núcleos a una velocidad de 1.3 Ghz y una memoria RAM de 4GB que trabaja a 800 Mhz, tiene una interfaz de conexión con la CPU PCI express 2.0 (Peripheral Component Interconnect express) lo que permite una rápida comunicación GPU-CPU.
+
+Este modelo de GPU permite su programación en CUDA, que es el código finalmente generado habiendo pasado el código OpenACC generado por nuestro traductor por un compilador con soporte OpenACC, para esto hemos empleado el compilador HMPP, en su versión 3.2.2, de la empresa CAPS [CAPS 2012]. Este compilador emplea también GCC [GCC 2013].
+
+De esta manera las partes de código que paralelicemos en OpenACC serán ejecutadas en cualquiera de las dos GPUs que el nodo posee y las partes secuenciales serán tarea de los procesadores Intel Xeon.
+
+En cuanto al software empleado para la realización de las pruebas hemos de decir que en la máquina de ejecución de las pruebas cuenta con una shell unix con un cliente ssh, opcionalmente con un cliente X-Server, de modo que se trabaja sobre ella de forma remota. Además del sistema sobre el que ejecutamos las pruebas hemos de decir que la empresa Appentra proporcionó un driver que automatiza la ejecución de tests de funcionamiento de la herramienta.
+
+Este driver de pruebas se basa en tener N algoritmos a los que aplicar la herramienta, cada algoritmo será definido en dos ficheros independientes, uno para el algoritmo secuencial, y otro para un algoritmo secuencial preparado para ser convertido a un algoritmo paralelo por el traductor.
+
+De este modo el driver automatiza la ejecución del traductor sobre el algoritmo secuencial preparado y a continuación ejecuta algoritmo secuencial y algoritmo paralelizado por el traductor midiendo sus tiempos, speedUp y comparando los resultados obtenidos por cada uno para verificar su corrección.
+
+Todos los resultados presentados en este capítulo de la memoria han sido extraídos de este tipo de ejecución del driver, por tanto la comprobación de que los resultados de los algoritmos paralelos son iguales a los de los secuenciales se ha realizado en todos ellos.
+
+Otra cuestión fundamental a comentar sobre la plataforma experimental empleada para la validación es el juego de benchmarks empleados, a continuación se define brevemente cada benchmark:
+
+\begin{itemize}
+
+\item Laplace2d: Es un cálculo ampliamente empleado en procesado de señales, en lo que respecta a este proyecto es muy interesante ya que es un algoritmo costoso en tiempo, en el que existe un bucle de convergencia dentro del cual existen varias computaciones.
+
+\item Algoritmo de sobel: Es un algoritmo clásico en detección de bordes en imágenes. Este algoritmo se basa en la aproximación del gradiente en cada punto de la imagen en sus componentes X e Y, para así estimar la magnitud de este gradiente, en las imágenes el gradiente indica la variación de colores y tonos en la imagen, es decir los cambios bruscos en ella, de este modo se detectan los bordes en la imagen que son precisamente esto, cambios bruscos.
+
+\item Multiplicación de matrices: Es el clásico producto de matrices, aunque este ejemplo es más sencillo que los anteriores, su estudio es muy interesante por el tipo de patrón de acceso a memoria que presenta.
+
+\end{itemize}
+
+\section{Validación del código paralelo generado}
+
+Como hemos introducido al comienzo de este capítulo, se han utilizado 3 conocidos algoritmos a modo de benchmark para generar las versiones paralelas y para obtener mediciones de tiempos y speedups tras las ejecuciones. 
+Las versiones paralelas que se muestran a continuación son el resultado final de un proceso de desarrollo incremental, en el que se han tenido en cuenta progresivamente los retos de paralelización de un sistema GPU con OpenACC (Sección: \ref{capitulo3:gpu}). Cada una de las versiones intermedias y la versión final han sido validadas con el sistema de pruebas mediante el driver descrito en la sección anterior, que comprueba que el resultado del código paralelo coincide con el del código secuencial.
+
+\subsection{Transformada de Laplace 2D}
+
+
+Presentamos ahora la versión secuencial del algoritmo en la figura ~\ref{fig:Laplaced2dseq} para realizar un breve estudio del mismo antes de discutir la versión paralela obtenida automáticamente con el traductor desarrollado.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{includes/images/laplace_seq.png}
+\caption{Algoritmo laplace 2d versión secuencial}
+\label{fig:Laplaced2dseq}
+\end{figure}
+
+El algoritmo laplace secuencial en realidad tiene más partes de código, bucles de inicialización de variables previos y demás sin embargo nos vamos a ceñir en nuestras explicaciones a esta sección del código ya que es la parte intensa en computación que nos interesará ejecutar de forma paralela.
+
+La parte realmente interesante para paralelizar está compuesta por un bucle for gobernado por el error, el algoritmo se mantiene en el for externo mientras el error no es lo suficientemente pequeño o se alcanza un número máximo de iteraciones.
+
+Este es un típico caso de un bucle de convergencia, se pretende que un cálculo matemático converja hacia una solución minimizando un error en este caso. Estos algoritmos son muy comunes e interesantes para paralelizar ya que si conseguimos un buen código paralelo del algoritmo dentro del bucle externo la ganancia es muy grande.Esto se debe a que dicho código se repite múltiples veces, en muchos casos un número elevadísimo de veces en ciertos algoritmos ya que éstos tardan en converger hacia la solución.
+
+Observemos que en el código presentado en la figura ~\ref{fig:Laplaced2dseq} el bucle cuyo índice es i\_4 (linea 81) no explota localidad ya que recorre arrays 2d de forma contraria a como debe hacerlo en lenguaje C, recordemos que los arrays 2D en C se almacenan por filas, emplearemos esto para observar en acción la transformación de intercambio de bucles que resulta perfecta para aplicar en este caso.
+
+Además observemos que el bucle de convergencia del código de laplace es no paralelizable ya que existe una dependencia mutua, es decir, si analizamos todo el código del bucle externo (línea 67) encontramos que en el A\_new se calcula empleando A\_par y finalmente A\_par depende de A\_new. Las variables A\_new y A\_par se emplean, para en una iteración concreta, tener el resultado de la iteración anterior y emplearlo en los cálculos.
+
+De modo que podemos adelantar que la manera más razonable de paralelizar el algoritmo sería implementando una paralelización eficiente del cuerpo del bucle de convergencia, ya que éste no podemos paralelizarlo.
+
+Dicho todo esto veamos ahora la versión paralela de laplace generada por el traductor en la figura ~\ref{fig:Laplaced2dpar}.
+
+\begin{figure}[tph]
+\centering
+\includegraphics[width=\linewidth]{includes/images/laplace_par_oacc.png}
+\caption{Algoritmo laplace 2d versión paralela}
+\label{fig:Laplaced2dpar}
+\end{figure}
+
+En primer lugar, hay salidas en la versión paralela distintas de las que veíamos en la versión secuencial, los límites de bucle etc, esto está relacionado con temas de la reescritura del programa en la compilación source to source que se lleva a cabo. En la versión secuencial los límites de los bucles estaban definidos como \#defines c que fueron sustituidos por su valor literal.
+
+Por otra parte fijémonos en las transformaciones que el traductor ha aplicado al código, se ha aplicado un unrolling factor 3 en el bucle indexado por la variable i\_3 (línea 83), observemos que el límite de este bucle (999) es divisible por 3. También se ha aplicado un intercambio de bucles en el anidamiento perfecto de los bucles indexados por los índices j\_4 e i\_4 en la (línea 107). Ya habíamos comentado que este intercambio de bucles sería interesante para explotar localidad.
+
+En GPU no tiene porque explotarse la coalescencia aún con estos dos bucles intercambiados, es decir, tal y como han quedado esos bucles podrían seguir sin explotar coalescencia en GPU, no obstante tras varias pruebas con el compilador que convierte el código C-OpenACC generado en código CUDA se llegó a la conclusión de que este compilador generaría código que explota coalescencia si el código C-OpenACC generado explota localidad en CPU y eso si se garantiza en el código que ha sido generado.
+
+Comentadas ya todas estas cuestiones pasemos ahora a explicar brevemente la paralelización que el traductor ha hecho del algoritmo de laplace. Como ya adelantábamos el bucle externo no es paralelizable, no obstante el traductor ha hecho algo bastante inteligente a nivel del bucle externo, que es insertar la directiva data para realizar en ese punto las transferencias CPU-GPU necesarias, de esta manera dichas transferencias solo se harán una vez, si la directiva data hubiera sido insertada dentro del bucle se realizarían una vez por iteración con la consecuente pérdida de rendimiento.
+
+Vista la transferencia CPU-GPU fuera del bucle, el traductor inserta directivas para paralelizar el interior del bucle externo, el primer bucle (línea 76) es paralelizado mediante una directiva kernels loop con una operación de reducción. Nótese que en el bucle paralelizado con la operación de reducción los bucles son independientes, podría haberse especificado loop independent, no obstante habiendo una operación de reducción esto podría llegar a ser ineficiente ya que si se indica independent las iteraciones pueden llegar a repartirse completamente una por thread. Sin embargo no indicando independent se reparten grupos de iteraciones a diferentes threads, de esta manera cada thread realiza una reducción parcial, del otro modo sería necesaria una operación de reducción global entre muchos datos.
+
+En el otro bucle paralelizado (línea 105) si se indican las cláusulas independent ya que no existen operaciones de reducción, es una simple asignación, de este modo en este bucle sí se consigue mayor rendimiento aplicando la cláusula independent.
+
+
+\subsection{Filtro de Sobel}
+
+Comencemos pues con la versión secuencial de sobel que podemos ver en la figura ~\ref{fig:Sobelseq}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{includes/images/sobel_seq.png}
+\caption{Algoritmo de Sobel secuencial}
+\label{fig:Sobelseq}
+\end{figure}
+
+Como en el caso de laplace no presentamos el algoritmo al completo por simplicidad, existen antes de la sección que se presenta algunos bucles de inicialización. El código que se presenta es la parte intensa de computación del algoritmo de sobel, en ella se recorre al completo la imagen de entrada pixel a pixel, esto es lo que hacen los bucles más externos y en su cuerpo se calcula el gradiente y aplica sobel.
+
+Observemos que las estructuras de almacenamiento de imágenes han sido aplanadas en arrays 1D, lo cual es buena idea para evitar problemas de no explotación de localidad de memoria.
+
+Adelantando la posible paralelización de este código, los bucles externos (línea 56) son paralelizables, si nos fijamos lo que se calcula dentro es independiente entre iteraciones y además el único resultado útil que se produce en el cuerpo del bucle es la asignación final que se realiza en la imagen de salida de sobel (edge\_image), todos los demás cálculos son pasos previos para finalmente realizar esta asignación y las variables que se emplean para estos cálculos sum\_x sum\_y y sum son privatizables. De este modo la paralelización de este algoritmo no es especialmente compleja.
+
+
+Explicada la versión secuencial del algoritmo y comentadas las posibilidades de paralelización que existen para el mismo veamos ahora en la figura ~\ref{fig:Sobelpar} que código paralelo genera el traductor.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{includes/images/sobel_par_oacc.png}
+\caption{Algoritmo de Sobel paralelo}
+\label{fig:Sobelpar}
+\end{figure}
+
+En primer lugar vemos que el traductor ha hecho todos los cálculos en una sola instrucción muy larga, esto solo tiene que ver con la generación de código C a partir de la representación intermedia del compilador y no entraremos en detalles del porqué, esto podría ser mejorado en versiones posteriores haciendo el código más legible.
+
+En lo que respecta a la inserción de directivas el traductor ha hecho justo lo que adelantábamos podría ser la paralelización de este algoritmo, simplemente anotar que los bucles son paralelizables e independientes, obsérvese además que se ha insertado también la directiva data en la línea 63 para realizar la transferencia de datos, original\_image debe ser copiado a GPU para realizar los cálculos y edge\_image debe ser copiado desde la GPU a la CPU una vez finalizados los cálculos.
+
+
+
+\subsection{Multiplicación de matrices}
+
+Comencemos analizando la multiplicación de matrices en su versión secuencial, ésta puede verse a continuación en la figura ~\ref{fig:Matmulseq}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{includes/images/matmul_seq.png}
+\caption{Algoritmo de Multiplicación de matrices secuencial}
+\label{fig:Matmulseq}
+\end{figure}
+
+La matriz resultante de la multiplicación será de tamaño m x n y p es el tamaño de la dimensión en el que las matrices siendo multiplicadas (c y d) deben coincidir.
+
+Observemos que las matrices han sido aplanadas en arrays 1D. Los bucles exteriores recorren todos los elementos de la matriz resultado a y el bucle más interior realiza el cálculo de cada elemento de a haciendo la correspondiente suma y multiplicaciones. Debemos fijarnos en los patrones de acceso en este bucle, supongamos que el patrón de acceso a la matriz resultado a es correcto, el segundo bucle, índice j, es el que define el patrón de acceso suma (+ j) en a, por tanto se irá accediendo a posiciones consecutivas.
+
+Fijémonos ahora en los accesos a b y c, los patrones de acceso son i*p+k para b y k*n+j para c, de esta manera uno de los patrones de acceso explotará localidad pero el otro no, es decir, en todo momento tendremos un patrón de acceso que no explota localidad y no tenemos forma de solucionarlo.
+
+Dejando a un lado la corrección de los patrones de acceso a memoria, la paralelización del algoritmo es sencilla, los bucles exteriores son completamente independientes, ya que dentro de ellos se calculan posiciones diferentes del resultado.
+
+El bucle interior puede ser paralelizado también, es una operación de reducción, en este tercer nivel de anidamiento podría emplearse un paralelismo vectorial en los cálculos.
+
+Comentado el algoritmo secuencial y vistas las opciones de paralelización de que disponemos veamos en la figura \ref{fig:Matmulpar} la versión paralela a la que ha llegado nuestro traductor.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{includes/images/matmul_par_oacc.png}
+\caption{Algoritmo de Multiplicación de matrices paralelo}
+\label{fig:Matmulpar}
+\end{figure}
+
+El traductor ha paralelizado los dos bucles externos empleando gang y worker, esto es correcto aunque se podría haber usado también la cláusula independent.
+
+Lo que el traductor no ha hecho es emplear el nivel de paralelización adicional SIMD que el estándar OpenAcc proporciona a través de la cláusula vector, esta cláusula no ha sido implementada en el traductor y podría ser objetivo de futuras ampliaciones.
+
+
+\subsection{Test de fisión}
+
+En los ejemplos presentados hemos tenido ocasión de ver las transformaciones de unrolling e intercambio de bucles, pero no hemos visto la transfromación de fisión de bucles, presentamos ahora un pequeño ejemplo de la misma que se puede ver en las figuras ~\ref{fig:fisiontest} y ~\ref{fig:fisiontestfisioned}
+%
+%
+\begin{figure}[tph]
+\centering
+
+\begin{minipage}{0.30\textwidth}
+\includegraphics[width=\linewidth]{includes/images/fision_test.png}
+\caption{Codigo sin fisión}
+\label{fig:fisiontest}
+\end{minipage}
+\hspace*{1cm}
+\begin{minipage}{0.35\textwidth}
+\includegraphics[width=\linewidth]{includes/images/fision_test_fisioned.png}
+\caption{Codigo con fisión}
+\label{fig:fisiontestfisioned}
+\end{minipage}
+
+\end{figure}
+%
+
+Simplemente observemos como el traductor ha detectado que existían dos núcleos de cómputo dentro del bucle, el de a y el de b, y para realizar la fisión ha partido el computo global del bucle en estos dos grupos de cómputo independientes.
+
+Debemos hacer notar que aunque no ha sido aplicada a ningun ejemplo la transformación de fisión ha sido implementada porque en una primera aproximación se creia que debería aplicarse en el algoritmo de laplace para poder paralizar el bucle de la línea 70 que puede verse en la figura \ref{fig:Laplaced2dseq}, no obstante esto no has sido así gracias a algunas cláusulas en el estándar OpenACC que nos permiten paralelizar este bucle sin necesidad de fisionarlo.
+
+\section{Evaluación del rendimiento en términos de tiempo de ejecución y speedUp}
+
+En esta sección presentamos los resultados obtenidos con los benchmarks anteriormente expuestos, se presenta en la figura \ref{fig:Mediciones} la gráfica que da cuenta de todos ellos:
+
+\begin{figure}[tp]
+\centering
+\includegraphics[width=0.9\linewidth]{includes/images/mediciones.png}
+\caption{Mediciones}
+\label{fig:Mediciones}
+\end{figure}
+
+En la gráfica anterior se pueden ver todas las mediciones tomadas, laplace es el algoritmo que más ventaja toma de ser paralelizado con OpenACC esto es por ser el algoritmo con mayor coste computacional, en el que además la paralelización obtenida con la herramienta realiza la transferencia de datos GPU-CPU una sola vez minimizandola así. El speed up obtenido con laplace está en torno a 20 lo que ilustra la potencia de las modernas CPUs. El test para laplace ha sido ejecutado con 1000 iteraciones y un tamaño de matriz 1000x1000 de flotantes.
+
+El siguiente algoritmo por rendimiento es sobel, se obtiene un speed up de 8, es bastante menor que el speedup obtenido para laplace. La explicación es que simplemente sobel es un algoritmo con menos carga computacional.
+El tamaño de la imagen para sobel ha sido de 30000x30000 (pixels), con imágenes más grandes sería previsible obtener mayor rendimiento.
+
+Por último el algoritmo del que menos rendimiento se obtiene es el producto de matrices, esto es lógico ya que en él se da un problema de localidad de memoria, este ejemplo se ha ejecutado multiplicando matrices 2000x2000 de flotantes.
+
+Se han elegido estos tres benchmarks ya que representan de una buena manera algoritmos clásicos de cómputación y cálculo, además cada uno aporta una problemática diferente lo que produce estos resultados tan variados.
+
+Debemos hacer notar también que el objetivo de estas pruebas es simplemente comprobar que la generación de código es correcta y que se obtiene una aceleración razonable al paralelizar los algoritmos con el traductor, es por ello que no se presenta una batería exhaustiva de pruebas con diversos tamaños de problema en cada algoritmo. 
+
+\section{Evaluación de la productividad}
+Para recalcar la gran utilidad del traductor desarrollado, hay que decir que a un ingeniero o grupo de ingenieros les llevaría un tiempo muy superior obtener versiones paralelas de los benchmark con los que hemos presentado los resultados. El traductor desarrollado obtiene las versiones paralelas en OpenACC prácticamente al instante, mientras que el proceso ingenieril que se debería llevar a cabo es muy costoso. Se debe hacer un análisis del código secuencial y extraer de él toda la información necesaria para saber qué es paralelizable y qué no lo es; para una persona, dependiendo de la complejidad del algoritmo, puede llevar muchas jornadas laborales, sin hablar de los errores que los programadores pueden cometer involuntariamente.
+Se puede comprobar en la figura \ref{fig:productividad_openacc} el tiempo que le llevaría obtener una versión paralela óptima, para los 3 ejemplos que hemos discutido anteriormente, a un programador paralelo novel, a un programador paralelo experto y al traductor desarrollado.
+
+%figura infraestructura
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=0.9\linewidth]{includes/images/productividad_openacc.png}
+\caption{Tiempos de desarrollo de versiones paralelas}
+\label{fig:productividad_openacc}
+\end{center}
+\end{figure}
+
+Se observa que, como ya habíamos adelantado, con el traductor se obtiene la versión anotada con directivas OpenACC de los algoritmos de manera casi instantánea, mientras que a los programadores les llevaría muchas horas de trabajo (dedicados exclusivamente a esta tarea).
+
+%\end{document} % Fin del documento
