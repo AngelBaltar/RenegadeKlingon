@@ -11,78 +11,128 @@ require 'Utils/Debugging'
 
 local loader = require("Utils/Advanced-Tiled-Loader/Loader")
 
- -- Path to the tmx files. The file structure must be similar to how they are saved in Tiled
+ -- Path to the tmx files. The file structure must be similar to how they are saved in _tiled
 loader.path = "Resources/maps/"
+
+local _space=nil
+local _map=nil
+local _tile=nil
+
+local create_RomulanScout=function(x,y)
+	
+	return RomulanScout:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local create_DestructorKlingon=function(x,y)
+	
+	return PlayerShip:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local create_RomulanWarBird=function(x,y)
+	
+	return RomulanWarBird:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local create_RomulanNorexan=function(x,y)
+	
+	return RomulanNorexan:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local create_HealthObject=function(x,y)
+	
+	return HealthObject:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local create_WeaponObject=function(x,y)
+
+	local gun=WeaponObject.static.MACHINE_GUN
+
+	if _tile.properties["weapon_type"]=="MACHINE_GUN" then
+		gun=WeaponObject.static.MACHINE_GUN
+	end
+	if _tile.properties["weapon_type"]=="DOUBLE_BLUE" then
+		gun=WeaponObject.static.DOUBLE_BLUE
+	end
+	if _tile.properties["weapon_type"]=="DOUBLE_GREEN" then
+		gun=WeaponObject.static.DOUBLE_GREEN
+	end
+
+	return WeaponObject:new(_space,gun,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+
+local create_tileBlock=function(x,y)
+	
+	return TileBlock:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local create_MineBlock=function(x,y)
+	
+	return MineBlock:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local _creation_tab={}
+
+_creation_tab["RomulanScout"]=create_RomulanScout
+_creation_tab["DestructorKlingon"]=create_DestructorKlingon
+_creation_tab["RomulanWarBird"]=create_RomulanWarBird
+_creation_tab["RomulanNorexan"]=create_RomulanNorexan
+_creation_tab["HealthObject"]=create_HealthObject
+_creation_tab["WeaponObject"]=create_WeaponObject
+_creation_tab["TileBlock"]=create_tileBlock
+_creation_tab["MineBlock"]=create_MineBlock
+
+
+
 
 function load_level(map_name,space)
 	local object_type=""
 	local imagePath=""
 	local quad=nil
 	local obj=nil
-	local processed_tiles={}
+	local processed__tiles={}
 	local step_bg=1
 	local n_bgs=4
+	_space=space
 
-	local map=loader.load(map_name)
+	_map=loader.load(map_name)
 	local ordered_paths={}
 	local max_x=0
 	--backgrounds
-	for x, y, tile in map("fondo"):iterate() do
-		ordered_paths[x]=tile.properties["img_path"]
-		--DEBUG_PRINT(tile.tileset.name)
+	for x, y, _tile in _map("fondo"):iterate() do
+		ordered_paths[x]=_tile.properties["img_path"]
+		--DEBUG_PRINT(_tile._tileset.name)
 	end
 	for _,path in pairs(ordered_paths) do
-		space:addBackGroundImage(path)
+		_space:addBackGroundImage(path)
 	end
 	--all plane objects
 	for plane=1,n_bgs do
 		--DEBUG_PRINT("plano_"..plane)
-		if map("plano_"..plane)~=nil then
-			for x, y, tile in map("plano_"..plane):iterate() do
-				
+		if _map("plano_"..plane)~=nil then
+			for x, y, block in _map("plano_"..plane):iterate() do
+				_tile=block
 				obj=nil
-				--avoid repeated tiles
-				if processed_tiles[y*map.width+x]==nil then
-					object_type=tile.tileset.properties["object_type"]
-					if(tile.properties["object_type"]~=nil) then
-						object_type=tile.properties["object_type"]
+				--avoid repeated _tiles
+				if processed__tiles[y*_map.width+x]==nil then
+					
+					object_type=_tile.tileset.properties["object_type"]
+					imagePath=_tile.tileset.imagePath
+					
+					if(_tile.properties["object_type"]~=nil) then
+						object_type=_tile.properties["object_type"]
 					end
-					imagePath=tile.tileset.imagePath
-			   		--print( string.format("Tile at (%d,%d) has an id of %d %s %s",
-			   		--				x, y, tile.id,object_type,imagePath) )
-					if object_type=="RomulanScout" then
-						obj=RomulanScout:new(space,map.tileWidth*x,map.tileHeight*y)
 					
-					elseif object_type=="DestructorKlingon" then
-						obj=PlayerShip:new(space,map.tileWidth*x,map.tileHeight*y)
-					
-					elseif object_type=="RomulanWarBird" then
-						obj=RomulanWarBird:new(space,map.tileWidth*x,map.tileHeight*y)
+			   		--print( string.format("_tile at (%d,%d) has an id of %d %s %s",
+			   		--				x, y, _tile.id,object_type,imagePath) )
 
-					elseif object_type=="RomulanNorexan" then
-						obj=RomulanNorexan:new(space,map.tileWidth*x,map.tileHeight*y)
-					
-					elseif object_type=="HealthObject" then
-						obj=HealthObject:new(space,map.tileWidth*x,map.tileHeight*y)
-					
-					elseif object_type=="WeaponObject" then
-						if tile.properties["weapon_type"]=="MACHINE_GUN" then
-							obj=WeaponObject:new(space,WeaponObject.static.MACHINE_GUN,map.tileWidth*x,map.tileHeight*y)
-						end
-						if tile.properties["weapon_type"]=="DOUBLE_BLUE" then
-							obj=WeaponObject:new(space,WeaponObject.static.DOUBLE_BLUE,map.tileWidth*x,map.tileHeight*y)
-						end
-						if tile.properties["weapon_type"]=="DOUBLE_GREEN" then
-							obj=WeaponObject:new(space,WeaponObject.static.DOUBLE_GREEN,map.tileWidth*x,map.tileHeight*y)
-						end
-
-					elseif object_type=="TileBlock" then
-							obj=TileBlock:new(space,tile,map.tileWidth*x,map.tileHeight*y)
-
-					elseif object_type=="MineBlock" then
-							obj=MineBlock:new(space,tile,map.tileWidth*x,map.tileHeight*y)
+					if _creation_tab[object_type]~=nil then
+						obj=_creation_tab[object_type](x,y)
+					else
+						obj=nil
 					end
-					processed_tiles[y*map.width+x]=true
+					
+					processed__tiles[y*_map.width+x]=true
 				end
 				if(obj~=nil) then
 					obj:setBackGroundDistance(plane*step_bg)
