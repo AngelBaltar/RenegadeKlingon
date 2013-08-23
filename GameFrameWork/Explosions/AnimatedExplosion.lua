@@ -14,7 +14,8 @@ explosions_tab[0]={     sprite=EXPLOSION1,
                         n_steps=8,
                         delay=0.1,
                         mode="once",
-                        zoom=1}
+                        zoom=1,
+                        source = love.audio.newSource( 'Resources/sfx/explosion1.wav',"static")}
 
 explosions_tab[1]={     sprite=EXPLOSION2,
                         size_x=64,
@@ -22,7 +23,8 @@ explosions_tab[1]={     sprite=EXPLOSION2,
                         n_steps=16,
                         delay=0.1,
                         mode="once",
-                        zoom=1}
+                        zoom=1,
+                        source = love.audio.newSource( 'Resources/sfx/explosion2.wav',"static")}
 
 local N_EXPLOSIONS=2
 --constructor
@@ -38,6 +40,8 @@ function AnimatedExplosion:initialize(space,x,y)
   self._animation:setMode(explosions_tab[self._random_explosion].mode)
   self._zoom=explosions_tab[self._random_explosion].zoom
   Explosion.initialize(self,space,x,y,explosions_tab[self._random_explosion].sprite)
+  explosions_tab[self._random_explosion].source:stop( )
+  explosions_tab[self._random_explosion].source:play()
 end
 
 --return the width of this explosion
