@@ -8,21 +8,26 @@ GameScreen = class('GameScreen',Screen)
 local mini_font=love.graphics.newFont( 12 )
 local config=GameConfig.getInstance()
 
-
-function GameScreen:initialize()
-    self._space=Space:new()
-    Hud:new(self._space)
-    load_level("map1.tmx",self._space)
-    
-
-end
-
 local _round=function (num, idp)
   if idp and idp>0 then
     local mult = 10^idp
     return math.floor(num * mult + 0.5) / mult
   end
   return math.floor(num + 0.5)
+end
+
+function GameScreen:initialize()
+    self._space=Space:new()
+    self._levels={}
+
+    self._levels[0]="map1.tmx"
+    self._levels[1]="map2.tmx"
+
+    self._levelact=0
+    self._numLevels=2
+    load_level(self._levels[self._levelact],self._space)
+    
+
 end
 
 function GameScreen:draw()
@@ -67,6 +72,16 @@ function GameScreen:update(dt)
   else
       --DEBUG_PRINT("space update")
       self._space:update(dt)
+
+      if(self._space:isLevelEnded()) then
+        self._levelact=self._levelact+1
+        if(self._levelact>=self._numLevels) then
+          return nil
+        else
+           load_level(self._levels[self._levelact],self._space)
+        end
+      end
+
   end
 end
 

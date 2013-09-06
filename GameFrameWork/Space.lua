@@ -40,6 +40,9 @@ function Space:initialize()
     self._bgActual=0
     self._bgTimingCadence=0
     self._backgroundDistance=4
+    self._levelEnded=false
+
+    Hud:new(self)
 end
 
 function Space:removeFromBuckets(so)
@@ -231,6 +234,11 @@ local _getBackGroundTimingCadence=function(self)
 	return timingCadence
 end
 
+--returs if the actual level is ended
+function Space:isLevelEnded()
+	return self._levelEnded
+end
+
 local _updateBackGround=function(self,dt)
 	local step=100*dt/self._backgroundDistance
 	local size=self:getBackGroundWidth()
@@ -257,6 +265,9 @@ local _updateBackGround=function(self,dt)
 
     if self._bgPos*-1 > self:getBackGroundWidth() then
       self._bgPos = 0
+      if(self._bgActual+1>=self._bgSize) then
+      	self._levelEnded=true
+      end
       self._bgActual=(self._bgActual+1)%self._bgSize
     end
 

@@ -94,7 +94,8 @@ function load_level(map_name,space)
 	local step_bg=1
 	local n_bgs=4
 	_space=space
-
+	_space:initialize()
+	
 	_map=loader.load(map_name)
 	local ordered_paths={}
 	local max_x=0
