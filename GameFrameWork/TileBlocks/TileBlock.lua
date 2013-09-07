@@ -34,19 +34,7 @@ function TileBlock:die()
 end
 
 function TileBlock:pilot(dt)
-
   SpaceObject.pilot(self,dt)
-  if(self:isEnabled()) then
-    
-    local step=100*dt/self:getBackGroundDistance()
-    local my_space=self:getSpace()
-    local x=self:getPositionX()
-    local y=self:getPositionY()
-
-    x=x-my_space:getBackGroundCadence()*step
-    --x=x-1*step
-    self:setPosition(x,y)
-  end
 end
 
 --Draws the object in the screen

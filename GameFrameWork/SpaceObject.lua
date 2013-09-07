@@ -28,17 +28,15 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function SpaceObject:pilot(dt)
-  
-  if(not self:isEnabled()) then
-	  local step=100*dt/self:getBackGroundDistance()
-	  local my_space=self:getSpace()
-	  local x=self:getPositionX()
-	  local y=self:getPositionY()
-
-	  x=x-my_space:getBackGroundCadence()*step
-	  --x=x-1*step
-	  self:setPosition(x,y)
-  end
+   
+   local step=100*dt/self:getBackGroundDistance()
+   local my_space=self:getSpace()
+   local x=self:getPositionX()
+   local y=self:getPositionY()
+    
+    x=x-my_space:getBackGroundCadence()*step
+    self:setPosition(x,y)
+    
 end
 
 --Draws the object in the screen
