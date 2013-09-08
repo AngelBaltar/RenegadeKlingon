@@ -76,7 +76,7 @@ function GameScreen:update(dt)
       if(self._space:isLevelEnded()) then
         self._levelact=self._levelact+1
         if(self._levelact>=self._numLevels) then
-          return nil
+          self._space:getPlayerShip():die()
         else
            load_level(self._levels[self._levelact],self._space)
         end

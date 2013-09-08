@@ -263,13 +263,13 @@ local _updateBackGround=function(self,dt)
     	
 	end
 
-	if(self._bgActual==self._bgSize-1) and (self._bgPos*-1 > 0) then
-      	self._levelEnded=true
-      end
-
     if self._bgPos*-1 > self:getBackGroundWidth() then
       self._bgPos = 0
-      self._bgActual=(self._bgActual+1)%self._bgSize
+      self._bgActual=(self._bgActual+1)
+      if(self._bgActual>=self._bgSize-1) then
+      	self._levelEnded=true
+      end  
+      self._bgActual=self._bgActual%self._bgSize
     end
 
   	
