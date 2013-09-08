@@ -102,10 +102,14 @@ function load_level(map_name,space)
 	--backgrounds
 	for x, y, _tile in _map("fondo"):iterate() do
 		ordered_paths[x]=_tile.properties["img_path"]
-		--DEBUG_PRINT(_tile._tileset.name)
+		if(max_x<x) then
+			max_x=x
+		end
 	end
-	for _,path in pairs(ordered_paths) do
-		_space:addBackGroundImage(path)
+	for x=0 ,max_x do
+		if(ordered_paths[x]~=nil) then
+			_space:addBackGroundImage(ordered_paths[x])
+		end
 	end
 	--all plane objects
 	for plane=1,n_bgs do
