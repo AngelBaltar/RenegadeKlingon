@@ -2,17 +2,23 @@ require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Weapons/EnemyBasicWeapon'
 require 'GameFrameWork/Enemies/Enemy'
 require 'GameFrameWork/Explosions/AnimatedExplosion'
+require 'GameFrameWork/PilotPatterns/KamikazePilotPattern'
+require 'GameFrameWork/PilotPatterns/RandomPilotPattern'
 
 RomulanScout = class('GameFrameWork.Enemies.RomulanScout',Enemy)
 
 
 RomulanScout.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanScout.png")
+
+local _init_health=10
+
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function RomulanScout:initialize(space,posx,posy)
-  Enemy.initialize(self,space,RomulanScout.static.SHIP,posx,posy,6)
+  Enemy.initialize(self,space,RomulanScout.static.SHIP,posx,posy,_init_health,1.5)
   self._randomMove=RandomPilotPattern:new(self)
+  self._kamikazeMove=KamikazePilotPattern:new(self)
   self._weapon=EnemyBasicWeapon:new(self)
 end
 
@@ -30,7 +36,11 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function RomulanScout:pilot(dt)
-  self._randomMove:pilot(dt)
+  if (self:getHealth()<_init_health/2) then
+  	self._kamikazeMove:pilot(dt)
+  else
+  	self._randomMove:pilot(dt)
+  end
 end
 
 function RomulanScout:toString()

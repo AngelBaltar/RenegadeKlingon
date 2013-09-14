@@ -11,7 +11,7 @@ RomulanWarBird.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanWarBir
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function RomulanWarBird:initialize(space,posx,posy)
-  Enemy.initialize(self,space,RomulanWarBird.static.SHIP,posx,posy,400)
+  Enemy.initialize(self,space,RomulanWarBird.static.SHIP,posx,posy,400,3)
   self._randomMove=RandomPilotPattern:new(self)
   self._weapon=EnemyBasicWeapon:new(self)
 end

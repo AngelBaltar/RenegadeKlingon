@@ -7,11 +7,16 @@ Enemy = class('GameFrameWork.Enemies.Enemy',SpaceObject)
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Enemy:initialize(space,drawable,posx,posy,health)
+function Enemy:initialize(space,drawable,posx,posy,health,speed)
   --100 health for the enemy
   SpaceObject.initialize(self,space, drawable,posx,posy,health)
+  self._speed=speed
   --place it in free space
  
+end
+
+function Enemy:getSpeed()
+  return self._speed
 end
 
 --return the width of this ship

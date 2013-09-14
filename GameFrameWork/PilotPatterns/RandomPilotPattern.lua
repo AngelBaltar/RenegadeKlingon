@@ -20,6 +20,7 @@ function RandomPilotPattern:pilot(dt)
     return nil
   end
 
+  local speed=ship:getSpeed()
   local my_space=ship:getSpace()
   local x_i=my_space:getXend()/4
   local x_e=my_space:getXend()-ship:getWidth()
@@ -67,7 +68,7 @@ end
     self._directionY=-1
   end
 
-  ship:setPosition(pos_x+self._directionX,pos_y+self._directionY)
+  ship:setPosition(pos_x+self._directionX*speed,pos_y+self._directionY*speed)
 
   collision=false
   for obj,_ in pairs(tile_blocks) do
@@ -100,7 +101,7 @@ while collision and iter<iter_max do
     dir2=-1
   end
 
-  ship:setPosition(pos_x+rnd1*dir1,pos_y+rnd1*dir2)
+  ship:setPosition(pos_x+rnd1*dir1*speed,pos_y+rnd1*dir2*speed)
   collision=false
   for obj,_ in pairs(tile_blocks) do
     collision=collision or my_space:naturalCollisionCheck(obj,ship)

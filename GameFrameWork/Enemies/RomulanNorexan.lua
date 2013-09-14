@@ -12,7 +12,7 @@ RomulanNorexan.static.SHIP = love.graphics.newImage("Resources/gfx/RomulanNorexa
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function RomulanNorexan:initialize(space,posx,posy)
-  Enemy.initialize(self,space,RomulanNorexan.static.SHIP,posx,posy,50)
+  Enemy.initialize(self,space,RomulanNorexan.static.SHIP,posx,posy,50,3)
   self._randomMove=RandomPilotPattern:new(self)
   self._weapon=EnemyBasicWeapon:new(self)
 end
