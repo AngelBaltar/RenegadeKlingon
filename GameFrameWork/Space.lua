@@ -526,9 +526,7 @@ function Space:update(dt)
 		 			for soB,ku in pairs(self._buckets[i][j]) do
 		 				if soB:isEnabled() then
 		     				if soA~=soB then
-		     					if _collisionCheck(self,soA,soB) then
-			 						collision_array[{A=soA,B=soB}]=true
-			 					end
+			 					collision_array[{A=soA,B=soB}]=_collisionCheck(self,soA,soB)
 		     				end
 	     				end
 		 			end
@@ -539,11 +537,13 @@ function Space:update(dt)
 
 	--perform collision hits
 	for obj,__ in pairs(collision_array) do
-		soA=obj.A
-		soB=obj.B
-		if self:exists(soA) and self:exists(soB) then
-			_collisionManagement(self,soA,soB)
-		end
+		if __ then
+			soA=obj.A
+			soB=obj.B
+			if self:exists(soA) and self:exists(soB) then
+				_collisionManagement(self,soA,soB)
+			end
+	    end
 		--in other case soA or soB is dead
 	end
 
