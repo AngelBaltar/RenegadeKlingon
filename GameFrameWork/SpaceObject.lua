@@ -121,6 +121,12 @@ function SpaceObject:getDrawableObject()
 end
 
 function SpaceObject:collision(object,damage)
+	local my_space=self:getSpace()
+	local player=my_space:getPlayerShip()
+	local hud=my_space:getHud()
+	if(object:isBullet() and object:getEmmiter()==player) then
+		hud:addToScore(damage)
+	end
 	self:setHealth(self:getHealth()-damage)
 end
 

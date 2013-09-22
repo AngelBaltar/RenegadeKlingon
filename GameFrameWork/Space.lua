@@ -4,7 +4,7 @@ require 'Utils/GameConfig'
 
 Space = class('GameFrameWork.Space')
 
-local BUCKET_SIZE=16
+local BUCKET_SIZE=32
 local SIZE_BUCKETS_X=0
 local SIZE_BUCKETS_Y=0
 
@@ -566,6 +566,19 @@ function Space:readPressed()
 	end
 end
 
+--gets the hud
+function Space:getHud()
+	local i=0
+	for obj,_ in pairs(self._objectsList) do
+		if obj:isHud() then
+			return obj
+		end
+		i=i+1
+	end
+	return nil
+end
+
+--gets the player
 function Space:getPlayerShip()
 	local i=0
 	for obj,_ in pairs(self._objectsList) do

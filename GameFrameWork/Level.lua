@@ -93,9 +93,20 @@ function load_level(map_name,space)
 	local processed__tiles={}
 	local step_bg=1
 	local n_bgs=4
+	local hud=nil
 	_space=space
+
+	if(_space~=nil) then
+		hud=_space:getHud()
+	end
+
 	_space:initialize()
 	
+	if(hud~=nil) then
+		_space:getHud():addToScore(hud:getScore()) --keep the previous score if exists
+	end
+
+
 	_map=loader.load(map_name)
 	local ordered_paths={}
 	local max_x=0
