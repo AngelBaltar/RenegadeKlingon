@@ -63,13 +63,21 @@ function ControlsScreen:readPressed()
   local joypad,joypadbutton=ButtonRead.getInstance():getJoys()
 
   if (self._selectedOption==UP_OPTION) then
+      if(key~=nil) then
         config:setKeyUp(key)
+      end
   elseif (self._selectedOption==DOWN_OPTION) then
-      config:setKeyDown(key)
+      if(key~=nil) then
+        config:setKeyDown(key)
+      end
   elseif (self._selectedOption==LEFT_OPTION) then
-      config:setKeyLeft(key)
+      if(key~=nil) then
+        config:setKeyLeft(key)
+      end
   elseif (self._selectedOption==RIGHT_OPTION) then
-      config:setKeyRight(key)
+      if(key~=nil) then
+        config:setKeyRight(key)
+      end
   elseif (self._selectedOption==FIRE_OPTION) then
       if(key~=nil) then
         config:setKeyFire(key)
