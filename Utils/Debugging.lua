@@ -1,5 +1,5 @@
 
-debug_enabled=1
+debug_enabled=0
 
 function DEBUG(statements)
   
