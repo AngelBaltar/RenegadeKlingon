@@ -1,67 +1,11 @@
 RenegadeKlingon
 ===============
 
-Creating a love2d and lua based game just for fun, need to return back to arcade games. RenegadeKlingon is a r-type style game,
-it is under construction now.
+Check it at 
 
-ScreenShoots
-=============
+http://angelappentra.github.io/RenegadeKlingon
 
-Some screens from the game
-
-![Alt text](https://raw.github.com/AngelAppentra/RenegadeKlingon/master/ScreenShots/Screen_Shoot1.png)
-
-Download It
-===========
-
-You can try it for free, browse the code or report a bug using the issues.
-Download links are provided by platform (see linux, windows and mac sections).
-You can also download at the following link a zip that contains all supported platforms:
-
-https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/master.zip
+You will found screenshots, links for download the game and more.
 
 
-Linux
-===========
 
-Download link for linux is:
-
-https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/linux.zip
-
-For linux this game needs love2d system, a single .love file is provided , to play the game you only need 
-to download that zip file, uncompress it,
-go to the directory linux and execute RenegadeKlingon.love with love2d.
-
-If you don't know love2d check it at:
-
-https://love2d.org/
-
-Install it and you will be able to play this game following the previous instructions.
-
-Windows
-===========
-
-Download link for windows is:
-
-https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/windows.zip
-
-For windows a simple .exe is provided in windows directory
-
-
-Mac osx
-===========
-
-Download link for mac is:
-
-https://github.com/AngelAppentra/RenegadeKlingonDeploy/archive/windows.zip
-
-For Mac there is a simple .app provided in mac directory
-
-
-Need Help
-==========
-
-This is my first game, I am a programmer learning lua and love2d, no problems with it that is the easy part but I am not used to create graphics,
-sprites ...
-
-If you are a graphic designer and want to contribute you are welcome, contact mee in github creating a issue or leaving a comment
