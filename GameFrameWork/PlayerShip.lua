@@ -15,7 +15,6 @@ function PlayerShip:initialize(space,posx,posy)
   --100 health for the player
   SpaceObject.initialize(self,space, PlayerShip.static.SHIP,posx,posy,100)
   self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
-  self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
 end
 
 --return the width of this ship

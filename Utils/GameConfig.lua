@@ -277,7 +277,7 @@ end
 
 function GameConfig:isDownUp()
 	direction = love.joystick.getAxis(self._activepad, 2 )
-	DEBUG_PRINT("activepad: "..self._activepad.." direction:"..direction)
+--	DEBUG_PRINT("activepad: "..self._activepad.." direction:"..direction)
 	return love.keyboard.isDown(self._keyUp) or direction==-1 
 end
 

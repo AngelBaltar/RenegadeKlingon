@@ -291,6 +291,7 @@ function Space:draw()
 	local step_bg=1
 	local n_bgs=4
 	local dst=0
+	--love.graphics.setColor(255,0,0,255)
  	_printBackground(self)
 
 	if(self._pause) then
@@ -306,6 +307,7 @@ function Space:draw()
 		dst=plane*step_bg
 		for obj,_ in pairs(self._objectsList) do
 			if obj:isEnabled() and obj:getBackGroundDistance()==dst then
+			--	love.graphics.setColor(255,0,0,255)
 				obj:draw()
 			end
 		end

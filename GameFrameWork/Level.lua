@@ -1,5 +1,6 @@
 require 'Utils/middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
+require 'GameFrameWork/TextMessageObject'
 require 'GameFrameWork/Enemies/RomulanScout'
 require 'GameFrameWork/Enemies/RomulanNorexan'
 require 'GameFrameWork/Enemies/RomulanWarBird'
@@ -17,6 +18,7 @@ loader.path = "Resources/maps/"
 local _space=nil
 local _map=nil
 local _tile=nil
+local _num_messages=0
 
 local create_RomulanScout=function(x,y)
 	
@@ -71,6 +73,14 @@ local create_MineBlock=function(x,y)
 	return MineBlock:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y)
 end
 
+local create_TextMessageObject=function(x,y)
+	
+	local msgFile=_map.name..".msg.".._num_messages..".txt"
+	_num_messages=_num_messages+1
+	DEBUG_PRINT("text message ".._map.tileWidth*x.." ".._map.tileHeight*y)
+	return TextMessageObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,msgFile)
+end
+
 local _creation_tab={}
 
 _creation_tab["RomulanScout"]=create_RomulanScout
@@ -81,6 +91,7 @@ _creation_tab["HealthObject"]=create_HealthObject
 _creation_tab["WeaponObject"]=create_WeaponObject
 _creation_tab["TileBlock"]=create_tileBlock
 _creation_tab["MineBlock"]=create_MineBlock
+_creation_tab["TextMessageObject"]=create_TextMessageObject
 
 
 
@@ -95,6 +106,7 @@ function load_level(map_name,space)
 	local n_bgs=4
 	local hud=nil
 	_space=space
+	_num_messages=0
 
 	if(_space~=nil) then
 		hud=_space:getHud()
@@ -139,7 +151,7 @@ function load_level(map_name,space)
 						object_type=_tile.properties["object_type"]
 					end
 					
-			   		--print( string.format("_tile at (%d,%d) has an id of %d %s %s",
+			   		--print( string.format("plano_"..plane.."_tile at (%d,%d) has an id of %d %s %s",
 			   		--				x, y, _tile.id,object_type,imagePath) )
 
 					if _creation_tab[object_type]~=nil then

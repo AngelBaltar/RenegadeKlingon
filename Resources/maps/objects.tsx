@@ -49,4 +49,9 @@
       <property name="weapon_type" value="DOUBLE_GREEN"/>
   </properties>
  </tile>
+<tile id="9">
+  <properties>
+      <property name="object_type" value="TextMessageObject"/>
+  </properties>
+ </tile>
 </tileset>

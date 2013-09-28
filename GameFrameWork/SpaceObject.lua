@@ -41,8 +41,8 @@ end
 
 --Draws the object in the screen
 function SpaceObject:draw()
-	love.graphics.setColor(255,255,255,255)
-   	love.graphics.setBackgroundColor(0,0,0)
+	--love.graphics.setColor(255,255,255,255)
+   	--love.graphics.setBackgroundColor(0,0,0)
    	love.graphics.draw(self._toDraw, self._xPos, self._yPos)
 end
 
