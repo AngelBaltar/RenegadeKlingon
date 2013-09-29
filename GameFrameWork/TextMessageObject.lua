@@ -16,7 +16,11 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
   self._msgDraw=""
   self._ch_act=0
   self._last_frame=os.clock()
-  self._frame_rate=0.7
+  self._frame_rate=16
+  self._height=0
+  self._width=0
+  self._msgDraw={}
+  self._transparency=0
   --DEBUG_PRINT("Opening"..messageFile)
   if not love.filesystem.exists(messageFile) then
     return nil
@@ -27,17 +31,52 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
         self._msgTxt=self._msgTxt..line.."\n"
   end
   --DEBUG_PRINT(self._msgTxt)
-  SpaceObject.initialize(self,space, tile,posx,posy,2000)
+  
+ local font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30)
+ love.graphics.setFont(font)
+ local ch_act=0
+ local count=0
+ while (ch_act<string.len(self._msgTxt)) do
+
+   self._msgDraw[count]=""
+   n_lines=1
+   for i = ch_act, string.len(self._msgTxt) do
+        ch=string.sub(self._msgTxt, i, i)
+        ch_act=i
+        if(ch==frame_exit_char) then
+          ch_act=i+1
+          break
+        end
+        if(ch=='\n') then
+          n_lines=n_lines+1
+        end
+        self._msgDraw[count]=self._msgDraw[count]..ch
+    end
+
+    if(self._width<font:getWidth(self._msgDraw[count])) then
+      self._width=font:getWidth(self._msgDraw[count])
+    end
+
+    if(self._height<font:getHeight()*n_lines) then
+      self._height=font:getHeight()*n_lines
+    end
+
+    count=count+1
+ end
+ self._height=self._height*1.5
+ self._NumMsgs=count
+ self._msgNum=0
+ SpaceObject.initialize(self,space, tile,posx,posy,2000)
 end
 
 --return the width of this ship
 function TextMessageObject:getWidth()
-	return 2
+	return self._width
 end
 
 --return the height of this ship
 function TextMessageObject:getHeight()
-	return 3
+	return self._height
 end
 
 
@@ -52,40 +91,38 @@ end
 
 --updates de message
 function TextMessageObject:pilot(dt)
-    local ch=''
     
-    if(self._ch_act>=string.len(self._msgTxt)) then
+    if(self._msgNum>=self._NumMsgs) then
       self:die()
       --all message was done
     end
-
+    if(self._transparency<220) then
+      self._transparency=self._transparency+dt*40
+    end
     if(os.clock()-self._last_frame<=self._frame_rate) then
       return nil
     end
     
     self._last_frame=os.clock()
-    self._msgDraw=""
-
-    for i = self._ch_act, string.len(self._msgTxt) do
-      ch=string.sub(self._msgTxt, i, i)
-      self._ch_act=i
-      if(ch==frame_exit_char) then
-        self._ch_act=i+1
-        break
-      end
-      self._msgDraw=self._msgDraw..ch
-    end
+    self._msgNum=self._msgNum+1
+     self._transparency=0
+   
 end
 
 --Draws the object in the screen
 function TextMessageObject:draw()
     local x=self:getPositionX()
     local y=self:getPositionY()
-    love.graphics.setColor(150,10,10,100)
-    love.graphics.rectangle("fill",x,y,500,300)
-    love.graphics.setColor(255,255,255,255)
 
+    if self._msgDraw[self._msgNum]==nil then
+      return nil
+    end
+
+    love.graphics.setColor(10,10,150,100)
+    love.graphics.rectangle("fill",x,y,self._width,self._height)
+
+    love.graphics.setColor(255,0,0,self._transparency)
+    love.graphics.print(self._msgDraw[self._msgNum], x, y)
     love.graphics.setColor(255,255,255,255)
-    love.graphics.print(self._msgDraw, x, y)
 
 end

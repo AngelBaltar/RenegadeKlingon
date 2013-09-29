@@ -38,6 +38,7 @@ function love.load()
 
    local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",35)
    love.graphics.setFont(f)
+   
    love.graphics.setColor(255,255,255,255)
    love.graphics.setBackgroundColor(0,0,0)
 
