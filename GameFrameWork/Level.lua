@@ -77,7 +77,7 @@ local create_TextMessageObject=function(x,y)
 	
 	local msgFile=_map.name..".msg.".._num_messages..".txt"
 	_num_messages=_num_messages+1
-	DEBUG_PRINT("text message ".._map.tileWidth*x.." ".._map.tileHeight*y)
+	--DEBUG_PRINT("text message ".._map.tileWidth*x.." ".._map.tileHeight*y)
 	return TextMessageObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,msgFile)
 end
 

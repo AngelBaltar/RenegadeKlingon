@@ -332,6 +332,12 @@ local _collisionCheck = function(self,soA,soB)
 	--some of this checks are implemented in subclasses method collision
 	--but returning false here we get more performance
 
+	
+	--messages do not collide
+	if (soA:isTextMessage() or soB:isTextMessage()) then
+		return false
+	end
+
 	--objects in diferent planes do not collide
 	if(soA:getBackGroundDistance()~=soB:getBackGroundDistance()) then
 		return false
@@ -444,6 +450,12 @@ end
 --bullets collide bullets ...
 function Space:naturalCollisionCheck(soA,soB)
 
+
+	--messages do not collide
+	if (soA:isTextMessage() or soB:isTextMessage()) then
+		return false
+	end
+	
 	--objects in diferent planes do not collide
 	if(soA:getBackGroundDistance()~=soB:getBackGroundDistance()) then
 		return false

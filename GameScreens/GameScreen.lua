@@ -43,6 +43,8 @@ function GameScreen:draw()
  end
 
   if getDebug() then
+
+    local r, g, b, a = love.graphics.getColor( )
     font_ant=love.graphics.getFont()
     love.graphics.setFont(mini_font)
     love.graphics.setColor(0,0,0,100)
@@ -61,6 +63,7 @@ function GameScreen:draw()
     --   count=count+12
     -- end
     love.graphics.setFont(font_ant)
+    love.graphics.setColor(r,g,b,a)
   end
 end
 

@@ -39,6 +39,7 @@ function PlayerShip:die()
   local x=SpaceObject.getPositionX(self)
   local y=SpaceObject.getPositionY(self)
   AnimatedExplosion:new(my_space,x,y)
+  love.graphics.setColor(255,200,200,255)
   SpaceObject.die(self)
 end
 

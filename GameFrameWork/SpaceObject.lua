@@ -189,3 +189,7 @@ end
 function SpaceObject:isTileBlock()
 	return false
 end
+
+function SpaceObject:isTextMessage()
+	return false
+end

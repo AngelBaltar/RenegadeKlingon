@@ -82,30 +82,43 @@ end
 
 function TextMessageObject:die()
 
-DEBUG_PRINT("Text dies")
+--DEBUG_PRINT("Text dies")
 
-  SpaceObject.die(self)
+SpaceObject.die(self)
   
   ---
+end
+
+function TextMessageObject:readPressed()
+
+  local config=GameConfig.getInstance()
+  if config:isDownEnter() then
+    self._last_frame=0 --skip message frame on intro
+  end
 end
 
 --updates de message
 function TextMessageObject:pilot(dt)
     
+    
+
     if(self._msgNum>=self._NumMsgs) then
       self:die()
       --all message was done
     end
+
     if(self._transparency<220) then
       self._transparency=self._transparency+dt*40
     end
-    if(os.clock()-self._last_frame<=self._frame_rate) then
+    
+
+    if (os.clock()-self._last_frame<=self._frame_rate) then
       return nil
     end
     
     self._last_frame=os.clock()
     self._msgNum=self._msgNum+1
-     self._transparency=0
+    self._transparency=0
    
 end
 
@@ -117,12 +130,16 @@ function TextMessageObject:draw()
     if self._msgDraw[self._msgNum]==nil then
       return nil
     end
-
-    love.graphics.setColor(10,10,150,100)
+    local r, g, b, a = love.graphics.getColor( )
+    love.graphics.setColor(10,10,150,140)
     love.graphics.rectangle("fill",x,y,self._width,self._height)
 
     love.graphics.setColor(255,0,0,self._transparency)
-    love.graphics.print(self._msgDraw[self._msgNum], x, y)
-    love.graphics.setColor(255,255,255,255)
+    love.graphics.print("  "..self._msgDraw[self._msgNum],x+0.1*self._width, y)
+    love.graphics.setColor(r,g,b,a)
 
+end
+
+function TextMessageObject:isTextMessage()
+  return true
 end
