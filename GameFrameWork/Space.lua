@@ -293,12 +293,6 @@ function Space:draw()
 	local dst=0
 	--love.graphics.setColor(255,0,0,255)
  	_printBackground(self)
-
-	if(self._pause) then
-		love.graphics.setColor(255,0,0,255)
-        love.graphics.print("PAUSE",100,100)
-        love.graphics.setColor(255,255,255,255)
-	end
  	
  -- 	if player:getPositionX()>=self:getPlayerBackGroundScroll() then
 	--  		love.graphics.translate(self._bgPos, 0)
@@ -312,6 +306,14 @@ function Space:draw()
 			end
 		end
 	end
+
+	if(self._pause) then
+		love.graphics.setColor(255,0,0,255)
+        love.graphics.print("PAUSE",100,100)
+        love.graphics.setColor(255,255,255,255)
+	end
+
+
 end
 
 function Space:getDistance(soA,soB)

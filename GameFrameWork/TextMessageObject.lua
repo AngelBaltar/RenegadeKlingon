@@ -16,7 +16,8 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
   self._msgDraw=""
   self._ch_act=0
   self._last_frame=os.clock()
-  self._frame_rate=16
+  self._frame_rate=12
+  self._skip_frame=false
   self._height=0
   self._width=0
   self._msgDraw={}
@@ -93,7 +94,7 @@ function TextMessageObject:readPressed()
 
   local config=GameConfig.getInstance()
   if config:isDownEnter() then
-    self._last_frame=0 --skip message frame on intro
+    self._skip_frame=true --skip message frame on intro
   end
 end
 
@@ -112,10 +113,12 @@ function TextMessageObject:pilot(dt)
     end
     
 
-    if (os.clock()-self._last_frame<=self._frame_rate) then
+    if ((not self._skip_frame) and (os.clock()-self._last_frame<=self._frame_rate)) then
       return nil
     end
     
+    self._skip_frame=false
+
     self._last_frame=os.clock()
     self._msgNum=self._msgNum+1
     self._transparency=0
