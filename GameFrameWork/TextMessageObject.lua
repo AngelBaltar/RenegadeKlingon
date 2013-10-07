@@ -84,7 +84,7 @@ end
 function TextMessageObject:die()
 
 --DEBUG_PRINT("Text dies")
-
+self:getSpace():unfreeze()
 SpaceObject.die(self)
   
   ---
@@ -102,6 +102,9 @@ end
 function TextMessageObject:pilot(dt)
     
     
+    if(self._msgNum==0) then
+      self:getSpace():freeze(self)
+    end
 
     if(self._msgNum>=self._NumMsgs) then
       self:die()

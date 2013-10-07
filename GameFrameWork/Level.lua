@@ -1,13 +1,13 @@
 require 'Utils/middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/TextMessageObject'
-require 'GameFrameWork/Enemies/RomulanScout'
-require 'GameFrameWork/Enemies/RomulanNorexan'
-require 'GameFrameWork/Enemies/RomulanWarBird'
 require 'GameFrameWork/Harvestables/HealthObject'
 require 'GameFrameWork/Harvestables/WeaponObject'
 require 'GameFrameWork/TileBlocks/TileBlock'
 require 'GameFrameWork/TileBlocks/MineBlock'
+require 'GameFrameWork/PilotPatterns/RandomPilotPattern'
+require 'GameFrameWork/Weapons/EnemyBasicWeapon'
+require 'GameFrameWork/Enemies/Enemy'
 require 'Utils/Debugging'
 
 local loader = require("Utils/Advanced-Tiled-Loader/Loader")
@@ -19,10 +19,20 @@ local _space=nil
 local _map=nil
 local _tile=nil
 local _num_messages=0
+local _RomulanNorexan_ship= love.graphics.newImage("Resources/gfx/RomulanNorexan.png")
+local _RomulanWarBird_ship = love.graphics.newImage("Resources/gfx/RomulanWarBird.png")
+local _RomulanScout_ship = love.graphics.newImage("Resources/gfx/RomulanScout.png")
 
 local create_RomulanScout=function(x,y)
 	
-	return RomulanScout:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+	local health=10
+	local speed=1.5
+	local movementPattern=RandomPilotPattern:new(nil)
+	local weapon=EnemyBasicWeapon:new(nil)
+	local scout=Enemy:new(_space,_RomulanScout_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	weapon:setAttachedShip(scout)
+	movementPattern:setShip(scout)
+	return scout
 end
 
 local create_DestructorKlingon=function(x,y)
@@ -32,12 +42,25 @@ end
 
 local create_RomulanWarBird=function(x,y)
 	
-	return RomulanWarBird:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+	local health=400
+	local speed=3
+	local movementPattern=RandomPilotPattern:new(nil)
+	local weapon=EnemyBasicWeapon:new(nil)
+	local warbird=Enemy:new(_space,_RomulanWarBird_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	weapon:setAttachedShip(warbird)
+	movementPattern:setShip(warbird)
+	return warbird
 end
 
 local create_RomulanNorexan=function(x,y)
-	
-	return RomulanNorexan:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+	local health=50
+	local speed=3
+	local movementPattern=RandomPilotPattern:new(nil)
+	local weapon=EnemyBasicWeapon:new(nil)
+	local norexan=Enemy:new(_space,_RomulanNorexan_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	weapon:setAttachedShip(norexan)
+	movementPattern:setShip(norexan)
+	return norexan
 end
 
 local create_HealthObject=function(x,y)

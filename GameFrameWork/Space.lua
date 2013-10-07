@@ -33,6 +33,10 @@ function Space:initialize()
     --pause implementation
     self._pause=false
 
+    --freeze the game implementation
+    self._freeze=false
+    self._freezedBy=nil
+
     --background implementation
     self._bgList={}
     self._bgSize=0
@@ -197,6 +201,16 @@ function Space:isObjectEnabled(so)
 	end
 end
 
+function Space:freeze(freezer)
+	self._freeze=true
+	self._freezedBy=freezer
+end
+
+function Space:unfreeze()
+	self._freeze=false
+	self._freezedBy=nil
+end
+
 local _printBackground=function(self)
 
    local size=self:getBackGroundWidth()
@@ -291,7 +305,13 @@ function Space:draw()
 	local step_bg=1
 	local n_bgs=4
 	local dst=0
-	--love.graphics.setColor(255,0,0,255)
+
+	if(self._freeze) then
+		love.graphics.setColor(70,70,140,255)
+	else
+		love.graphics.setColor(255,255,255,255)
+	end
+
  	_printBackground(self)
  	
  -- 	if player:getPositionX()>=self:getPlayerBackGroundScroll() then
@@ -528,7 +548,10 @@ function Space:update(dt)
 	--pilot all the objects
 
 	for obj,k in pairs(self._objectsList) do
-		obj:pilot(dt)
+		if((not self._freeze)
+			or (self._freeze and self._freezedBy==obj)) then
+			obj:pilot(dt)
+		end
 	end
 
 

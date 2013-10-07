@@ -7,10 +7,12 @@ Enemy = class('GameFrameWork.Enemies.Enemy',SpaceObject)
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Enemy:initialize(space,drawable,posx,posy,health,speed)
+function Enemy:initialize(space,drawable,posx,posy,health,speed,movementPattern,weapon)
   --100 health for the enemy
   SpaceObject.initialize(self,space, drawable,posx,posy,health)
   self._speed=speed
+  self._movementPattern=movementPattern
+  self._weapon=weapon
   --place it in free space
  
 end
@@ -62,6 +64,7 @@ function Enemy:pilot(dt)
   if not self:isEnabled() then
     return nil
   end
+  self._movementPattern:pilot(dt)
 end
 
 --im the enemy, ovewritting from SpaceObject

@@ -11,6 +11,10 @@ function PilotPattern:pilot(dt)
 
 end
 
+function PilotPattern:setShip(ship)
+	self._ship=ship
+end
+
 function PilotPattern:getShip()
 	return self._ship
 end
