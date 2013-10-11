@@ -22,7 +22,7 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
   self._width=0
   self._msgDraw={}
   self._transparency=0
-  --DEBUG_PRINT("Opening"..messageFile)
+  --DEBUG_PRINT("Opening "..messageFile)
   if not love.filesystem.exists(messageFile) then
     return nil
   end

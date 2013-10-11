@@ -17,11 +17,16 @@ loader.path = "Resources/maps/"
 
 local _space=nil
 local _map=nil
+local _map_name=nil
 local _tile=nil
 local _num_messages=0
+
 local _RomulanNorexan_ship= love.graphics.newImage("Resources/gfx/RomulanNorexan.png")
 local _RomulanWarBird_ship = love.graphics.newImage("Resources/gfx/RomulanWarBird.png")
 local _RomulanScout_ship = love.graphics.newImage("Resources/gfx/RomulanScout.png")
+
+local _FederationSaber_ship = love.graphics.newImage("Resources/gfx/FederationSaber.png")
+local _FederationExcelsior_ship=love.graphics.newImage("Resources/gfx/FederationExcelsior.png")
 
 local create_RomulanScout=function(x,y)
 	
@@ -63,6 +68,28 @@ local create_RomulanNorexan=function(x,y)
 	return norexan
 end
 
+local create_FederationSaber=function(x,y)
+	local health=10
+	local speed=1.5
+	local movementPattern=RandomPilotPattern:new(nil)
+	local weapon=EnemyBasicWeapon:new(nil)
+	local runabout=Enemy:new(_space,_FederationSaber_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	weapon:setAttachedShip(runabout)
+	movementPattern:setShip(runabout)
+	return runabout
+end
+
+local create_FederationExcelsior=function(x,y)
+	local health=28
+	local speed=2.7
+	local movementPattern=RandomPilotPattern:new(nil)
+	local weapon=EnemyBasicWeapon:new(nil)
+	local excelsior=Enemy:new(_space,_FederationExcelsior_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	weapon:setAttachedShip(excelsior)
+	movementPattern:setShip(excelsior)
+	return excelsior
+end
+
 local create_HealthObject=function(x,y)
 	
 	return HealthObject:new(_space,_map.tileWidth*x,_map.tileHeight*y)
@@ -98,23 +125,29 @@ end
 
 local create_TextMessageObject=function(x,y)
 	
-	local msgFile=_map.name..".msg.".._num_messages..".txt"
+	local msgFile=loader.path.."Messages/".._map_name..".msg.".._num_messages..".txt"
 	_num_messages=_num_messages+1
-	--DEBUG_PRINT("text message ".._map.tileWidth*x.." ".._map.tileHeight*y)
+	DEBUG_PRINT("text message ".._map.tileWidth*x.." ".._map.tileHeight*y)
 	return TextMessageObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,msgFile)
 end
 
 local _creation_tab={}
 
-_creation_tab["RomulanScout"]=create_RomulanScout
 _creation_tab["DestructorKlingon"]=create_DestructorKlingon
+
+_creation_tab["RomulanScout"]=create_RomulanScout
 _creation_tab["RomulanWarBird"]=create_RomulanWarBird
 _creation_tab["RomulanNorexan"]=create_RomulanNorexan
+
+_creation_tab["FederationSaber"]=create_FederationSaber
+_creation_tab["FederationExcelsior"]=create_FederationExcelsior
+
 _creation_tab["HealthObject"]=create_HealthObject
 _creation_tab["WeaponObject"]=create_WeaponObject
 _creation_tab["TileBlock"]=create_tileBlock
 _creation_tab["MineBlock"]=create_MineBlock
 _creation_tab["TextMessageObject"]=create_TextMessageObject
+
 
 
 
@@ -130,6 +163,7 @@ function load_level(map_name,space)
 	local hud=nil
 	_space=space
 	_num_messages=0
+	_map_name=map_name
 
 	if(_space~=nil) then
 		hud=_space:getHud()

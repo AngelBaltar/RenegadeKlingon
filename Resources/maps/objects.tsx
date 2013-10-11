@@ -54,4 +54,14 @@
       <property name="object_type" value="TextMessageObject"/>
   </properties>
  </tile>
+<tile id="10">
+  <properties>
+      <property name="object_type" value="FederationSaber"/>
+  </properties>
+ </tile>
+<tile id="11">
+  <properties>
+      <property name="object_type" value="FederationExcelsior"/>
+  </properties>
+ </tile>
 </tileset>

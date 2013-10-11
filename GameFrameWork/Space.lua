@@ -4,7 +4,7 @@ require 'Utils/GameConfig'
 
 Space = class('GameFrameWork.Space')
 
-local BUCKET_SIZE=32
+local BUCKET_SIZE=16
 local SIZE_BUCKETS_X=0
 local SIZE_BUCKETS_Y=0
 
