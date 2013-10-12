@@ -1,4 +1,5 @@
 require 'GameFrameWork/PilotPatterns/PilotPattern'
+require 'GameFrameWork/PilotPatterns/AvoidCollisionPilotPattern'
 
 RandomPilotPattern = class('GameFrameWork.PilotPatterns.RandomPilotPattern',PilotPattern)
 
@@ -8,6 +9,12 @@ function RandomPilotPattern:initialize(ship)
     self._timer=0
     self._directionX=-1
     self._directionY=1
+    self._avoidCollision=AvoidCollisionPilotPattern:new(ship)
+end
+
+function RandomPilotPattern:setShip(ship)
+  PilotPattern.setShip(self,ship)
+  self._avoidCollision:setShip(ship)
 end
 
 function RandomPilotPattern:pilot(dt)
@@ -32,13 +39,6 @@ function RandomPilotPattern:pilot(dt)
   local pos_y=ship:getPositionY()
   local tile_blocks=my_space:getAllTileBlocks()
   local collision=false
-  local rnd1=0
-  local rnd2=0
-  local rnd3=0
-  local dir1=1
-  local dir2=1
-  local iter=0
-  local iter_max=10
   
   ship._weapon:fire()
 
@@ -69,45 +69,9 @@ end
   end
 
   ship:setPosition(pos_x+self._directionX*speed,pos_y+self._directionY*speed)
-
-  collision=false
-  for obj,_ in pairs(tile_blocks) do
-    collision=collision or my_space:naturalCollisionCheck(obj,ship)
-    if collision then
-      break
-    end
-  end
-
-iter=0
-while collision and iter<iter_max do
-  iter=iter+1
-  rnd1=math.random(5)
-  rnd2=math.random()
-  rnd3=math.random()
-  self._timer=0
-  
- 
-  if(rnd3>0.5) then
-    dir1=1
+  local collides=self._avoidCollision:pilot(dt)
+  if(collides) then
     self._directionX=self._directionX*-1
-  else
-    dir1=-1
+    self._directionY=self._directionY*-1
   end
-
-  if(rnd2>0.5) then
-    dir2=1
-     self._directionY=self._directionY*-1
-  else
-    dir2=-1
-  end
-
-  ship:setPosition(pos_x+rnd1*dir1*speed,pos_y+rnd1*dir2*speed)
-  collision=false
-  for obj,_ in pairs(tile_blocks) do
-    collision=collision or my_space:naturalCollisionCheck(obj,ship)
-    if collision then
-      break
-    end
-  end
-end
 end

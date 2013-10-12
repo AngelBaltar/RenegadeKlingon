@@ -718,6 +718,19 @@ function Space:isInBounds(so)
 	return inbounds_x and inbounds_y
 end
 
+--gets all objects in the screen
+function Space:getAllNotBulletsEnabledObjects()
+
+	local all_obj={}
+	for obj,_ in pairs(self._objectsList) do
+		if (obj:isEnabled()) and (not obj:isBullet()) then
+			all_obj[obj]=true
+		end
+	end
+	return all_obj
+
+end
+
 function Space:getAllEnemies()
 	local all_enemies={}
 	for obj,_ in pairs(self._objectsList) do
