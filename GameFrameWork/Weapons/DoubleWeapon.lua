@@ -3,6 +3,7 @@ require 'GameFrameWork/Bullets/AnimatedBullet'
 
 DoubleWeapon = class('GameFrameWork.Weapons.DoubleWeapon',Weapon)
 
+local source=love.audio.newSource( 'Resources/sfx/double_weapon.wav',"static")
 --constructor
 function DoubleWeapon:initialize(destructor_klingon,bullet)
 	self._bullet=bullet
@@ -26,5 +27,7 @@ function DoubleWeapon:doFire()
 
     AnimatedBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y+my_ship:getHeight()/2-emit_delta,
                      6+x_relative_step,0+y_relative_step,self._bullet)
+   source:stop()
+   source:play()
    
 end

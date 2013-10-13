@@ -27,6 +27,7 @@ local _RomulanScout_ship = love.graphics.newImage("Resources/gfx/RomulanScout.pn
 
 local _FederationSaber_ship = love.graphics.newImage("Resources/gfx/FederationSaber.png")
 local _FederationExcelsior_ship=love.graphics.newImage("Resources/gfx/FederationExcelsior.png")
+local _FederationGalaxy_ship=love.graphics.newImage("Resources/gfx/FederationGalaxy.png")
 
 local create_RomulanScout=function(x,y)
 	
@@ -90,6 +91,18 @@ local create_FederationExcelsior=function(x,y)
 	return excelsior
 end
 
+
+local create_FederationGalaxy=function(x,y)
+	local health=1200
+	local speed=2.7
+	local movementPattern=RandomPilotPattern:new(nil)
+	local weapon=EnemyBasicWeapon:new(nil)
+	local galaxy=Enemy:new(_space,_FederationGalaxy_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	weapon:setAttachedShip(galaxy)
+	movementPattern:setShip(galaxy)
+	return galaxy
+end
+
 local create_HealthObject=function(x,y)
 	
 	return HealthObject:new(_space,_map.tileWidth*x,_map.tileHeight*y)
@@ -141,6 +154,7 @@ _creation_tab["RomulanNorexan"]=create_RomulanNorexan
 
 _creation_tab["FederationSaber"]=create_FederationSaber
 _creation_tab["FederationExcelsior"]=create_FederationExcelsior
+_creation_tab["FederationGalaxy"]=create_FederationGalaxy
 
 _creation_tab["HealthObject"]=create_HealthObject
 _creation_tab["WeaponObject"]=create_WeaponObject

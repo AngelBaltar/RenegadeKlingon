@@ -64,4 +64,9 @@
       <property name="object_type" value="FederationExcelsior"/>
   </properties>
  </tile>
+<tile id="12">
+  <properties>
+      <property name="object_type" value="FederationGalaxy"/>
+  </properties>
+ </tile>
 </tileset>
