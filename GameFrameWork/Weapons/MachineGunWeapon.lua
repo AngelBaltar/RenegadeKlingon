@@ -3,7 +3,6 @@ require 'GameFrameWork/Bullets/AnimatedBullet'
 
 MachineGunWeapon = class('GameFrameWork.Weapons.MachineGunWeapon',Weapon)
 
-local source=love.audio.newSource( 'Resources/sfx/machine_gun.wav',"static")
 --constructor
 function MachineGunWeapon:initialize(destructor_klingon)
 	Weapon.initialize(self,destructor_klingon,0.02)
@@ -22,7 +21,4 @@ function MachineGunWeapon:doFire()
 
    AnimatedBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y-my_ship:getHeight()/2-2,
                      6+x_relative_step,0+y_relative_step,AnimatedBullet.static.PINK_ANIMATED)
-   source:stop()
-   source:play()
-   
 end

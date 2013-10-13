@@ -9,9 +9,29 @@ AnimatedBullet.static.GREEN_ANIMATED = love.graphics.newImage("Resources/gfx/bul
 AnimatedBullet.static.PINK_ANIMATED = love.graphics.newImage("Resources/gfx/bullet_machinegun.png")
 
 local animation_tab={}
-animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=32,size_y=32,n_steps=8,mode="loop",zoom=1,health=6}
-animation_tab[AnimatedBullet.static.GREEN_ANIMATED]={size_x=32,size_y=32,n_steps=8,mode="loop",zoom=1,health=12}
-animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=32,size_y=32,n_steps=4,mode="bounce",zoom=2,health=20}
+animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=32,
+                                                    size_y=32,
+                                                    n_steps=8,
+                                                    mode="loop",
+                                                    zoom=1,
+                                                    health=6,
+                                                    source=love.audio.newSource( 'Resources/sfx/double_weapon.wav',"static")}
+
+animation_tab[AnimatedBullet.static.GREEN_ANIMATED]={size_x=32,
+                                                    size_y=32,
+                                                    n_steps=8,
+                                                    mode="loop",
+                                                    zoom=1,
+                                                    health=12,
+                                                    source=love.audio.newSource( 'Resources/sfx/double_weapon.wav',"static")}
+animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=32,
+                                                    size_y=32,
+                                                    n_steps=4,
+                                                    mode="bounce",
+                                                    zoom=2,
+                                                    health=20,
+                                                    source=love.audio.newSource( 'Resources/sfx/machine_gun.wav',"static")
+                                                  }
 
 --constructor
 function AnimatedBullet:initialize(space,emmiter,x,y,stepx,stepy,AnimatedBullet_type)
@@ -23,6 +43,9 @@ function AnimatedBullet:initialize(space,emmiter,x,y,stepx,stepy,AnimatedBullet_
   					animation_tab[AnimatedBullet_type].size_y, 0.2, animation_tab[AnimatedBullet_type].n_steps)
   self._animation:setMode(animation_tab[AnimatedBullet_type].mode)
   Bullet.initialize(self,space,emmiter,x,y,stepx,stepy,animation_tab[AnimatedBullet_type].health,AnimatedBullet_type)
+  
+  animation_tab[AnimatedBullet_type].source:stop()
+  animation_tab[AnimatedBullet_type].source:play()
 end
 
 

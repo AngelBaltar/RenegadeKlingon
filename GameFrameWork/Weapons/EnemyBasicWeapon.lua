@@ -4,8 +4,6 @@ require 'GameFrameWork/Bullets/SimpleBullet'
 EnemyBasicWeapon = class('GameFrameWork.Weapons.EnemyBasicWeapon',Weapon)
 
 
-local source=love.audio.newSource( 'Resources/sfx/basic_weapon.wav',"static")
-
 --constructor
 function EnemyBasicWeapon:initialize(enemie)
 	--cadence 1.2 seconds
@@ -41,6 +39,4 @@ function EnemyBasicWeapon:doFire()
    
 
 	 SimpleBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y,delta_x,delta_y,SimpleBullet.static.BLUE_BULLET)
-   source:stop()
-   source:play()
 end
