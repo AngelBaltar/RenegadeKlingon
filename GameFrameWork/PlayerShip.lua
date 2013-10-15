@@ -1,6 +1,6 @@
 require 'GameFrameWork/SpaceObject'
 require 'GameFrameWork/Explosions/AnimatedExplosion'
-require 'GameFrameWork/Weapons/DestructorKlingonBasicWeapon'
+require 'GameFrameWork/Weapons/BasicWeapon'
 require 'GameFrameWork/Weapons/MachineGunWeapon'
 require 'Utils/Debugging'
 require 'Utils/GameConfig'
@@ -14,7 +14,7 @@ PlayerShip.static.SHIP = love.graphics.newImage("Resources/gfx/destructor_klingo
 function PlayerShip:initialize(space,posx,posy)
   --100 health for the player
   SpaceObject.initialize(self,space, PlayerShip.static.SHIP,posx,posy,100)
-  self._basic_weapon=DestructorKlingonBasicWeapon:new(self)
+  self._basic_weapon=BasicWeapon:new(self)
 end
 
 --return the width of this ship
