@@ -8,7 +8,9 @@ require("Utils/ButtonRead")
 
 local selected_option=0
 local config=GameConfig.getInstance()
-local button_read=ButtonRead.getInstance()
+local button_read=ButtonRead.getInstance()if player~=nil and pos_x<player:getPositionX() then
+    self._directionX=self._directionX*-2
+end
 local main_self=nil
 
 
