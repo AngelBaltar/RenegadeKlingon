@@ -6,7 +6,7 @@ DoubleBasicWeapon = class('GameFrameWork.Weapons.DoubleBasicWeapon',Weapon)
 
 --constructor
 function DoubleBasicWeapon:initialize(ship)
-   local cadence=0.9
+   local cadence=3.4
    if(ship ~=nil and ship:isPlayerShip()) then 
       cadence=0.1
    end

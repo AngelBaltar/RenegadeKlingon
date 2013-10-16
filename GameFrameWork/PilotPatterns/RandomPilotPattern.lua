@@ -21,6 +21,7 @@ function RandomPilotPattern:pilot(dt)
   
   local ship=self:getShip()
 
+
   SpaceObject.pilot(ship,dt)
   
   if not ship:isEnabled() then
@@ -29,6 +30,7 @@ function RandomPilotPattern:pilot(dt)
 
   local speed=ship:getSpeed()
   local my_space=ship:getSpace()
+  local player=my_space:getPlayerShip()
   local x_i=my_space:getXend()/4
   local x_e=my_space:getXend()-ship:getWidth()
 
@@ -41,7 +43,6 @@ function RandomPilotPattern:pilot(dt)
   local collision=false
   
   ship._weapon:fire()
-
 
 if(self._timer>0.8) then
     self._directionY=self._directionY*-2
@@ -70,8 +71,11 @@ end
 
   ship:setPosition(pos_x+self._directionX*speed,pos_y+self._directionY*speed)
   local collides=self._avoidCollision:pilot(dt)
-  if(collides) then
+  if collides then
     self._directionX=self._directionX*-1
     self._directionY=self._directionY*-1
+  end
+  if player~=nil and pos_x<player:getPositionX() then
+    self._directionX=3
   end
 end

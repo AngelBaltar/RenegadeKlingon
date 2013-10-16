@@ -5,8 +5,12 @@ DoubleWeapon = class('GameFrameWork.Weapons.DoubleWeapon',Weapon)
 
 --constructor
 function DoubleWeapon:initialize(ship,bullet)
-	self._bullet=bullet
-   Weapon.initialize(self,ship,0.12)
+	 local cadence=1.5
+   if(ship ~=nil and ship:isPlayerShip()) then 
+      cadence=0.1
+   end
+  self._bullet=bullet
+  Weapon.initialize(self,ship,cadence)
 end
 
 function DoubleWeapon:doFire()
