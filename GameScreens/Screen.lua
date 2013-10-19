@@ -6,8 +6,8 @@ Screen = class('Screen')
 
 function Screen:initialize()
 	self._status=0
-	 self._read_cadence=0.02
-  self._last_read=os.clock()
+	self._read_cadence=0.2
+  	self._last_read=0
 end
 
 function Screen:draw()
@@ -18,8 +18,9 @@ function Screen:update(dt)
 	local pad=GameConfig.getInstance():getActiveJoyPad()
 	local direction1 = love.joystick.getAxis(pad, 2 )
 	local direction2 = love.joystick.getAxis(pad, 1 )
-	if(os.clock()-self._last_read>self._read_cadence) then
-		self._last_read=os.clock()
+	self._last_read=self._last_read+dt
+	if(self._last_read>self._read_cadence) then
+		self._last_read=0
 		if(direction1~=0 or direction2~=0) and self._status==0 then
 			self._status=1
 			self:readPressed()

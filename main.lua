@@ -47,8 +47,8 @@ function love.load()
    love.keyboard.setKeyRepeat(0.2, 0.1)
 end
 
-function MainScreen:update()
-  Screen.update(self)
+function MainScreen:update(dt)
+  Screen.update(self,dt)
   -- make it work with joypad too using update to get joypad axis buttons
 end
 
@@ -62,7 +62,7 @@ function love.update(dt)
     if(selected_option==OPTIONS_OPTION) then
           optionsMenu:update(dt)
     end
-    MainScreen.update(main_self)
+    MainScreen.update(main_self,dt)
 end
 
 function love.draw()

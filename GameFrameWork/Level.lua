@@ -7,6 +7,7 @@ require 'GameFrameWork/TileBlocks/TileBlock'
 require 'GameFrameWork/TileBlocks/MineBlock'
 require 'GameFrameWork/PilotPatterns/RandomPilotPattern'
 require 'GameFrameWork/Weapons/DoubleBasicWeapon'
+require 'GameFrameWork/Weapons/BasicWeapon'
 require 'GameFrameWork/Enemies/Enemy'
 require 'Utils/Debugging'
 

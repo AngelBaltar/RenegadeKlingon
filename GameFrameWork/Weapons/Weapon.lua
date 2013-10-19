@@ -7,7 +7,7 @@ Weapon = class('GameFrameWork.Weapons.Weapon')
 function Weapon:initialize(ship_to_attach,shot_cadence)
   self._ship=ship_to_attach
   self._shot_cadence=shot_cadence
-  self._last_shot=os.clock()
+  self._last_shot=0
 end
 
 function Weapon:calculateFire()
@@ -52,10 +52,11 @@ function Weapon:doFire()
 
 end
 
-function Weapon:fire()
-	if(os.clock()-self._last_shot>self._shot_cadence) then
+function Weapon:fire(dt)
+	self._last_shot=self._last_shot+dt
+	if(self._last_shot>self._shot_cadence) then
 		self:doFire()
-		self._last_shot=os.clock()
+		self._last_shot=0
 	end
 end
 

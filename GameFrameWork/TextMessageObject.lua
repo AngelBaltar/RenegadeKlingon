@@ -15,7 +15,7 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
   self._msgTxt=""
   self._msgDraw=""
   self._ch_act=0
-  self._last_frame=os.clock()
+  self._last_frame=0
   self._frame_rate=12
   self._skip_frame=false
   self._height=0
@@ -100,7 +100,7 @@ end
 
 --updates de message
 function TextMessageObject:pilot(dt)
-    
+    self._last_frame=self._last_frame+dt
     
     if(self._msgNum==0) then
       self:getSpace():freeze(self)
@@ -116,13 +116,13 @@ function TextMessageObject:pilot(dt)
     end
     
 
-    if ((not self._skip_frame) and (os.clock()-self._last_frame<=self._frame_rate)) then
+    if ((not self._skip_frame) and (self._last_frame<=self._frame_rate)) then
       return nil
     end
     
     self._skip_frame=false
 
-    self._last_frame=os.clock()
+    self._last_frame=dt
     self._msgNum=self._msgNum+1
     self._transparency=0
    

@@ -42,7 +42,7 @@ function RandomPilotPattern:pilot(dt)
   local tile_blocks=my_space:getAllTileBlocks()
   local collision=false
   
-  ship._weapon:fire()
+  ship._weapon:fire(dt)
 
 if(self._timer>0.8) then
     self._directionY=self._directionY*-2
