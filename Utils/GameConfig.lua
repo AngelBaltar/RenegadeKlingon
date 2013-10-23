@@ -315,3 +315,14 @@ function GameConfig:isDownEscape()
 	return love.keyboard.isDown(self._keyEscape)
 		or love.joystick.isDown( self._joyEscape_num,self._joyEscape_button)
 end
+
+function GameConfig:isDownAnyThing()
+	return self:isDownUp() 	 or
+         	self:isDownDown()  or
+         	self:isDownRight() or
+         	self:isDownLeft()  or
+         	self:isDownFire()  or
+         	self:isDownPause() or
+         	self:isDownEnter() or
+         	self:isDownEscape()
+end

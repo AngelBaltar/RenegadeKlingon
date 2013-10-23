@@ -7,10 +7,10 @@ require("Utils/GameConfig")
 require("Utils/ButtonRead")
 
 local selected_option=0
+local time_inactive=0
+local inactivity_to_autoplay=10
 local config=GameConfig.getInstance()
-local button_read=ButtonRead.getInstance()if player~=nil and pos_x<player:getPositionX() then
-    self._directionX=self._directionX*-2
-end
+local button_read=ButtonRead.getInstance()
 local main_self=nil
 
 
@@ -36,7 +36,7 @@ function love.load()
    
    local scr_main=MainScreen:new()
 
-   play=GameScreen:new()
+   play=nil
 
    local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",35)
    love.graphics.setFont(f)
@@ -63,6 +63,12 @@ function love.update(dt)
           optionsMenu:update(dt)
     end
     MainScreen.update(main_self,dt)
+    time_inactive=time_inactive+dt
+    if play==nil and time_inactive>inactivity_to_autoplay then
+      selected_option=PLAY_OPTION
+      play=GameScreen:new(true)
+    end
+
 end
 
 function love.draw()
@@ -77,10 +83,12 @@ function love.draw()
     end
     if(selected_option==OPTIONS_OPTION) then
         optionsMenu:draw()
+        main_self:readPressed()
     end
 end
 
 function MainScreen:readPressed()
+
 
      if(selected_option==NONE_OPTION) then
         if(config:isDownEscape()) then
@@ -89,12 +97,13 @@ function MainScreen:readPressed()
         selected_option=mainMenu:readPressed()
         if(selected_option==PLAY_OPTION) then
             --create new instance of the game
-            play=GameScreen:new()
+            play=GameScreen:new(false)
         end
     else
         if(selected_option==PLAY_OPTION) then
              if play:readPressed()==Screen:getExitMark() then
                 selected_option=NONE_OPTION
+                play=nil
              end
         else
            if(selected_option==OPTIONS_OPTION) then
@@ -107,12 +116,13 @@ function MainScreen:readPressed()
 end
 
 function love.joystickpressed( joystick, button )
+   time_inactive=0
    button_read:setJoyButton(joystick, button)
    main_self:readPressed()
 end
 
 function love.keypressed(key, unicode)
-
+    time_inactive=0
     if(key=='o') then
       if getDebug() then
         disableDebug()

@@ -60,3 +60,11 @@ end
 function MineBlock:draw()
   self._mine:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom) 
 end
+
+function MineBlock:isEnemyShip()
+  return true
+end
+
+function MineBlock:toString()
+  return "MINE"
+end

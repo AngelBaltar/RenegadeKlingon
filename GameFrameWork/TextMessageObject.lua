@@ -16,7 +16,7 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
   self._msgDraw=""
   self._ch_act=0
   self._last_frame=0
-  self._frame_rate=12
+  self._frame_rate=8
   self._skip_frame=false
   self._height=0
   self._width=0

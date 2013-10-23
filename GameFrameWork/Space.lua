@@ -741,6 +741,16 @@ function Space:getAllEnemies()
 	return all_enemies
 end
 
+function Space:getEnabledEnemies()
+	local en_enemies={}
+	for obj,_ in pairs(self._objectsList) do
+		if obj:isEnemyShip() and obj:isEnabled() then
+			en_enemies[obj]=true
+		end
+	end
+	return en_enemies
+end
+
 function Space:getAllTileBlocks()
 	local all_tiles={}
 	for obj,_ in pairs(self._objectsList) do

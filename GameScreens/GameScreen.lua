@@ -16,7 +16,7 @@ local _round=function (num, idp)
   return math.floor(num + 0.5)
 end
 
-function GameScreen:initialize()
+function GameScreen:initialize(autoplay)
     self._space=Space:new()
     self._levels={}
 
@@ -25,8 +25,9 @@ function GameScreen:initialize()
 
     self._levelact=0
     self._numLevels=2
+    self._autoplay=autoplay
     load_level(self._levels[self._levelact],self._space)
-    
+    self._space:getPlayerShip():setAutoPilot(self._autoplay)
 
 end
 
@@ -91,6 +92,11 @@ end
 function GameScreen:readPressed()
 	if config:isDownEscape() then
     	return Screen:getExitMark()
-   end
-   self._space:readPressed()
+  end
+  if(self._autoplay) then
+      if config:isDownAnyThing() then
+        return Screen:getExitMark()
+      end
+  end
+  self._space:readPressed()
 end
