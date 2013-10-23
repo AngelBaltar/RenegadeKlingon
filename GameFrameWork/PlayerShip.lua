@@ -14,8 +14,8 @@ PlayerShip.static.SHIP = love.graphics.newImage("Resources/gfx/destructor_klingo
 function PlayerShip:initialize(space,posx,posy)
   --100 health for the player
   SpaceObject.initialize(self,space, PlayerShip.static.SHIP,posx,posy,100)
-  --self._basic_weapon=BasicWeapon:new(self)
-  self._basic_weapon=DoubleBasicWeapon:new(self)
+  self._basic_weapon=BasicWeapon:new(self)
+  --self._basic_weapon=DoubleBasicWeapon:new(self)
   self._autopilot=false
 end
 
@@ -71,13 +71,12 @@ function PlayerShip:autoPilot(dt)
   local sup_y=my_space:getYend()-self:getHeight()-4
   local sup_x=my_space:getXend()-self:getWidth()-4
   local shot_emit_x,shot_emit_y,x_relative_step,y_relative_step=self._basic_weapon:calculateFire()
-
   
   local enemy=nil
   for obj,_ in pairs(enemies) do
-    DEBUG_PRINT("diff with "..obj:toString()..":"..math.abs(obj:getPositionY()-position_y))
+    DEBUG_PRINT("diff with "..obj:toString()..":"..math.abs((obj:getPositionY()-obj:getHeight()/2)-shot_emit_y))
     nenemies=nenemies+1
-    if math.abs(obj:getPositionY()-shot_emit_y)<=0.3 then
+    if math.abs((obj:getPositionY()+obj:getHeight()/2)-shot_emit_y)<obj:getHeight()/2 then
       self._basic_weapon:fire(dt)
       fired=true
       break
@@ -85,8 +84,8 @@ function PlayerShip:autoPilot(dt)
     enemy=obj
   end
 
-  if not fired then
-      if enemy:getPositionY()>position_y then
+  if not fired and enemy~=nil then
+      if enemy:getPositionY()>shot_emit_y then
           
            if(position_y+step<sup_y)then
               position_y=position_y+step

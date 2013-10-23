@@ -8,7 +8,7 @@ require("Utils/ButtonRead")
 
 local selected_option=0
 local time_inactive=0
-local inactivity_to_autoplay=10
+local inactivity_to_autoplay=6
 local config=GameConfig.getInstance()
 local button_read=ButtonRead.getInstance()
 local main_self=nil
