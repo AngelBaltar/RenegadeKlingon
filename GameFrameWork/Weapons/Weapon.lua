@@ -4,10 +4,18 @@ require 'Utils/middleclass/middleclass'
 Weapon = class('GameFrameWork.Weapons.Weapon')
 
 --constructor
-function Weapon:initialize(ship_to_attach,shot_cadence)
-  self._ship=ship_to_attach
-  self._shot_cadence=shot_cadence
+function Weapon:initialize(ship_to_attach)
+  self._shot_cadence=0.3
   self._last_shot=0
+  self:setAttachedShip(ship_to_attach)
+end
+
+function Weapon:PlayerCadence()
+	return 0.1
+end
+
+function Weapon:EnemieCadence()
+	return 1.5
 end
 
 function Weapon:calculateFire()
@@ -65,5 +73,14 @@ function Weapon:getAttachedShip()
 end
 
 function Weapon:setAttachedShip(ship)
-	self._ship=ship
+
+  self._ship=ship
+  if (self._ship~=nil) and  (self._ship:isEnemyShip()) then
+  	self._shot_cadence=self:EnemieCadence()
+  end
+  
+  if (self._ship~=nil) and  (self._ship:isPlayerShip()) then
+  	self._shot_cadence=self:PlayerCadence()
+  end
+	
 end

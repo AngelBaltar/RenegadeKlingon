@@ -6,12 +6,7 @@ BasicWeapon = class('GameFrameWork.Weapons.BasicWeapon',Weapon)
 
 --constructor
 function BasicWeapon:initialize(ship)
-	--cadence 1.2 seconds
-  local cadence=0.9
-    if(ship ~=nil and ship:isPlayerShip()) then 
-      cadence=0.1
-   end
-  Weapon.initialize(self,ship,cadence)
+  Weapon.initialize(self,ship)
 end
 
 function BasicWeapon:doFire()

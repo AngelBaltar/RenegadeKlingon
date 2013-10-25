@@ -5,7 +5,12 @@ MachineGunWeapon = class('GameFrameWork.Weapons.MachineGunWeapon',Weapon)
 
 --constructor
 function MachineGunWeapon:initialize(ship)
-	Weapon.initialize(self,ship,0.02)
+	Weapon.initialize(self,ship)
+end
+
+
+function MachineGunWeapon:PlayerCadence()
+	return 0.02
 end
 
 function MachineGunWeapon:doFire()
