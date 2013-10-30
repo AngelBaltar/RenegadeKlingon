@@ -83,7 +83,7 @@ end
 
 local create_FederationExcelsior=function(x,y)
 	local health=28
-	local speed=2.7
+	local speed=1.7
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleBasicWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
 	local excelsior=Enemy:new(_space,_FederationExcelsior_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
@@ -94,8 +94,8 @@ end
 
 
 local create_FederationGalaxy=function(x,y)
-	local health=1200
-	local speed=2.7
+	local health=400
+	local speed=2.0
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
 	local galaxy=Enemy:new(_space,_FederationGalaxy_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
@@ -122,6 +122,10 @@ local create_WeaponObject=function(x,y)
 	if _tile.properties["weapon_type"]=="DOUBLE_GREEN" then
 		gun=WeaponObject.static.DOUBLE_GREEN
 	end
+	if _tile.properties["weapon_type"]=="DOUBLE_BASIC" then
+		gun=WeaponObject.static.DOUBLE_BASIC
+	end
+
 
 	return WeaponObject:new(_space,gun,_map.tileWidth*x,_map.tileHeight*y)
 end

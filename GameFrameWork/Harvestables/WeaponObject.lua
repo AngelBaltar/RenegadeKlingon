@@ -8,10 +8,12 @@ WeaponObject = class('GameFrameWork.Harverstables.WeaponObject',HarvestableObjec
 WeaponObject.static.MACHINE_GUN = love.graphics.newImage("Resources/gfx/crystal_pink.png")
 WeaponObject.static.DOUBLE_BLUE = love.graphics.newImage("Resources/gfx/crystal_blue.png")
 WeaponObject.static.DOUBLE_GREEN = love.graphics.newImage("Resources/gfx/crystal_green.png")
+WeaponObject.static.DOUBLE_BASIC = love.graphics.newImage("Resources/gfx/crystal_red.png")
 
 local WP_MACHINEGUN=1
 local WP_DOUBLE_BLUE=2
 local WP_DOUBLE_GREEN=3
+local WP_DOUBLE_BASIC=4
 
 
 local weapons_tab={}
@@ -42,6 +44,15 @@ weapons_tab[WeaponObject.static.DOUBLE_GREEN]={
                         zoom=3,
                         weapon=WP_DOUBLE_GREEN}
 
+weapons_tab[WeaponObject.static.DOUBLE_BASIC]={
+                        size_x=17,
+                        size_y=18,
+                        n_steps=4,
+                        mode="loop",
+                        delay=0.3,
+                        zoom=3,
+                        weapon=WP_DOUBLE_BASIC}
+
 --constructor
 function WeaponObject:initialize(space,weapon_type,posx,posy)
 
@@ -62,6 +73,10 @@ function WeaponObject:initialize(space,weapon_type,posx,posy)
 
   if(weapons_tab[weapon_type].weapon==WP_DOUBLE_GREEN) then
     self._weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
+  end
+
+  if(weapons_tab[weapon_type].weapon==WP_DOUBLE_BASIC) then
+    self._weapon=DoubleBasicWeapon:new(nil)
   end
 
   self._zoom=weapons_tab[weapon_type].zoom

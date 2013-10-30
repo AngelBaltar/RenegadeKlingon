@@ -69,4 +69,10 @@
       <property name="object_type" value="FederationGalaxy"/>
   </properties>
  </tile>
+ <tile id="13">
+  <properties>
+      <property name="object_type" value="WeaponObject"/>
+      <property name="weapon_type" value="DOUBLE_BASIC"/>
+  </properties>
+ </tile>
 </tileset>
