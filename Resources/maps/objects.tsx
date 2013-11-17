@@ -78,6 +78,13 @@
  <tile id="14">
   <properties>
       <property name="object_type" value="AnimatedTileBlock"/>
+      <property name="animation" value="FIRE_BALL"/>
+  </properties>
+ </tile>
+ <tile id="15">
+  <properties>
+      <property name="object_type" value="AnimatedTileBlock"/>
+      <property name="animation" value="FIRE_SPELL"/>
   </properties>
  </tile>
 </tileset>

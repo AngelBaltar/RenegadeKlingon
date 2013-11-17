@@ -5,7 +5,7 @@
  <tileset firstgid="48" source="tileblocks1.tsx"/>
  <tileset firstgid="84" source="tileblocks2.tsx"/>
  <tileset firstgid="184" source="tileblocks3.tsx"/>
- <layer name="fondo" width="300" height="19" visible="0">
+ <layer name="fondo" width="300" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -18969,7 +18969,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="16"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>

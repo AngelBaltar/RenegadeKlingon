@@ -155,6 +155,12 @@ local create_animatedTileBlock=function(x,y)
 	local animation=AnimatedTileBlock.static.FIRE_BALL
 	
 	--add animation types here!!!!!
+	if _tile.properties["animation"]=="FIRE_BALL" then
+		animation=AnimatedTileBlock.static.FIRE_BALL
+	end
+	if _tile.properties["animation"]=="FIRE_SPELL" then
+		animation=AnimatedTileBlock.static.FIRE_SPELL
+	end
 
 	return AnimatedTileBlock:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,animation)
 end

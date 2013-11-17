@@ -4,14 +4,24 @@ require 'Utils/Animation'
 AnimatedTileBlock = class('GameFrameWork.AnimatedTileBlock',TileBlock)
 
 AnimatedTileBlock.static.FIRE_BALL = love.graphics.newImage("Resources/gfx/fire_ball.png")
+AnimatedTileBlock.static.FIRE_SPELL = love.graphics.newImage("Resources/gfx/fire_spell.png")
 
 local animation_tab={}
-animation_tab[AnimatedTileBlock.static.FIRE_BALL]={size_x=128,
-                                                    size_y=128,
-                                                    n_steps=10,
+animation_tab[AnimatedTileBlock.static.FIRE_BALL]={size_x=64,
+                                                    size_y=64,
+                                                    n_steps=30,
                                                     mode="loop",
-                                                    zoom=1,
+                                                    zoom=1.3,
                                                     health=10000}
+
+animation_tab[AnimatedTileBlock.static.FIRE_SPELL]={size_x=64,
+                                                    size_y=64,
+                                                    n_steps=30,
+                                                    mode="loop",
+                                                    zoom=1.3,
+                                                    health=10000}
+
+
 
 --constructor
 function AnimatedTileBlock:initialize(space,tile,x,y,AnimatedTileBlock_type)
@@ -20,7 +30,7 @@ function AnimatedTileBlock:initialize(space,tile,x,y,AnimatedTileBlock_type)
 
   self._animation = newAnimation(AnimatedTileBlock_type,
   					animation_tab[AnimatedTileBlock_type].size_x,
-  					animation_tab[AnimatedTileBlock_type].size_y, 0.2, animation_tab[AnimatedTileBlock_type].n_steps)
+  					animation_tab[AnimatedTileBlock_type].size_y, 0.3, animation_tab[AnimatedTileBlock_type].n_steps)
   self._animation:setMode(animation_tab[AnimatedTileBlock_type].mode)
   TileBlock.initialize(self,space,tile,x,y,animation_tab[AnimatedTileBlock_type].health)
   
