@@ -4,6 +4,7 @@ require 'GameFrameWork/TextMessageObject'
 require 'GameFrameWork/Harvestables/HealthObject'
 require 'GameFrameWork/Harvestables/WeaponObject'
 require 'GameFrameWork/TileBlocks/TileBlock'
+require 'GameFrameWork/TileBlocks/AnimatedTileBlock'
 require 'GameFrameWork/TileBlocks/MineBlock'
 require 'GameFrameWork/PilotPatterns/RandomPilotPattern'
 require 'GameFrameWork/Weapons/DoubleBasicWeapon'
@@ -149,6 +150,15 @@ local create_TextMessageObject=function(x,y)
 	return TextMessageObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,msgFile)
 end
 
+
+local create_animatedTileBlock=function(x,y)
+	local animation=AnimatedTileBlock.static.FIRE_BALL
+	
+	--add animation types here!!!!!
+
+	return AnimatedTileBlock:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,animation)
+end
+
 local _creation_tab={}
 
 _creation_tab["DestructorKlingon"]=create_DestructorKlingon
@@ -164,6 +174,7 @@ _creation_tab["FederationGalaxy"]=create_FederationGalaxy
 _creation_tab["HealthObject"]=create_HealthObject
 _creation_tab["WeaponObject"]=create_WeaponObject
 _creation_tab["TileBlock"]=create_tileBlock
+_creation_tab["AnimatedTileBlock"]=create_animatedTileBlock
 _creation_tab["MineBlock"]=create_MineBlock
 _creation_tab["TextMessageObject"]=create_TextMessageObject
 

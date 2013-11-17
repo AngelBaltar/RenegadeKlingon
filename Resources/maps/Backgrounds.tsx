@@ -26,4 +26,14 @@
    <property name="img_path" value="Resources/gfx/desert-1.png"/>
   </properties>
  </tile>
+  <tile id="5">
+  <properties>
+   <property name="img_path" value="Resources/gfx/space-5.png"/>
+  </properties>
+ </tile>
+  <tile id="5">
+  <properties>
+   <property name="img_path" value="Resources/gfx/space-6.png"/>
+  </properties>
+ </tile>
 </tileset>

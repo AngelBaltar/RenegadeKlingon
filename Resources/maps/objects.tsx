@@ -75,4 +75,9 @@
       <property name="weapon_type" value="DOUBLE_BASIC"/>
   </properties>
  </tile>
+ <tile id="14">
+  <properties>
+      <property name="object_type" value="AnimatedTileBlock"/>
+  </properties>
+ </tile>
 </tileset>
