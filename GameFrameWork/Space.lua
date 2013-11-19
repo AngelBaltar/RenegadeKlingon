@@ -211,10 +211,8 @@ local _printBackground=function(self)
 
    local size=self._bgList[self._bgActual]:getWidth()
    love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0) -- this is the left image
-   if(size+self._bgPos<800) then
-   		love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
+   love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
     								+ size, 0) -- this is the right image
-	end
 end
 
 function Space:getBackGroundCadence()
