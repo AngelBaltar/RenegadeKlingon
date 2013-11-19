@@ -31,7 +31,7 @@
    <property name="img_path" value="Resources/gfx/space-5.png"/>
   </properties>
  </tile>
-  <tile id="5">
+  <tile id="6">
   <properties>
    <property name="img_path" value="Resources/gfx/space-6.png"/>
   </properties>

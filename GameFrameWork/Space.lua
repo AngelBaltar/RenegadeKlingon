@@ -145,11 +145,7 @@ function Space:clearBackGroundImages()
 end
 
 function Space:getBackGroundWidth()
-	if(self._bgSize>0) then
-		return self._bgList[0]:getWidth()
-	else
-		return 0
-	end
+	return 800
 end
 
 function Space:getBackGroundHeight()
@@ -213,11 +209,12 @@ end
 
 local _printBackground=function(self)
 
-   local size=self:getBackGroundWidth()
+   local size=self._bgList[self._bgActual]:getWidth()
    love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0) -- this is the left image
-   love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
+   if(size+self._bgPos<800) then
+   		love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
     								+ size, 0) -- this is the right image
-
+	end
 end
 
 function Space:getBackGroundCadence()
@@ -277,7 +274,7 @@ local _updateBackGround=function(self,dt)
     	
 	end
 
-    if self._bgPos*-1 > self:getBackGroundWidth() then
+    if self._bgPos*-1 > self._bgList[self._bgActual]:getWidth() then
       self._bgPos = 0
       self._bgActual=(self._bgActual+1)
       if(self._bgActual>=self._bgSize-1) then
