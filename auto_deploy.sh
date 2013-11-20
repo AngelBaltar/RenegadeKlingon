@@ -45,18 +45,18 @@ commit_push() {
 	test cd $path_act
 }
 
-merge_push_master()
-{
-	#MERGE IT ALL ON MASTER BRANCH
-	test cd $path_deploy
-	test git checkout master
-	test git merge linux
-	test git merge windows
-	test git merge mac
-	git push
-	test cd $path_act
+# merge_push_master()
+# {
+# 	#MERGE IT ALL ON MASTER BRANCH
+# 	test cd $path_deploy
+# 	test git checkout master
+# 	test git merge linux
+# 	test git merge windows
+# 	test git merge mac
+# 	git push
+# 	test cd $path_act
 
-}
+# }
 
 #lets deploy a .love for LINUX
 echo "deploying for linux..."
@@ -93,7 +93,8 @@ test rm -rf $path_mac/RenegadeKlingon.app
 commit_push mac
 echo "deploy for mac OK"
 
-echo "merging all in master an doing push..."
-merge_push_master
-echo "all OK"
+checkout master
+# echo "merging all in master an doing push..."
+# merge_push_master
+# echo "all OK"
 
