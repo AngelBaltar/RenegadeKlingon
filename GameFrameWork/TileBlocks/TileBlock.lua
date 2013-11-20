@@ -41,6 +41,8 @@ end
 function TileBlock:draw()
   local x=self:getPositionX()
   local y=self:getPositionY()
+  --DEBUG_PRINT("draw tileblock "..x.." "..y)
+  --love.graphics.draw(self._tile.tileset.image,x,y)
   self._tile:draw(x, y, 0, 1, 1, 0,0)
 end
 

@@ -133,7 +133,7 @@ end
 
 
 local create_tileBlock=function(x,y)
-	
+    _tile:draw(0, 0, 0, 1, 1, 0,0)
 	return TileBlock:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y)
 end
 
