@@ -45,7 +45,13 @@ end
 
 local create_DestructorKlingon=function(x,y)
 	
-	return PlayerShip:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+	local ship=_space:getPlayerShip()
+	if(ship==nil) then
+		ship=PlayerShip:new(_space,_map.tileWidth*x,_map.tileHeight*y)
+	else
+		ship:setPosition(_map.tileWidth*x,_map.tileHeight*y)
+	end
+	return ship
 end
 
 local create_RomulanWarBird=function(x,y)
@@ -98,7 +104,7 @@ local create_FederationGalaxy=function(x,y)
 	local health=400
 	local speed=2.0
 	local movementPattern=RandomPilotPattern:new(nil)
-	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
+	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.BLUE_ANIMATED)
 	local galaxy=Enemy:new(_space,_FederationGalaxy_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
 	weapon:setAttachedShip(galaxy)
 	movementPattern:setShip(galaxy)
@@ -202,12 +208,17 @@ function load_level(map_name,space)
 
 	if(_space~=nil) then
 		hud=_space:getHud()
+		player=_space:getPlayerShip()
 	end
 
 	_space:initialize()
 	
 	if(hud~=nil) then
 		_space:getHud():addToScore(hud:getScore()) --keep the previous score if exists
+	end
+
+	if(player~=nil) then --keep the previous player if exists
+		_space:addSpaceObject(player)
 	end
 
 
