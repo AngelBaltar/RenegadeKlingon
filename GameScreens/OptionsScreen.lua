@@ -36,7 +36,10 @@ function OptionsScreen:draw()
 end
 
 function OptionsScreen:update(dt)
-
+	
+	-- if(self._selectedOption==NONE_OPTION) then
+	-- 	Screen.update(self,dt)
+	-- end
 	if(self._selectedOption==CREDITS_OPTION) then
 		self._credits:update(dt)
 	end

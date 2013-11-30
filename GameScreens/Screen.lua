@@ -6,7 +6,7 @@ Screen = class('Screen')
 
 function Screen:initialize()
 	self._status=0
-	self._read_cadence=0.2
+	self._read_cadence=0.08
   	self._last_read=0
 end
 

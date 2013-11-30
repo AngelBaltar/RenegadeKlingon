@@ -44,17 +44,14 @@ function love.load()
    love.graphics.setColor(255,255,255,255)
    love.graphics.setBackgroundColor(0,0,0)
 
-   love.keyboard.setKeyRepeat(0.2, 0.1)
+   love.keyboard.setKeyRepeat(0.0002, 0.0001)
 end
 
 function MainScreen:update(dt)
   Screen.update(self,dt)
   -- make it work with joypad too using update to get joypad axis buttons
-end
 
-function love.update(dt)
-   
-    if(selected_option==PLAY_OPTION) then
+   if(selected_option==PLAY_OPTION) then
        if play:update(dt)==Screen:getExitMark() then
             selected_option=NONE_OPTION
         end
@@ -62,12 +59,17 @@ function love.update(dt)
     if(selected_option==OPTIONS_OPTION) then
           optionsMenu:update(dt)
     end
-    MainScreen.update(main_self,dt)
     time_inactive=time_inactive+dt
     if play==nil and time_inactive>inactivity_to_autoplay then
       selected_option=PLAY_OPTION
       play=GameScreen:new(true)
     end
+
+end
+
+function love.update(dt)
+   
+    MainScreen.update(main_self,dt)
 
 end
 
@@ -83,7 +85,6 @@ function love.draw()
     end
     if(selected_option==OPTIONS_OPTION) then
         optionsMenu:draw()
-        main_self:readPressed()
     end
 end
 
