@@ -43,6 +43,10 @@ function GameScreen:draw()
     love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
  end
 
+ if(self._credits~=nil) then
+     self._credits:draw()
+ end
+
   if getDebug() then
 
     local r, g, b, a = love.graphics.getColor( )
@@ -75,18 +79,21 @@ function GameScreen:update(dt)
    		return nil
   else
       --DEBUG_PRINT("space update")
-      self._space:update(dt)
 
       if(self._space:isLevelEnded()) then
         self._levelact=self._levelact+1
         if(self._levelact>=self._numLevels) then
-          self._space:getPlayerShip():die()
+          if(self._credits==nil) then
+            self._credits=CreditsScreen:new()
+          end
+          return self._credits:update()
         else
            load_level(self._levels[self._levelact],self._space)
         end
       end
 
   end
+  self._space:update(dt)
 end
 
 function GameScreen:readPressed()
@@ -99,4 +106,7 @@ function GameScreen:readPressed()
       end
   end
   self._space:readPressed()
+  if(self._credits~=nil) then
+    self._credits:readPressed()
+  end
 end

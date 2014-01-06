@@ -27,7 +27,7 @@ end
 
 function love.load()
    DEBUG_PRINT("LOADING GAME...")
-
+   disableDebug()
    mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2-50)
    mainMenu:addItem("Play")
    mainMenu:addItem("Options")  
@@ -55,9 +55,11 @@ function MainScreen:update(dt)
        if play:update(dt)==Screen:getExitMark() then
             selected_option=NONE_OPTION
         end
+        return
     end
     if(selected_option==OPTIONS_OPTION) then
           optionsMenu:update(dt)
+          return
     end
     time_inactive=time_inactive+dt
     if play==nil and time_inactive>inactivity_to_autoplay then

@@ -4,7 +4,7 @@
  <tileset firstgid="41" source="Backgrounds800x600.tsx"/>
  <tileset firstgid="48" source="tileblocks2.tsx"/>
  <tileset firstgid="148" source="tileblocks3.tsx"/>
- <tileset firstgid="152" source="Backgrounds2000x600.tsx"/>
+ <tileset firstgid="164" source="Backgrounds2000x600.tsx"/>
  <layer name="fondo" width="300" height="19">
   <data>
    <tile gid="0"/>
@@ -5407,7 +5407,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="152"/>
+   <tile gid="164"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -5469,7 +5469,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="152"/>
+   <tile gid="164"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -5531,7 +5531,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="152"/>
+   <tile gid="164"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -26543,7 +26543,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="11"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
