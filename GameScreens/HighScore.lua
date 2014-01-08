@@ -66,7 +66,7 @@ function HighScore:readPressed()
 			.. string.char(my_byte+delta) .. 
 			score_table[score_table_size+1].name:sub(self._indexAct + 1, str:len())
 
-		if(config:isDownEnter() or isDownFire()) then
+		if(config:isDownEnter() or config:isDownFire()) then
 			self._indexAct=self._indexAct+1
 			if(self._indexAct>=4) then
 				score_table_size=score_table_size+1
