@@ -29,6 +29,8 @@ function GameScreen:initialize(autoplay)
     load_level(self._levels[self._levelact],self._space)
     self._space:getPlayerShip():setAutoPilot(self._autoplay)
 
+    self._scores=nil
+
 end
 
 function GameScreen:draw()
@@ -39,8 +41,13 @@ function GameScreen:draw()
    self._space:draw()
 
  if(player==nil)then
-    love.graphics.setColor(255,0,0,255)
-    love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
+   if(self._scores~=nil) then
+    self._scores:draw()
+    if(not self._scores:isInputActivate()) then
+      love.graphics.setColor(255,0,0,255)
+      love.graphics.print("GAME OVER", self._space:getXend()/2-70,self._space:getYend()/2-60)
+    end
+   end
  end
 
  if(self._credits~=nil) then
@@ -76,7 +83,14 @@ function GameScreen:update(dt)
   local player=self._space:getPlayerShip()
    --if player dead!
   if(player==nil)then
-   		return nil
+   		if(self._scores==nil) then
+        self._scores=HighScore:new(self._space:getHud())
+        self._scores:activateInput()
+      end
+      if(self._scores:isInputActivate()) then
+        return 0
+      end
+      return nil
   else
       --DEBUG_PRINT("space update")
 
@@ -108,5 +122,8 @@ function GameScreen:readPressed()
   self._space:readPressed()
   if(self._credits~=nil) then
     self._credits:readPressed()
+  end
+  if(self._scores~=nil and self._scores:isInputActivate()) then
+    self._scores:readPressed()
   end
 end

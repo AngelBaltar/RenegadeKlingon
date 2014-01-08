@@ -2,6 +2,7 @@ require 'Utils/Menu'
 require 'GameScreens/Screen'
 require 'GameScreens/CreditsScreen'
 require 'GameScreens/ControlsScreen'
+require 'GameScreens/HighScore'
 
 local config=GameConfig.getInstance()
 
@@ -10,14 +11,17 @@ OptionsScreen = class('OptionsScreen', Screen)
 local NONE_OPTION=0
 local CREDITS_OPTION=1
 local CONTROLS_OPTION=2
+local HIGH_SCORE_OPTION=3
 
 function OptionsScreen:initialize()
   self._optionsMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2)
   self._optionsMenu:addItem("Credits")
   self._optionsMenu:addItem("Controls")
+  self._optionsMenu:addItem("High Score")
   self._selectedOption=NONE_OPTION
   self._credits=CreditsScreen:new()
   self._controls=ControlsScreen:new()
+  self._scores=HighScore:new()
   Screen.initialize(self)
 end 
 
@@ -33,6 +37,10 @@ function OptionsScreen:draw()
 	if(self._selectedOption==CONTROLS_OPTION) then
 		self._controls:draw()
 	end
+	if(self._selectedOption==HIGH_SCORE_OPTION) then
+		self._scores:draw()
+	end
+
 end
 
 function OptionsScreen:update(dt)
@@ -45,6 +53,9 @@ function OptionsScreen:update(dt)
 	end
 	if self._selectedOption==CONTROLS_OPTION then
 		self._controls:update(dt)
+	end
+	if self._selectedOption==HIGH_SCORE_OPTION then
+		self._scores:update(dt)
 	end
 	return 1
 end
@@ -66,6 +77,11 @@ function OptionsScreen:readPressed()
 		end
 		if(self._selectedOption==CONTROLS_OPTION) then
 			if self._controls:readPressed()==Screen:getExitMark() then
+				self._selectedOption=NONE_OPTION
+			end
+		end
+		if(self._selectedOption==HIGH_SCORE_OPTION) then
+			if self._scores:readPressed()==Screen:getExitMark() then
 				self._selectedOption=NONE_OPTION
 			end
 		end
