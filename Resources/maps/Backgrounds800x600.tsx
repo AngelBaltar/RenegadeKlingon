@@ -28,12 +28,32 @@
  </tile>
   <tile id="5">
   <properties>
-   <property name="img_path" value="Resources/gfx/space-5.png"/>
+   <property name="img_path" value="Resources/gfx/planetM-1.png"/>
   </properties>
  </tile>
   <tile id="6">
   <properties>
-   <property name="img_path" value="Resources/gfx/space-6.png"/>
+   <property name="img_path" value="Resources/gfx/planetM-2.png"/>
+  </properties>
+  </tile>
+  <tile id="7">
+  <properties>
+   <property name="img_path" value="Resources/gfx/planetM-3.png"/>
+  </properties>
+ </tile>
+  <tile id="8">
+  <properties>
+   <property name="img_path" value="Resources/gfx/planetM-4.png"/>
+  </properties>
+ </tile>
+<tile id="9">
+  <properties>
+   <property name="img_path" value="Resources/gfx/planetM-5.png"/>
+  </properties>
+ </tile>
+<tile id="10">
+  <properties>
+   <property name="img_path" value="Resources/gfx/planetM-6.png"/>
   </properties>
  </tile>
 </tileset>

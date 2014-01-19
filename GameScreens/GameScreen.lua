@@ -22,9 +22,10 @@ function GameScreen:initialize(autoplay)
 
     self._levels[0]="map1.tmx"
     self._levels[1]="map2.tmx"
+    self._levels[2]="map3.tmx"
 
     self._levelact=0
-    self._numLevels=2
+    self._numLevels=3
     self._autoplay=autoplay
     load_level(self._levels[self._levelact],self._space)
     self._space:getPlayerShip():setAutoPilot(self._autoplay)

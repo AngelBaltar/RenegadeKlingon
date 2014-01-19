@@ -228,6 +228,7 @@ function load_level(map_name,space)
 	--backgrounds
 	for x, y, _tile in _map("fondo"):iterate() do
 		ordered_paths[x]=_tile.properties["img_path"]
+		DEBUG_PRINT(ordered_paths[x].."\n")
 		if(max_x<x) then
 			max_x=x
 		end
