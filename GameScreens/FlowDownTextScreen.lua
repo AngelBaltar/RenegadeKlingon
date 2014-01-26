@@ -10,7 +10,7 @@ function FlowDownTextScreen:initialize(message)
 end 
 
 function  FlowDownTextScreen:setMessage(message)
-	  self._xPos=450
+	  self._xPos=400
 	  self._yPos=nil -- if depends of the font of the system, we cant do this here, will do in the first update
 	  self._message=message
 	  self._numLines=0
