@@ -45,6 +45,7 @@ function love.load()
    love.graphics.setBackgroundColor(0,0,0)
 
    love.keyboard.setKeyRepeat(0.0002, 0.0001)
+   love.mouse.setVisible(false)
 end
 
 function MainScreen:update(dt)
