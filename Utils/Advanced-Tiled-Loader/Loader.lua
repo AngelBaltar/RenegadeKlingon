@@ -2,6 +2,9 @@
 -- -= Loader =-
 ---------------------------------------------------------------------------------------------------
 
+--modified by RenegadeKlingon
+ local empty_imageData = love.image.newImageData( 2000, 9000 )
+
 -- Define path so lua knows where to look for files.
 TILED_LOADER_PATH = TILED_LOADER_PATH or ({...})[1]:gsub("[%.\\/][Ll]oader$", "") .. '.'
 
@@ -121,7 +124,11 @@ end
 
 -- Returns a new image from the filename. 
 function Loader._newImage(source)
-    return love.graphics.newImage(source), source:getWidth(), source:getHeight()
+     if source==nil then
+        return love.graphics.newImage(empty_imageData), empty_imageData:getWidth(), empty_imageData:getHeight()
+    else
+        return love.graphics.newImage(source), source:getWidth(), source:getHeight()
+    end
 end
 
 ----------------------------------------------------------------------------------------------------
@@ -292,7 +299,11 @@ function Loader._expandTileSet(t, map)
                 imageHeight = cache_imagesize[image].height
             -- Else load it and store in the cache
             else
-                image = love.image.newImageData(path) 
+                if not love.filesystem.exists(path) then
+                    image=empty_imageData
+                else
+                    image = love.image.newImageData(path)
+                end 
                 -- transparent color
                 if v.xarg.trans then
                     trans = { tonumber( "0x" .. v.xarg.trans:sub(1,2) ), 
