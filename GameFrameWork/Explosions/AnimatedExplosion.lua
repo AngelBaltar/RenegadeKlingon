@@ -15,7 +15,7 @@ explosions_tab[0]={     sprite=EXPLOSION1,
                         delay=0.1,
                         mode="once",
                         zoom=1,
-                        source = love.audio.newSource( 'Resources/sfx/explosion1.wav',"static")}
+                        source = love.audio.newSource( 'Resources/sfx/explosion1.mp3',"static")}
 
 explosions_tab[1]={     sprite=EXPLOSION2,
                         size_x=64,
@@ -24,7 +24,7 @@ explosions_tab[1]={     sprite=EXPLOSION2,
                         delay=0.1,
                         mode="once",
                         zoom=1,
-                        source = love.audio.newSource( 'Resources/sfx/explosion2.wav',"static")}
+                        source = love.audio.newSource( 'Resources/sfx/explosion2.mp3',"static")}
 
 local N_EXPLOSIONS=2
 --constructor

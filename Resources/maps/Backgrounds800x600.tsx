@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset name="Backgrounds" tilewidth="800" tileheight="600">
- <image source="../../mapFakeSources/backgrounds800x600.png" width="800" height="2400"/>
+ <image source="mapSources/backgrounds800x600.jpg" width="800" height="2400"/>
  <tile id="0">
   <properties>
    <property name="img_path" value="Resources/gfx/space-1.png"/>

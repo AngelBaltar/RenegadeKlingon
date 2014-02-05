@@ -15,7 +15,7 @@ animation_tab[AnimatedBullet.static.BLUE_ANIMATED]={size_x=32,
                                                     mode="loop",
                                                     zoom=1,
                                                     health=6,
-                                                    source=love.audio.newSource( 'Resources/sfx/double_weapon.wav',"static")}
+                                                    source=love.audio.newSource( 'Resources/sfx/double_weapon.mp3',"static")}
 
 animation_tab[AnimatedBullet.static.GREEN_ANIMATED]={size_x=32,
                                                     size_y=32,
@@ -23,14 +23,14 @@ animation_tab[AnimatedBullet.static.GREEN_ANIMATED]={size_x=32,
                                                     mode="loop",
                                                     zoom=1,
                                                     health=12,
-                                                    source=love.audio.newSource( 'Resources/sfx/double_weapon.wav',"static")}
+                                                    source=love.audio.newSource( 'Resources/sfx/double_weapon.mp3',"static")}
 animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=32,
                                                     size_y=32,
                                                     n_steps=4,
                                                     mode="bounce",
                                                     zoom=2,
                                                     health=20,
-                                                    source=love.audio.newSource( 'Resources/sfx/machine_gun.wav',"static")
+                                                    source=love.audio.newSource( 'Resources/sfx/machine_gun.mp3',"static")
                                                   }
 
 --constructor

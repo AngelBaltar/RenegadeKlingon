@@ -6,7 +6,7 @@ SimpleBullet = class('GameFrameWork.SimpleBullet',Bullet)
 
 SimpleBullet.static.BLUE_BULLET = love.graphics.newImage("Resources/gfx/blue_bullet.png")
 SimpleBullet.static.RED_BULLET =love.graphics.newImage("Resources/gfx/red_bullet.png")
-local source=love.audio.newSource( 'Resources/sfx/basic_weapon.wav',"static")
+local source=love.audio.newSource( 'Resources/sfx/basic_weapon.mp3',"static")
 --ps:setColor(255,255,255,255,255,255,255,0)
 --constructor
 --draw_object must be a drawable

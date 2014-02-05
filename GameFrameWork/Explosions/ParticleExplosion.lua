@@ -1,7 +1,7 @@
 require 'GameFrameWork/Explosions/Explosion'
 
 ParticleExplosion = class('GameFrameWork.Explosions.ParticleExplosion',Explosion)
-local source=love.audio.newSource( 'Resources/sfx/particle_explosion.wav',"static")
+local source=love.audio.newSource( 'Resources/sfx/particle_explosion.mp3',"static")
 
 
 --ps:setColor(255,255,255,255,255,255,255,0)

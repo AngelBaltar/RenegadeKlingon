@@ -293,11 +293,7 @@ function Loader._expandTileSet(t, map)
                 imageHeight = cache_imagesize[image].height
             -- Else load it and store in the cache
             else
-                if not love.filesystem.exists(path) then
-                    image=love.image.newImageData( 160, 256 )
-                else
-                    image = love.image.newImageData(path)
-                end 
+                image = love.image.newImageData(path)
                 -- transparent color
                 if v.xarg.trans then
                     trans = { tonumber( "0x" .. v.xarg.trans:sub(1,2) ), 

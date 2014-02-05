@@ -45,7 +45,13 @@ function Space:initialize()
     self._bgTimingCadence=0
     self._backgroundDistance=4
     self._levelEnded=false
-
+    if(self._source~=nil) then
+    	self._source:stop( )
+    end
+    self._source=love.audio.newSource('Resources/sfx/map1.mp3',"static")
+  	self._source:play()
+  	self._source:setVolume(self._source:getVolume()/2)
+  	self._source:setLooping(true)
     Hud:new(self)
 end
 
@@ -137,7 +143,9 @@ function Space:updateBucketFor(so)
 end
 function Space:addBackGroundImage(path_to_image)
 	self._bgList[self._bgSize]=love.graphics.newImage(path_to_image)
+	print("size:"..self._bgList[self._bgSize]:getWidth())
 	self._bgSize=self._bgSize+1
+
 end
 
 function Space:clearBackGroundImages()
