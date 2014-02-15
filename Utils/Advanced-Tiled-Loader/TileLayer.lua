@@ -2,6 +2,7 @@
 -- -= TileLayer =-
 ---------------------------------------------------------------------------------------------------
 -- Setup
+TILED_LOADER_PATH = "Utils/Advanced-Tiled-Loader/"
 TILED_LOADER_PATH = TILED_LOADER_PATH or ({...})[1]:gsub("[%.\\/][Tt]ile[Ll]ayer$", "") .. '.'
 local math = math
 local type = type

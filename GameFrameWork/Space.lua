@@ -143,7 +143,7 @@ function Space:updateBucketFor(so)
 end
 function Space:addBackGroundImage(path_to_image)
 	self._bgList[self._bgSize]=love.graphics.newImage(path_to_image)
-	print("size:"..self._bgList[self._bgSize]:getWidth())
+	DEBUG_PRINT("size:"..self._bgList[self._bgSize]:getWidth())
 	self._bgSize=self._bgSize+1
 
 end
