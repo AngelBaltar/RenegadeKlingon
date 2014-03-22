@@ -1,4 +1,24 @@
-#bash
+#!/bin/sh
+
+# -- /* RenegadeKlingon - LÖVE2D GAME
+# --  * auto_deploy_static.sh
+# --  * Copyright (C) Angel Baltar Diaz
+# --  *
+# --  * This program is free software: you can redistribute it and/or
+# --  * modify it under the terms of the GNU General Public
+# --  * License as published by the Free Software Foundation; either
+# --  * version 3 of the License, or (at your option) any later version.
+# --  *
+# --  * This program is distributed in the hope that it will be useful,
+# --  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+# --  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# --  * General Public License for more details.
+# --  *
+# --  * You should have received a copy of the GNU General Public
+# --  * License along with this program.  If not, see
+# --  * <http://www.gnu.org/licenses/>.
+# --  */
+
 #deploy the game to binary executables in deployments directory
 necesary_files="GameFrameWork GameScreens Resources Utils main.lua conf.lua"
 
@@ -17,6 +37,10 @@ test() {
     fi
 }
 
+
+echo "extracting love binaries..."
+test tar -xvzf love-0.8.0-win-x86.tar.gz
+test tar -xvzf love.app.tar.gz 
 
 
 #lets deploy a .love for LINUX
@@ -54,4 +78,6 @@ echo "deploy for mac OK"
 rm -rf $path_linux
 rm -rf $path_windows
 rm -rf $path_mac
+rm -rf love.app
+rm -rf love-0.8.0-win-x86
 
