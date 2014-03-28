@@ -6,4 +6,9 @@
    <property name="img_path" value="Resources/gfx/space-5.png"/>
   </properties>
  </tile>
+  <tile id="1">
+  <properties>
+   <property name="img_path" value="Resources/gfx/red-sky.png"/>
+  </properties>
+ </tile>
 </tileset>
