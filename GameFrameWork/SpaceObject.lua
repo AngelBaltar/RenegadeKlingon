@@ -46,14 +46,17 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function SpaceObject:pilot(dt)
-   
    local step=100*dt/self:getBackGroundDistance()
    local my_space=self:getSpace()
    local x=self:getPositionX()
    local y=self:getPositionY()
-    
-    x=x-my_space:getBackGroundCadence()*step
-    self:setPosition(x,y)
+   --apply stepping only for enabled objects
+   if self:isEnabled() then
+    	x=x-my_space:getBackGroundCadence()*step
+   else
+   		x=x-my_space:getBackGroundCadence()
+   end
+   self:setPosition(x,y)
     
 end
 

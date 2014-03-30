@@ -67,6 +67,7 @@ function Space:initialize()
     	self._source:stop( )
     end
     self._source=love.audio.newSource('Resources/sfx/map1.mp3',"static")
+  	love.audio.stop()
   	self._source:play()
   	self._source:setVolume(self._source:getVolume()/2)
   	self._source:setLooping(true)

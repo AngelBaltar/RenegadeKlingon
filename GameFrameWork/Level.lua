@@ -77,7 +77,7 @@ local create_RomulanWarBird=function(x,y)
 	local health=400
 	local speed=3
 	local movementPattern=RandomPilotPattern:new(nil)
-	local weapon=DoubleBasicWeapon:new(nil)
+	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
 	local warbird=Enemy:new(_space,_RomulanWarBird_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
 	weapon:setAttachedShip(warbird)
 	movementPattern:setShip(warbird)

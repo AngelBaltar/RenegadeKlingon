@@ -131,6 +131,7 @@ end
 
 function GameScreen:readPressed()
 	if config:isDownEscape() then
+      love.audio.stop()
     	return Screen:getExitMark()
   end
   if(self._autoplay) then
