@@ -34,7 +34,7 @@ mines_tab[0]={     sprite=MINE1,
                         zoom=0.7}
 
 --constructor
-function MineBlock:initialize(space,tile,x,y)
+function MineBlock:initialize(space,tile,weapon,x,y)
   local random_mine=0
   self._mine=newAnimation(mines_tab[random_mine].sprite,
                                 mines_tab[random_mine].size_x,
@@ -46,6 +46,7 @@ function MineBlock:initialize(space,tile,x,y)
   self._zoom=mines_tab[random_mine].zoom
   TileBlock.initialize(self,space,tile,x,y,50)
   self._mine:play()
+  self._weapon=weapon
 end
 
 function MineBlock:die()
@@ -71,7 +72,10 @@ end
 
 function MineBlock:pilot(dt)
   self._mine:update(dt)
-  TileBlock.pilot(self,dt)   
+  TileBlock.pilot(self,dt)
+  if(self._weapon~=nil) then
+    self._weapon:fire(dt)
+  end   
 end
 
 --Draws the object in the screen
