@@ -161,9 +161,13 @@ local create_tileBlock=function(x,y)
 end
 
 local create_MineBlock=function(x,y)
-	local weap=nil --BasicWeapon:new(nil)
+	return MineBlock:new(_space,_tile,nil,_map.tileWidth*x,_map.tileHeight*y)
+end
+
+local create_FireMineBlock=function(x,y)
+	local weap=BasicWeapon:new(nil)
 	local mine=MineBlock:new(_space,_tile,weap,_map.tileWidth*x,_map.tileHeight*y)
-	--weap:setAttachedShip(mine)
+	weap:setAttachedShip(mine)
 	return mine
 end
 
@@ -208,6 +212,7 @@ _creation_tab["TileBlock"]=create_tileBlock
 _creation_tab["AnimatedTileBlock"]=create_animatedTileBlock
 _creation_tab["MineBlock"]=create_MineBlock
 _creation_tab["TextMessageObject"]=create_TextMessageObject
+_creation_tab["FireMineBlock"]=create_FireMineBlock
 
 
 

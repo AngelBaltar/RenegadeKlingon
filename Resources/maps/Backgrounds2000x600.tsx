@@ -11,4 +11,9 @@
    <property name="img_path" value="Resources/gfx/red-sky.png"/>
   </properties>
  </tile>
+   <tile id="2">
+  <properties>
+   <property name="img_path" value="Resources/gfx/farback.png"/>
+  </properties>
+ </tile>
 </tileset>

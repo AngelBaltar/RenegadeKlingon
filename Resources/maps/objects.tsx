@@ -87,4 +87,9 @@
       <property name="animation" value="FIRE_SPELL"/>
   </properties>
  </tile>
+  <tile id="16">
+  <properties>
+   <property name="object_type" value="FireMineBlock"/>
+  </properties>
+ </tile>
 </tileset>

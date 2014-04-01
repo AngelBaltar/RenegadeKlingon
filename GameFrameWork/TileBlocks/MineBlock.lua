@@ -73,7 +73,7 @@ end
 function MineBlock:pilot(dt)
   self._mine:update(dt)
   TileBlock.pilot(self,dt)
-  if(self._weapon~=nil) then
+  if(self._weapon~=nil) and (SpaceObject.isEnabled(self)) then
     self._weapon:fire(dt)
   end   
 end
