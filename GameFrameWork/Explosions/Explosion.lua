@@ -9,14 +9,18 @@ Explosion = class('GameFrameWork.Explosions.Explosion',SpaceObject)
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function Explosion:initialize(space,x,y,drawable)
-  SpaceObject.initialize(self,space,drawable,x,y,0)
-
+  SpaceObject.initialize(self,space,drawable,x,y,1)
+  --SpaceObject.setPosition(self,x-self:getWidth(),y-self:getHeight())
 end
 
 --the explosions do not collide
 --overwrite it as nothing
 function Explosion:collision(object,damage)
 
+end
+
+function Explosion:pilot(dt)
+  SpaceObject.pilot(self,dt)
 end
 
 

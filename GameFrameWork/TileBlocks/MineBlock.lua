@@ -58,7 +58,8 @@ function MineBlock:die()
   --no by out of bounds
   SpaceObject.die(self)
   if my_space:isInBounds(self) then
-    AnimatedExplosion:new(my_space,x,y)
+    local explo=AnimatedExplosion:new(my_space,x,y)
+    explo:setZoom(self:getStimatedSize()/explo:getStimatedSize())
   end
 end
 

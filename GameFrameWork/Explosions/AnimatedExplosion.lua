@@ -24,11 +24,13 @@ AnimatedExplosion = class('GameFrameWork.Explosions.AnimatedExplosion',Explosion
 
 local EXPLOSION1=love.graphics.newImage('Resources/gfx/explosion1.png')
 local EXPLOSION2=love.graphics.newImage('Resources/gfx/explosion2.png')
+local EXPLOSION3=love.graphics.newImage('Resources/gfx/particlefx_07.png')
+local EXPLOSION4=love.graphics.newImage('Resources/gfx/particlefx_08.png')
 
 local explosions_tab={}
 explosions_tab[0]={     sprite=EXPLOSION1,
-                        size_x=48,
-                        size_y=48,
+                        size_x=96,
+                        size_y=96,
                         n_steps=8,
                         delay=0.1,
                         mode="once",
@@ -36,15 +38,32 @@ explosions_tab[0]={     sprite=EXPLOSION1,
                         source = love.audio.newSource( 'Resources/sfx/explosion1.mp3',"static")}
 
 explosions_tab[1]={     sprite=EXPLOSION2,
-                        size_x=64,
-                        size_y=64,
+                        size_x=128,
+                        size_y=128,
                         n_steps=16,
                         delay=0.1,
                         mode="once",
                         zoom=1,
                         source = love.audio.newSource( 'Resources/sfx/explosion2.mp3',"static")}
 
-local N_EXPLOSIONS=2
+explosions_tab[2]={     sprite=EXPLOSION3,
+                        size_x=128,
+                        size_y=128,
+                        n_steps=64,
+                        delay=0.01,
+                        mode="once",
+                        zoom=1,
+                        source = love.audio.newSource( 'Resources/sfx/explosion2.mp3',"static")}
+explosions_tab[3]={     sprite=EXPLOSION4,
+                        size_x=128,
+                        size_y=128,
+                        n_steps=64,
+                        delay=0.01,
+                        mode="once",
+                        zoom=1,
+                        source = love.audio.newSource( 'Resources/sfx/explosion2.mp3',"static")}
+
+local N_EXPLOSIONS=4
 --constructor
 function AnimatedExplosion:initialize(space,x,y)
   
@@ -73,7 +92,7 @@ function AnimatedExplosion:getHeight()
 end
 
 function AnimatedExplosion:setZoom(zoom)
-  self._zoom=zoom
+  self._zoom=self._zoom*zoom
 end
 
 --Performs movements changing the position of the object, firing AnimatedExplosions...
