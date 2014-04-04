@@ -27,7 +27,7 @@ local frame_exit_char='#'
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
+function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageText)
   --100 health for the player
  
   self._msgTxt=""
@@ -41,15 +41,22 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile)
   self._msgDraw={}
   self._transparency=0
   --DEBUG_PRINT("Opening "..messageFile)
-  if not love.filesystem.exists(messageFile) then
+  if (messageFile==nil or 
+    not love.filesystem.exists(messageFile))
+    and messageText==nil then
     return nil
   end
   
-  local iterator=love.filesystem.lines(messageFile)
+  local iterator=nil
+  if(messageFile~=nil) then
+    iterator=love.filesystem.lines(messageFile)
+  else
+    iterator=messageText:gmatch("[^\r\n]+")
+  end
   for line in iterator do
         self._msgTxt=self._msgTxt..line.."\n"
   end
-  --DEBUG_PRINT(self._msgTxt)
+  DEBUG_PRINT(self._msgTxt)
   
  local font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30)
  love.graphics.setFont(font)
@@ -101,23 +108,47 @@ end
 
 function TextMessageObject:die()
 
---DEBUG_PRINT("Text dies")
+DEBUG_PRINT("Text dies")
 self:getSpace():unfreeze()
 SpaceObject.die(self)
   
   ---
 end
 
+local function _is_active(self)
+    local is_active=nil
+    if( not SpaceObject.isEnabled(self)) then
+      is_active=false
+    else
+      is_active=((SpaceObject.getPositionX(self)+(self._width/2))
+                  <(SpaceObject.getSpace(self).getXend()/2))
+    end
+    return is_active
+end
+
 function TextMessageObject:readPressed()
 
+  if(not _is_active(self)) then
+    return 
+  end
   local config=GameConfig.getInstance()
   if config:isDownEnter() then
     self._skip_frame=true --skip message frame on intro
   end
 end
 
+
+
 --updates de message
 function TextMessageObject:pilot(dt)
+    
+   
+    local pilot=_is_active(self)
+    if(not pilot) then
+      SpaceObject.pilot(self,dt)
+      return
+    end
+   
     self._last_frame=self._last_frame+dt
     
     if(self._msgNum==0) then
@@ -148,9 +179,16 @@ end
 
 --Draws the object in the screen
 function TextMessageObject:draw()
+
+    local draw=_is_active(self)
+    if(not draw) then
+      return
+    end
+
     local x=self:getPositionX()
     local y=self:getPositionY()
 
+    
     if self._msgDraw[self._msgNum]==nil then
       return nil
     end

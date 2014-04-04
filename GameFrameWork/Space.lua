@@ -355,6 +355,11 @@ function Space:draw()
         love.graphics.setColor(255,255,255,255)
 	end
 
+	--ensure freezing object draws at the top
+	if(self._freeze) then
+		self._freezedBy:draw()
+	end
+
 
 end
 
@@ -564,7 +569,9 @@ function Space:update(dt)
 		return
 	end
 
-	_updateBackGround(self,dt)
+	if(not self._freeze) then
+		_updateBackGround(self,dt)
+	end
 
 
 	--pilot all the objects

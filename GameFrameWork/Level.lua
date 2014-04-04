@@ -298,5 +298,5 @@ function load_level(map_name,space)
 			end
 		end
 	end
-
+TextMessageObject:new(_space,nil,100,100,nil,"hola#\ncomo estas#")
 end
