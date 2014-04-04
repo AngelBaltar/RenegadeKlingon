@@ -112,7 +112,6 @@ end
 
 function MainScreen:readPressed()
 
-
      if(selected_option==NONE_OPTION) then
         if(config:isDownEscape()) then
           love.event.push("quit")   -- actually causes the app to quit

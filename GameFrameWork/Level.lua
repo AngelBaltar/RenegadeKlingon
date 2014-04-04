@@ -264,6 +264,14 @@ function load_level(map_name,space)
 			_space:addBackGroundImage(ordered_paths[x])
 		end
 	end
+
+	if(map_name=="map1.tmx") then
+		TextMessageObject:new(_space,nil,
+							100,100,nil,
+							"Controls are\n#"
+							..GameConfig.getInstance():getControlsDescription().."#")
+	end
+
 	--all plane objects
 	for plane=1,n_bgs do
 		--DEBUG_PRINT("plano_"..plane)
@@ -298,5 +306,4 @@ function load_level(map_name,space)
 			end
 		end
 	end
-TextMessageObject:new(_space,nil,100,100,nil,"hola#\ncomo estas#")
 end

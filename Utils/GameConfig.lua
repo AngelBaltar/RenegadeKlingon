@@ -345,3 +345,16 @@ function GameConfig:isDownAnyThing()
          	self:isDownEnter() or
          	self:isDownEscape()
 end
+
+function GameConfig:getControlsDescription()
+	local desc=""
+	desc=desc.."up-> "..self._keyUp.."\n"
+	desc=desc.."down-> "..self._keyDown.."\n"
+	desc=desc.."left-> "..self._keyLeft.."\n"
+	desc=desc.."right-> "..self._keyRight.."\n"
+	desc=desc.."fire-> "..self._keyFire.."\n"
+	desc=desc.."pause-> "..self._keyPause.."\n"
+	desc=desc.."enter-> "..self._keyEnter.."\n"
+	desc=desc.."exit-> "..self._keyEscape.."\n"
+	return desc
+end

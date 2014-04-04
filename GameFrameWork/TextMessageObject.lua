@@ -65,7 +65,8 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
  while (ch_act<string.len(self._msgTxt)) do
 
    self._msgDraw[count]=""
-   n_lines=1
+   n_lines=0
+   local line=""
    for i = ch_act, string.len(self._msgTxt) do
         ch=string.sub(self._msgTxt, i, i)
         ch_act=i
@@ -75,12 +76,15 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
         end
         if(ch=='\n') then
           n_lines=n_lines+1
+          line=line..ch
+          if(self._width<font:getWidth(line)+20) then
+              self._width=font:getWidth(line)+20
+          end
+          line=""
+        else
+          line=line..ch
         end
         self._msgDraw[count]=self._msgDraw[count]..ch
-    end
-
-    if(self._width<font:getWidth(self._msgDraw[count])) then
-      self._width=font:getWidth(self._msgDraw[count])
     end
 
     if(self._height<font:getHeight()*n_lines) then
@@ -197,7 +201,7 @@ function TextMessageObject:draw()
     love.graphics.rectangle("fill",x,y,self._width,self._height)
 
     love.graphics.setColor(255,0,0,self._transparency)
-    love.graphics.print("  "..self._msgDraw[self._msgNum],x+0.1*self._width, y)
+    love.graphics.print(self._msgDraw[self._msgNum],x+0.1*self._width, y)
     love.graphics.setColor(r,g,b,a)
 
 end
