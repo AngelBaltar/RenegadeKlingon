@@ -22,9 +22,9 @@
 #deploy the game to binary executables in deployments directory
 necesary_files="GameFrameWork GameScreens Resources Utils main.lua conf.lua"
 
-path_linux=linux
-path_windows=windows
-path_mac=mac
+path_linux=RenegadeKlingon_linux
+path_windows=RenegadeKlingon_windows
+path_mac=RenegadeKlingon_mac
 path_act=`pwd`
 
 
@@ -45,8 +45,8 @@ test tar -xvzf love.app.tar.gz
 
 #lets deploy a .love for LINUX
 echo "deploying for linux..."
-rm -rf $path_linux
-mkdir $path_linux
+rm -rf RenegadeKlingon_linux.zip
+test mkdir $path_linux
 test zip  $path_linux/RenegadeKlingon.zip -r $necesary_files
 test mv $path_linux/RenegadeKlingon.zip $path_linux/RenegadeKlingon.love
 test cp $path_linux/RenegadeKlingon.love ./RenegadeKlingon.love
@@ -55,8 +55,8 @@ echo "deploy for linux OK"
 
 # # lets deploy a .exe for WINDOWS
 echo "deploying for windows..."
-rm -rf $path_windows
-mkdir $path_windows
+rm -rf RenegadeKlingon_windows.zip
+test mkdir $path_windows
 test cp ./RenegadeKlingon.love $path_windows/game.love
 test cp -R ./love-0.8.0-win-x86/* $path_windows/
 test cat $path_windows/love.exe $path_windows/game.love > $path_windows/RenegadeKlingon.exe
@@ -65,8 +65,9 @@ test zip -r RenegadeKlingon_windows.zip $path_windows
 echo "deploy for windows OK"
 
 # #lets deploy a .app for MAC OSX
-rm -rf $path_mac
-mkdir $path_mac
+echo "deploying for mac..."
+rm -rf RenegadeKlingon_mac.zip
+test mkdir $path_mac
 test cp -R ./love.app $path_mac/RenegadeKlingon.app
 test cp ./RenegadeKlingon.love $path_mac/RenegadeKlingon.app/Contents/Resources/
 test sed -i 's/>org.love2d.love</>com.with2balls.RenegadeKlingon</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
