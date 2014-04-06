@@ -63,15 +63,8 @@ function Space:initialize()
     self._bgTimingCadence=0
     self._backgroundDistance=4
     self._levelEnded=false
-    if(self._source~=nil) then
-    	self._source:stop( )
-    end
-    self._source=love.audio.newSource('Resources/sfx/map1.mp3',"static")
-  	love.audio.stop()
-  	self._source:play()
-  	self._source:setVolume(self._source:getVolume()/2)
-  	self._source:setLooping(true)
     Hud:new(self)
+    self._music_playing=nil
 end
 
 function Space:removeFromBuckets(so)
@@ -387,6 +380,10 @@ local _collisionCheck = function(self,soA,soB)
 		return false
 	end
 
+	--musics do not collide
+	if (soA:isMusicObject() or soB:isMusicObject()) then
+		return false
+	end
 	--objects in diferent planes do not collide
 	if(soA:getBackGroundDistance()~=soB:getBackGroundDistance()) then
 		return false
@@ -808,5 +805,13 @@ function Space:getNumBucketObjects()
 	 	end
 	 end
 	 return count
+end
+
+function Space:getMusicObject()
+	return self._music_playing
+end
+
+function Space:setMusicObject(music)
+	self._music_playing=music
 end
 

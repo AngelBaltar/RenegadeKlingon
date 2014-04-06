@@ -92,4 +92,9 @@
    <property name="object_type" value="FireMineBlock"/>
   </properties>
  </tile>
+  <tile id="17">
+  <properties>
+   <property name="object_type" value="MusicObject"/>
+  </properties>
+ </tile>
 </tileset>

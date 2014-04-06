@@ -19,6 +19,7 @@
 require 'Utils/middleclass/middleclass'
 require 'GameFrameWork/PlayerShip'
 require 'GameFrameWork/TextMessageObject'
+require 'GameFrameWork/MusicObject'
 require 'GameFrameWork/Harvestables/HealthObject'
 require 'GameFrameWork/Harvestables/WeaponObject'
 require 'GameFrameWork/TileBlocks/TileBlock'
@@ -40,6 +41,7 @@ local _map=nil
 local _map_name=nil
 local _tile=nil
 local _num_messages=0
+local _num_musics=0
 
 local _RomulanNorexan_ship= love.graphics.newImage("Resources/gfx/RomulanNorexan.png")
 local _RomulanWarBird_ship = love.graphics.newImage("Resources/gfx/RomulanWarBird.png")
@@ -179,6 +181,11 @@ local create_TextMessageObject=function(x,y)
 	return TextMessageObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,msgFile)
 end
 
+local create_MusicObject=function(x,y)
+	local mus=MusicObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,_map_name,_num_musics)
+	_num_musics=_num_musics+1
+end
+
 
 local create_animatedTileBlock=function(x,y)
 	local animation=AnimatedTileBlock.static.FIRE_BALL
@@ -213,6 +220,7 @@ _creation_tab["AnimatedTileBlock"]=create_animatedTileBlock
 _creation_tab["MineBlock"]=create_MineBlock
 _creation_tab["TextMessageObject"]=create_TextMessageObject
 _creation_tab["FireMineBlock"]=create_FireMineBlock
+_creation_tab["MusicObject"]=create_MusicObject
 
 
 
@@ -229,6 +237,7 @@ function load_level(map_name,space)
 	local hud=nil
 	_space=space
 	_num_messages=0
+	_num_musics=0
 	_map_name=map_name
 
 	if(_space~=nil) then

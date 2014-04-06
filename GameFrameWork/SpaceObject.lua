@@ -214,3 +214,7 @@ end
 function SpaceObject:isTextMessage()
 	return false
 end
+
+function SpaceObject:isMusicObject()
+  return false
+end
