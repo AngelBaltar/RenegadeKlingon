@@ -16,7 +16,6 @@
 --  * License along with this program.  If not, see
 --  * <http://www.gnu.org/licenses/>.
 --  */
-
 require('Utils/Debugging')
 require("Utils/Menu")
 require("GameScreens/OptionsScreen")
