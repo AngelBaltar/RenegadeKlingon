@@ -28,6 +28,7 @@ local _sounds_map={}
 _sounds_map["map1.tmx"]={}
 
 _sounds_map["map1.tmx"][0]=love.audio.newSource('Resources/sfx/map1.mp3',"static")
+_sounds_map["map1.tmx"][1]=love.audio.newSource('Resources/sfx/hold_the_line.mp3',"static")
 --_sounds_map["map1.tmx"][1]=love.audio.newSource('Resources/sfx/explosion2.mp3',"static")
 
 --constructor
