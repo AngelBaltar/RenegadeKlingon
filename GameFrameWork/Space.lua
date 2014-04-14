@@ -304,7 +304,7 @@ local _updateBackGround=function(self,dt)
   	
 	self._bgTimingCadence=_getBackGroundTimingCadence(self)
 
-	--actualize disabled object
+	--actualize disabled objects
 	for obj,_ in pairs(self._objectsList) do
 		if not obj:isEnabled() then
 			obj:setEnabled(self:isObjectEnabled(obj))

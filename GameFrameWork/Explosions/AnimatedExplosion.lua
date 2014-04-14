@@ -98,6 +98,7 @@ end
 --Performs movements changing the position of the object, firing AnimatedExplosions...
 function AnimatedExplosion:pilot(dt)
       self._animation:update(dt)
+      Explosion.pilot(self,dt)
       if not self._animation:isPlaying() then
         self:die()
       end

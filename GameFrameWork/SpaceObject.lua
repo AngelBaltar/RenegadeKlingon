@@ -51,11 +51,11 @@ function SpaceObject:pilot(dt)
    local x=self:getPositionX()
    local y=self:getPositionY()
    --apply stepping only for enabled objects
-   if self:isEnabled() then
+   --if self:isEnabled() then
     	x=x-my_space:getBackGroundCadence()*step
-   else
-   		x=x-my_space:getBackGroundCadence()
-   end
+   --else
+   --		x=x-my_space:getBackGroundCadence()
+   --end
    self:setPosition(x,y)
     
 end
