@@ -33,6 +33,7 @@ function SpaceObject:initialize(space,draw_object,posx,posy,health)
   self._bucket_y=-1
   self._backgroundDistance=1
   self._isEnabled=space:isObjectEnabled(self)
+  self._dead=false
   space:addSpaceObject(self)
 end
 
@@ -50,14 +51,8 @@ function SpaceObject:pilot(dt)
    local my_space=self:getSpace()
    local x=self:getPositionX()
    local y=self:getPositionY()
-   --apply stepping only for enabled objects
-   --if self:isEnabled() then
-    	x=x-my_space:getBackGroundCadence()*step
-   --else
-   --		x=x-my_space:getBackGroundCadence()
-   --end
+   x=x-my_space:getBackGroundCadence()*step
    self:setPosition(x,y)
-    
 end
 
 --Draws the object in the screen
@@ -74,6 +69,8 @@ end
 function SpaceObject:die()
 
 	self._space:removeSpaceObject(self)
+	self:setEnabled(false)
+	self._dead=true
 end
 
 --returns the X component of the position for this object
@@ -102,7 +99,9 @@ function SpaceObject:setPosition(x,y)
 		end
 	else
 		if x_old~=x or y_old~=y then
-			self._space:updateBucketFor(self)
+			if(self:isEnabled()) then
+				self._space:updateBucketFor(self)
+			end
 		end
 	end
 
@@ -171,6 +170,8 @@ end
 
 function SpaceObject:setBackGroundDistance(bd)
 	self._backgroundDistance=bd
+	--update the bucket on switching between planes
+	self._space:updateBucketFor(self)
 end
 
 
@@ -217,4 +218,8 @@ end
 
 function SpaceObject:isMusicObject()
   return false
+end
+
+function SpaceObject:isDead()
+	return self._dead
 end

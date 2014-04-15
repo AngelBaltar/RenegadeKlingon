@@ -22,7 +22,7 @@ require 'Utils/GameConfig'
 
 Space = class('GameFrameWork.Space')
 
-local BUCKET_SIZE=16
+local BUCKET_SIZE=32
 local SIZE_BUCKETS_X=0
 local SIZE_BUCKETS_Y=0
 
@@ -69,35 +69,16 @@ end
 
 function Space:removeFromBuckets(so)
 	--DEBUG_PRINT("removeFromBuckets")
-	local bc_x=-1
-	local bc_y=-1
-	bc_x,bc_y=so:getBucket(so)
-	local found=(bc_x~=-1 and bc_y~=-1)
-	local delta_x=0
-	local delta_y=0
-
-	 if found then
-	 	delta_x=math.floor(so:getWidth()/BUCKET_SIZE)
-		delta_y=math.floor(so:getHeight()/BUCKET_SIZE)
-	 	for i=bc_x,bc_x+delta_x do
-		for j=bc_y,bc_y+delta_y do
-			if i>=0 
-				and i<=SIZE_BUCKETS_X 
-				and j>=0
-				and j<=SIZE_BUCKETS_Y then
-				self._buckets[i][j][so]=nil
-			end
-		end
-	end
-	 else
-		 --if not cache found, drop it all manually, no memory garbage!!
-		 for i=0,SIZE_BUCKETS_X do
-	 		for j=0,SIZE_BUCKETS_Y do
-	 			self._buckets[i][j][so]=nil
+	for i=0,SIZE_BUCKETS_X do
+	 	for j=0,SIZE_BUCKETS_Y do
+	 		for soA,kk in pairs(self._buckets[i][j]) do
+	 			if(kk==true) and (soA==so) then
+	 				self._buckets[i][j][so]=nil
+	 			end
 	 		end
 	 	end
-	 	
-	end
+ 	end
+	
 	so:setBucket(-1,-1)
 end
 function Space:updateBucketFor(so)
@@ -115,9 +96,19 @@ function Space:updateBucketFor(so)
 	local delta_x=math.floor(so:getWidth()/BUCKET_SIZE)
 	local delta_y=math.floor(so:getHeight()/BUCKET_SIZE)
 
+	if(so:isDead()) then
+		DEBUG_PRINT("updating bucket for dead object\n")
+	end
+
 	--do not update for disabled objects
 	if not so:isEnabled() then
-		return nil
+		return
+	end
+
+	--objects not in first plane do not collide so buckets doesnt matter
+	if(so:getBackGroundDistance()~=1) then
+		self:removeFromBuckets(so)
+		return
 	end
 
 	--this object will die because an out of bounds
@@ -135,9 +126,9 @@ function Space:updateBucketFor(so)
 			--nothing to do here
 			return nil
 		end
-		self:removeFromBuckets(so)
 	end
-
+	
+	self:removeFromBuckets(so)
 	--DEBUG_PRINT("inserting in "..bc_x_new.." "..bc_y_new)
 	for i=bc_x_new,bc_x_new+delta_x do
 		for j=bc_y_new,bc_y_new+delta_y do
@@ -185,6 +176,7 @@ end
 function Space:addSpaceObject(object)
 	--DEBUG_PRINT("addSpaceObject")
 	self._objectsList[object]=true
+
 	self:updateBucketFor(object)
 end
 
@@ -800,7 +792,12 @@ function Space:getNumBucketObjects()
 	for i=0,SIZE_BUCKETS_X do
 	 	for j=0,SIZE_BUCKETS_Y do
 	 		for soA,kk in pairs(self._buckets[i][j]) do
-	 			count=count+1
+	 			if(kk==true) then
+		 			count=count+1
+		 			if(soA:isDead()) then
+		 				DEBUG_PRINT("counting dead object\n")
+		 			end
+	 			end
 	 		end
 	 	end
 	 end
