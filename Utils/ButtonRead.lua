@@ -61,7 +61,9 @@ function ButtonRead:getKey()
 		return nil
 	else
 		key=self._key
-		__initialize(self) --only 1 read
+		self._keyboard=false
+		self._key="unknown"
+		self._unicode=0 --only 1 read
 		return key
 		
 	end
@@ -74,7 +76,9 @@ function ButtonRead:getJoys()
 	else
 		joy=self._joypadNum
 		button=self._joypadButton
-		__initialize(self) --only 1 read
+		self._joypad=false
+		self._joypadNum=0
+		self._joypadButton=0 --only 1 read
 		return joy,button
 	end
 end

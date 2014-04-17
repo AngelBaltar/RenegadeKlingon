@@ -77,8 +77,9 @@ function ControlsScreen:readPressed()
       return 1
   end
   
-  local key=ButtonRead.getInstance():getKey()
   local joypad,joypadbutton=ButtonRead.getInstance():getJoys()
+  local key=ButtonRead.getInstance():getKey()
+  
 
   if (self._selectedOption==UP_OPTION) then
       if(key~=nil) then

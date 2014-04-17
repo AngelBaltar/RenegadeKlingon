@@ -48,8 +48,8 @@ test() {
 
 }
 echo "extracting love binaries..."
-test tar -xzf love-0.9.1-win32.tar.gz
-#test tar -xzf love-0.9.1-macosx-x64.tar.gz 
+test unzip love-0.9.1-win32.zip 1>/dev/null
+test unzip love-0.9.1-macosx-x64.zip 1>/dev/null
 
 
 #lets deploy a .love for LINUX
@@ -73,16 +73,15 @@ test rm $path_windows/*.love $path_windows/love.exe
 test zip -r RenegadeKlingon_windows.zip $path_windows 1>/dev/null
 
 # #lets deploy a .app for MAC OSX
-# echo "deploying for mac..."
-# rm -rf RenegadeKlingon_mac.zip
-# test mkdir $path_mac
-# test cp -R ./love.app $path_mac/RenegadeKlingon.app
-# test cp ./RenegadeKlingon.love $path_mac/RenegadeKlingon.app/Contents/Resources/
-# test sed -i 's/>org.love2d.love</>com.with2balls.RenegadeKlingon</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
-# test sed -i 's/>LÖVE</>RENEGADEKLINGON</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
-# test zip RenegadeKlingon.osx.zip -r $path_mac/RenegadeKlingon.app
-# test rm -rf $path_mac/RenegadeKlingon.app
-# echo "deploy for mac OK"
+echo "deploying for mac..."
+rm -rf RenegadeKlingon_mac.zip
+test mkdir $path_mac
+test cp -R ./love.app $path_mac/RenegadeKlingon.app
+test cp ./RenegadeKlingon.love $path_mac/RenegadeKlingon.app/Contents/Resources/
+test sed -i 's/>org.love2d.love</>com.with2balls.RenegadeKlingon</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
+test sed -i 's/>LÖVE</>RENEGADEKLINGON</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
+test zip RenegadeKlingon.osx.zip -r $path_mac/RenegadeKlingon.app 1>/dev/null
+test rm -rf $path_mac/RenegadeKlingon.app
 
 echo "Every deploy OK"
 exit_deploy 0

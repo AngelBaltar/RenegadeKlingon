@@ -79,45 +79,23 @@ local __initialize = function(self)
 								{value="_keyEnter",type="string"},
 								{value="_keyEscape",type="string"},
 								
-								{value="_joyFire_num",type="number"},
 								{value="_joyFire_button",type="number"},
-
-								{value="_joyPause_num",type="number"},
 								{value="_joyPause_button",type="number"},
-
-								{value="_joyEnter_num",type="number"},
 								{value="_joyEnter_button",type="number"},
-
-								{value="_joyEscape_num",type="number"},
 								{value="_joyEscape_button",type="number"},
 								nil}
 
 	_readConfigFile(self)
 
-	-- 	self._joyFire_num=-1
-	-- self._joyFire_button=-1
-	-- self._joyPause_num=-1
-	-- self._joyPause_button=-1
-	-- self._joyEnter_num=-1
-	-- self._joyEnter_button=-1
-	-- self._joyEscape_num=-1
-	-- self._joyEscape_button=-1
-	-- self._keyEnter="return"
-
 	name =nil
-	joypad_found=false
-	i=0
-	self._activepad=0
-	n_joys=love.joystick.getNumJoysticks()
-	while (i<=n_joys and not joypad_found) do
-		name = love.joystick.getName(i)
-		if name ~= nil then
-			joypad_found=true
-			self._activepad=i
-		end
-		i=i+1
-	end
-	DEBUG_PRINT("ACTIVE PAD IS: "..self["_activepad"])
+	self._activepad=nil
+	local joysticks = love.joystick.getJoysticks()
+    for i, joystick in ipairs(joysticks) do
+        self._activepad=joystick
+        name=joystick:getName()
+        break
+    end
+	--DEBUG_PRINT("ACTIVE PAD IS: "..self["_activepad"])
 	
 
 end
@@ -128,8 +106,8 @@ local _writeConfigFile=function(self)
 
 	local i=1
 
-	 while (self._properties_ordered[i]~=nil) do
-	 	conf_file:write(self[self._properties_ordered[i].value].."\n\r")
+	 for _,prop in pairs(self._properties_ordered) do
+	 	conf_file:write(self[prop.value].."\n\r")
 	 	i=i+1
 	 end
 
@@ -175,7 +153,6 @@ function GameConfig:setKeyFire(joystick_key, button_nil )
 	if(button_nil==nil) then
 		self._keyFire=joystick_key
 	else
-		self._joyFire_num=joystick_key
 		self._joyFire_button=button_nil
 	end
 	_writeConfigFile(self)
@@ -187,7 +164,6 @@ function GameConfig:setKeyPause(joystick_key, button_nil )
 	if(button_nil==nil) then
 		self._keyPause=joystick_key
 	else
-		self._joyPause_num=joystick_key
 		self._joyPause_button=button_nil
 	end
 	_writeConfigFile(self)
@@ -199,7 +175,6 @@ function GameConfig:setKeyEnter(joystick_key, button_nil )
 	if(button_nil==nil) then
 		self._keyEnter=joystick_key
 	else
-		self._joyEnter_num=joystick_key
 		self._joyEnter_button=button_nil
 	end
 	_writeConfigFile(self)
@@ -211,7 +186,6 @@ function GameConfig:setKeyEscape(joystick_key, button_nil )
 	if(button_nil==nil) then
 		self._keyEscape=joystick_key
 	else
-		self._joyEscape_num=joystick_key
 		self._joyEscape_button=button_nil
 	end
 	_writeConfigFile(self)
@@ -241,8 +215,8 @@ end
 function GameConfig:getKeyFire()
 	ret=self._keyFire
 
-	if(self._joyFire_num~=-1 and self._joyFire_button~=-1) then
-		name = love.joystick.getName(self._joyFire_num)
+	if(self._activepad~=nil and self._joyFire_button~=-1) then
+		name = self._activepad:getName()
 		if(name~=nil) then
 			ret=ret.." OR "..name.." B"..self._joyFire_button
 		end
@@ -254,8 +228,8 @@ end
 function GameConfig:getKeyPause()
 	ret=self._keyPause
 
-	if(self._joyPause_num~=-1 and self._joyPause_button~=-1) then
-		name = love.joystick.getName(self._joyPause_num)
+	if(self._activepad~=nil and self._joyPause_button~=-1) then
+		name = self._activepad:getName()
 		if(name~=nil) then
 			ret=ret.." OR "..name.." B"..self._joyPause_button
 		end
@@ -267,8 +241,8 @@ end
 function GameConfig:getKeyEnter()
 	ret=self._keyEnter
 
-	if(self._joyEnter_num~=-1 and self._joyEnter_button~=-1) then
-		name = love.joystick.getName(self._joyEnter_num)
+	if(self._activepad~=nil and self._joyEnter_button~=-1) then
+		name = self._activepad:getName()
 		if(name~=nil) then
 			ret=ret.." OR "..name.." B"..self._joyEnter_button
 		end
@@ -280,8 +254,8 @@ end
 function GameConfig:getKeyEscape()
 	ret=self._keyEscape
 
-	if(self._joyEscape_num~=-1 and self._joyEscape_button~=-1) then
-		name = love.joystick.getName(self._joyEscape_num)
+	if(self._activepad~=nil and self._joyEscape_button~=-1) then
+		name = self._activepad:getName(self._joyEscape_num)
 		if(name~=nil) then
 			ret=ret.." OR "..name.." B"..self._joyEscape_button
 		end
@@ -295,44 +269,61 @@ function GameConfig:getActiveJoyPad()
 end
 
 function GameConfig:isDownUp()
-	direction = love.joystick.getAxis(self._activepad, 2 )
---	DEBUG_PRINT("activepad: "..self._activepad.." direction:"..direction)
+	local direction = 0
+	if(self._activepad~=nil) then
+		direction=self._activepad:getAxis( 2 )
+	end
 	return love.keyboard.isDown(self._keyUp) or direction==-1 
 end
 
 function GameConfig:isDownDown()
-	direction = love.joystick.getAxis(self._activepad, 2 )
+	local direction = 0
+	if(self._activepad~=nil) then
+		direction=self._activepad:getAxis( 2 )
+	end
 	return love.keyboard.isDown(self._keyDown) or direction==1
 end
 
 function GameConfig:isDownRight()
-	direction = love.joystick.getAxis(self._activepad, 1 )
+	local direction = 0
+	if(self._activepad~=nil) then
+		direction=self._activepad:getAxis( 1 )
+	end
 	return love.keyboard.isDown(self._keyRight) or direction==1
 end
 
 function GameConfig:isDownLeft()
-	direction = love.joystick.getAxis(self._activepad, 1 )
+	local direction = 0
+	if(self._activepad~=nil) then
+		direction=self._activepad:getAxis( 1 )
+	end
 	return love.keyboard.isDown(self._keyLeft) or direction==-1
 end
 
 function GameConfig:isDownFire()
 	return love.keyboard.isDown(self._keyFire)	
-			or love.joystick.isDown( self._joyFire_num,self._joyFire_button)
+			or (self._activepad~=nil 
+					and self._activepad:isDown(self._joyFire_button))
 end
 
 function GameConfig:isDownPause()
 	return love.keyboard.isDown(self._keyPause)
-		or love.joystick.isDown( self._joyPause_num,self._joyPause_button)
+		or (self._activepad~=nil 
+				and self._activepad:isDown(self._joyPause_button))
 end
 
 function GameConfig:isDownEnter()
+	local joy,button=button_read:getJoys()
 	return button_read:getKey()==self._keyEnter
-		or love.joystick.isDown( self._joyEnter_num,self._joyEnter_button)
+		or (self._activepad~=nil 
+			and self._activepad:isDown(self._joyEnter_button))
 end
 
 function GameConfig:isDownEscape()
+	local joy,button=button_read:getJoys()
 	return love.keyboard.isDown(self._keyEscape)
-		or love.joystick.isDown( self._joyEscape_num,self._joyEscape_button)
+		or (self._activepad~=nil
+				and self._activepad:isDown(self._joyEscape_button))
 end
 
 function GameConfig:isDownAnyThing()

@@ -34,12 +34,17 @@ end
 function Screen:update(dt)
 	--monitorice joystick axis, must be in update call
 	local pad=GameConfig.getInstance():getActiveJoyPad()
-	local direction1 = love.joystick.getAxis(pad, 2 )
-	local direction2 = love.joystick.getAxis(pad, 1 )
+	local direction1 = 0
+	local direction2 = 0
+	if(pad~=nil) then
+		direction1 = pad:getAxis( 2 )
+		direction2 = pad:getAxis( 1 )
+	end
 	self._last_read=self._last_read+dt
 	if(self._last_read>self._read_cadence) then
 		self._last_read=0
-		if(direction1~=0 or direction2~=0) and self._status==0 then
+		if(direction1~=0 or direction2~=0 or GameConfig.getInstance():isDownAnyThing()) 
+				and self._status==0 then
 			self._status=1
 			self:readPressed()
 		else
