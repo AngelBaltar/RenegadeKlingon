@@ -314,7 +314,7 @@ end
 
 function GameConfig:isDownEnter()
 	local joy,button=button_read:getJoys()
-	return button_read:getKey()==self._keyEnter
+	return love.keyboard.isDown(self._keyEnter)
 		or (self._activepad~=nil 
 			and self._activepad:isDown(self._joyEnter_button))
 end
