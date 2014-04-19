@@ -77,8 +77,8 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
         if(ch=='\n') then
           n_lines=n_lines+1
           line=line..ch
-          if(self._width<font:getWidth(line)+20) then
-              self._width=font:getWidth(line)+20
+          if(self._width<font:getWidth(line)+font:getWidth("A")*4) then
+              self._width=font:getWidth(line)+font:getWidth("A")*4
           end
           line=""
         else
