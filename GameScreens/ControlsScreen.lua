@@ -48,7 +48,6 @@ local _loadMenus=function(self)
 end
 
 function ControlsScreen:initialize()
-  self._selectedOption=NONE_OPTION
   _loadMenus(self)
 end 
 
@@ -64,6 +63,9 @@ function ControlsScreen:draw()
 end
 
 function ControlsScreen:update(dt)
+  if(self._selectedOption~=NONE_OPTION) then
+    self:readPressed()
+  end
   return 1
 end
 
@@ -74,59 +76,73 @@ function ControlsScreen:readPressed()
         return Screen:getExitMark()
       end
       self._selectedOption=self._controlsMenu:readPressed()
+      ButtonRead.getInstance():cleanBuffer()
       return 1
   end
-  
   local joypad,joypadbutton=ButtonRead.getInstance():getJoys()
   local key=ButtonRead.getInstance():getKey()
-  
+  local readed=false
 
   if (self._selectedOption==UP_OPTION) then
       if(key~=nil) then
         config:setKeyUp(key)
+        readed=true
       end
   elseif (self._selectedOption==DOWN_OPTION) then
       if(key~=nil) then
         config:setKeyDown(key)
+        readed=true
       end
   elseif (self._selectedOption==LEFT_OPTION) then
       if(key~=nil) then
         config:setKeyLeft(key)
+        readed=true
       end
   elseif (self._selectedOption==RIGHT_OPTION) then
       if(key~=nil) then
         config:setKeyRight(key)
+        readed=true
       end
   elseif (self._selectedOption==FIRE_OPTION) then
       if(key~=nil) then
         config:setKeyFire(key)
+        readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
         config:setKeyFire(joypad, joypadbutton )
+        readed=true
       end
   elseif (self._selectedOption==PAUSE_OPTION) then
       if(key~=nil) then
         config:setKeyPause(key)
+        readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
         config:setKeyPause(joypad, joypadbutton )
+        readed=true
       end
   elseif (self._selectedOption==ENTER_OPTION) then
       if(key~=nil) then
         config:setKeyEnter(key)
+        readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
         config:setKeyEnter(joypad, joypadbutton )
+        readed=true
       end
   elseif (self._selectedOption==ESCAPE_OPTION) then
     if(key~=nil) then
         config:setKeyEscape(key)
+        readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
         config:setKeyEscape(joypad, joypadbutton )
+        readed=true
       end
   end
-   _loadMenus(self)
+   if(readed) then
+      _loadMenus(self)
+   end
    return 1
 
 end

@@ -335,6 +335,7 @@ function GameConfig:isDownAnyThing()
          	self:isDownPause() or
          	self:isDownEnter() or
          	self:isDownEscape()
+
 end
 
 function GameConfig:getControlsDescription()
