@@ -60,7 +60,6 @@ test zip  $path_linux/RenegadeKlingon.zip -r $necesary_files 1>/dev/null
 test mv $path_linux/RenegadeKlingon.zip $path_linux/RenegadeKlingon.love
 test cp $path_linux/RenegadeKlingon.love ./RenegadeKlingon.love
 test zip -r RenegadeKlingon_linux.zip $path_linux 1>/dev/null
-echo "deploy for linux OK"
 
 # # lets deploy a .exe for WINDOWS
 echo "deploying for windows..."
