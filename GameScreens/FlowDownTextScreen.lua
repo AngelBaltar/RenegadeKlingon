@@ -56,7 +56,8 @@ function FlowDownTextScreen:update(dt)
 end
 
 function FlowDownTextScreen:readPressed()
-	if config:isDownEscape() then
+	local read=config:readInput()
+	if read==GameConfig.static.ESCAPE then
 		self._xPos=0
 		self._yPos=0
     	return Screen:getExitMark()

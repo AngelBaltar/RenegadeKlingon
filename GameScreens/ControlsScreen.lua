@@ -57,27 +57,27 @@ function ControlsScreen:draw()
 	if(self._selectedOption==NONE_OPTION) then
 		self._controlsMenu:print()
 	else
-		
 		love.graphics.print("Press the key...", love.graphics.getWidth()/4,love.graphics.getHeight()/4)
 	end
 end
 
 function ControlsScreen:update(dt)
-  if(self._selectedOption~=NONE_OPTION) then
+  if(self._selectedOption~=NONE_OPTION and ButtonRead.getInstance():isSomethingToRead()) then
     self:readPressed()
   end
-  return 1
+  return
 end
 
 function ControlsScreen:readPressed()
 
   if(self._selectedOption==NONE_OPTION) then
-      if config:isDownEscape() then
+      self._selectedOption=self._controlsMenu:readPressed()
+      if self._selectedOption==Screen:getExitMark() then
+        _loadMenus(self)
         return Screen:getExitMark()
       end
-      self._selectedOption=self._controlsMenu:readPressed()
-      ButtonRead.getInstance():cleanBuffer()
-      return 1
+
+      return
   end
   local joypad,joypadbutton=ButtonRead.getInstance():getJoys()
   local key=ButtonRead.getInstance():getKey()

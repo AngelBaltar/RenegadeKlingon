@@ -111,10 +111,11 @@ function HighScore:readPressed()
 		end
 		local delta=0
 		local my_byte=string.byte(self._score_table[self._score_table_size+1].name,self._indexAct)
-		if(config:isDownRight() and my_byte<string.byte('Z') ) then
+		local readed=config:readInput()
+		if(readed==GameConfig.static.RIGHT and my_byte<string.byte('Z') ) then
 			delta=1
 		end
-		if(config:isDownLeft() and my_byte>string.byte('A')) then
+		if(readed==GameConfig.static.LEFT and my_byte>string.byte('A')) then
 			delta=-1
 		end
 
@@ -123,7 +124,7 @@ function HighScore:readPressed()
 			.. string.char(my_byte+delta) .. 
 			self._score_table[self._score_table_size+1].name:sub(self._indexAct + 1, str:len())
 
-		if(config:isDownEnter() or config:isDownFire()) then
+		if(readed==GameConfig.static.ENTER or readed==GameConfig.static.FIRE) then
 			self._indexAct=self._indexAct+1
 			if(self._indexAct>=4) then
 				self._score_table_size=self._score_table_size+1

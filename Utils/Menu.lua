@@ -19,7 +19,6 @@
 
 require 'Utils/middleclass/middleclass'
 require	'Utils/GameConfig'
-
 Menu = class('Menu') 
 
 local config=GameConfig.getInstance()
@@ -55,15 +54,20 @@ function Menu:print()
 end
 
 function Menu:readPressed()
-	i=0
-	if(config:isDownDown()) then
-		self._focus=self._focus+1
-	end
-	if(config:isDownUp()) then
+	
+	local read=config:readInput()
+	DEBUG_PRINT(self._itemsList[0].." readed "..read)
+	if(read==GameConfig.static.UP) then
 		self._focus=self._focus-1
 	end
-	if(config:isDownEnter()) then
+	if(read==GameConfig.static.DOWN) then
+		self._focus=self._focus+1
+	end
+	if(read==GameConfig.static.ENTER) then
 		return self._focus+1
+	end
+	if(read==GameConfig.static.ESCAPE) then
+		return Screen:getExitMark()
 	end
 	self._focus=self._focus%self._insertAt
     return 0

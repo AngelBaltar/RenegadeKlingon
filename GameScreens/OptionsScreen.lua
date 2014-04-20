@@ -81,12 +81,12 @@ end
 function OptionsScreen:readPressed()
 	if(self._selectedOption==NONE_OPTION) then
 
-		if config:isDownEscape() then
+		self._selectedOption=self._optionsMenu:readPressed()
+		if self._selectedOption==Screen:getExitMark() then
 			self._selectedOption=NONE_OPTION
 		    return Screen:getExitMark()
 		end
 		
-		self._selectedOption=self._optionsMenu:readPressed()
 	else
 		if(self._selectedOption==CREDITS_OPTION) then
 			if self._credits:readPressed()==Screen:getExitMark() then

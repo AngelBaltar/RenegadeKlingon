@@ -22,6 +22,17 @@ require 'Utils/ButtonRead'
 
 GameConfig = class('GameFrameWork.GameConfig')
 
+GameConfig.static.NONE = 0
+GameConfig.static.UP = 1
+GameConfig.static.DOWN = 2
+GameConfig.static.RIGHT = 3
+GameConfig.static.LEFT = 4
+GameConfig.static.FIRE = 5
+GameConfig.static.PAUSE = 6
+GameConfig.static.ENTER = 7
+GameConfig.static.ESCAPE = 8
+
+
 local _instance=nil
 local button_read=ButtonRead.getInstance()
 
@@ -60,13 +71,9 @@ local __initialize = function(self)
 	self._keyEnter="return"
 	self._keyEscape="escape"
 
-	self._joyFire_num=-1
 	self._joyFire_button=-1
-	self._joyPause_num=-1
 	self._joyPause_button=-1
-	self._joyEnter_num=-1
 	self._joyEnter_button=-1
-	self._joyEscape_num=-1
 	self._joyEscape_button=-1
 
 	self._properties_ordered={
@@ -313,14 +320,12 @@ function GameConfig:isDownPause()
 end
 
 function GameConfig:isDownEnter()
-	local joy,button=button_read:getJoys()
 	return love.keyboard.isDown(self._keyEnter)
 		or (self._activepad~=nil 
 			and self._activepad:isDown(self._joyEnter_button))
 end
 
 function GameConfig:isDownEscape()
-	local joy,button=button_read:getJoys()
 	return love.keyboard.isDown(self._keyEscape)
 		or (self._activepad~=nil
 				and self._activepad:isDown(self._joyEscape_button))
@@ -335,7 +340,61 @@ function GameConfig:isDownAnyThing()
          	self:isDownPause() or
          	self:isDownEnter() or
          	self:isDownEscape()
+end
 
+function GameConfig:readInput()
+	local direction = 0
+	local key=button_read:getKey()
+	local joy,button=button_read:getJoys()
+	if(button==nil and joy==nil) then
+		DEBUG_PRINT("nilllllllllllll")
+	end
+	if(self._activepad~=nil) then
+		directiony=self._activepad:getAxis( 1 )
+		directionx=self._activepad:getAxis( 2 )
+	end
+	--joy directions first
+	if (directionx==-1) then
+		return GameConfig.static.UP
+	elseif (directionx==1) then
+		return GameConfig.static.DOWN
+	elseif (directiony==-1) then
+		return GameConfig.static.LEFT
+	elseif (directiony==1) then
+			return GameConfig.static.RIGHT
+	end
+
+	if(joy==self._activepad) then
+		DEBUG_PRINT("joy enter="..self._joyEnter_button.."button"..button)
+		if(button==self._joyEscape_button) then
+			return GameConfig.static.ESCAPE
+		elseif (button==self._joyEnter_button) then
+			return GameConfig.static.ENTER
+		elseif (button==self._joyFire_button) then
+			return GameConfig.static.FIRE
+		elseif (button==self._joyPause_button) then
+			return GameConfig.static.PAUSE
+		end
+	end
+
+	if(key==self._keyUp) then
+		return GameConfig.static.UP
+	elseif (key==self._keyDown) then
+		return GameConfig.static.DOWN
+	elseif (key==self._keyLeft) then
+		return GameConfig.static.LEFT
+	elseif (key==self._keyRight) then
+		return GameConfig.static.RIGHT
+	elseif (key==self._keyFire) then
+		return GameConfig.static.FIRE
+	elseif (key==self._keyPause) then
+		return GameConfig.static.PAUSE
+	elseif (key==self._keyEnter) then
+		return GameConfig.static.ENTER
+	elseif (key==self._keyEscape) then
+		return GameConfig.static.ESCAPE
+	end
+	return GameConfig.static.NONE
 end
 
 function GameConfig:getControlsDescription()

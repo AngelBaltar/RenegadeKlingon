@@ -140,7 +140,6 @@ function love.joystickpressed( joystick, button )
    time_inactive=0
    button_read:setJoyButton(joystick, button)
    --DEBUG_PRINT("joy pressed")
-   --main_self:readPressed()
 end
 
 function love.keypressed(key, unicode)
@@ -153,6 +152,5 @@ function love.keypressed(key, unicode)
       end
     end
     button_read:setKey(key,unicode)
-    --DEBUG_PRINT("key pressed")
-    --main_self:readPressed()
+    --DEBUG_PRINT("key pressed "..key)
 end

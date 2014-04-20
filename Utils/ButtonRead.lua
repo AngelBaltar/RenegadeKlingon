@@ -25,7 +25,7 @@ local _instance=nil
 --constructor
 local __initialize_joy=function(self)
 	self._joypad=false
-	self._joypadNum=0
+	self._joy=nil
 	self._joypadButton=0
 end
 
@@ -61,7 +61,7 @@ end
 
 function ButtonRead:setJoyButton(joypad,button)
 	self._joypad=true
-	self._joypadNum=joypad
+	self._joy=joypad
 	self._joypadButton=button
 end
 
@@ -76,18 +76,21 @@ function ButtonRead:getKey()
 	else
 		key=self._key
 		__initialize_key(self)--only 1 read
+		DEBUG_PRINT("button read "..key)
 		return key
-		
 	end
 	
 end
 
 function ButtonRead:getJoys()
 	if not self._joypad then
+		DEBUG_PRINT("button read nil")
 		return nil,nil
 	else
-		joy=self._joypadNum
-		button=self._joypadButton--only 1 read
+		joy=self._joy
+		button=self._joypadButton
+		__initialize_joy(self) --only 1 read
+		DEBUG_PRINT("button read "..button)
 		return joy,button
 	end
 end
