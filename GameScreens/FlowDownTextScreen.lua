@@ -58,8 +58,8 @@ end
 function FlowDownTextScreen:readPressed()
 	local read=config:readInput()
 	if read==GameConfig.static.ESCAPE then
-		self._xPos=0
-		self._yPos=0
+		self._xPos=400
+		self._yPos=nil
     	return Screen:getExitMark()
    end
    return 1
