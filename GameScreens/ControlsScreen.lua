@@ -36,14 +36,14 @@ local config=GameConfig.getInstance()
 
 local _loadMenus=function(self)
   self._controlsMenu=Menu:new(love.graphics.getWidth()/4,love.graphics.getHeight()/4)
-  self._controlsMenu:addItem("Up----->"..config:getKeyUp())
-  self._controlsMenu:addItem("Down--->"..config:getKeyDown())
-  self._controlsMenu:addItem("Left--->"..config:getKeyLeft())
-  self._controlsMenu:addItem("Right-->"..config:getKeyRight())
-  self._controlsMenu:addItem("Fire--->"..config:getKeyFire())
-  self._controlsMenu:addItem("Pause-->"..config:getKeyPause())
-  self._controlsMenu:addItem("Enter-->"..config:getKeyEnter())
-  self._controlsMenu:addItem("Escape->"..config:getKeyEscape())
+  self._controlsMenu:addItem("Up----->"..config:getKey(GameConfig.static.UP))
+  self._controlsMenu:addItem("Down--->"..config:getKey(GameConfig.static.DOWN))
+  self._controlsMenu:addItem("Left--->"..config:getKey(GameConfig.static.LEFT))
+  self._controlsMenu:addItem("Right-->"..config:getKey(GameConfig.static.RIGHT))
+  self._controlsMenu:addItem("Fire--->"..config:getKey(GameConfig.static.FIRE))
+  self._controlsMenu:addItem("Pause-->"..config:getKey(GameConfig.static.PAUSE))
+  self._controlsMenu:addItem("Enter-->"..config:getKey(GameConfig.static.ENTER))
+  self._controlsMenu:addItem("Escape->"..config:getKey(GameConfig.static.ESCAPE))
   self._selectedOption=NONE_OPTION
 end
 
@@ -85,58 +85,58 @@ function ControlsScreen:readPressed()
 
   if (self._selectedOption==UP_OPTION) then
       if(key~=nil) then
-        config:setKeyUp(key)
+        config:setKey(GameConfig.static.UP,key)
         readed=true
       end
   elseif (self._selectedOption==DOWN_OPTION) then
       if(key~=nil) then
-        config:setKeyDown(key)
+        config:setKey(GameConfig.static.DOWN,key)
         readed=true
       end
   elseif (self._selectedOption==LEFT_OPTION) then
       if(key~=nil) then
-        config:setKeyLeft(key)
+        config:setKey(GameConfig.static.LEFT,key)
         readed=true
       end
   elseif (self._selectedOption==RIGHT_OPTION) then
       if(key~=nil) then
-        config:setKeyRight(key)
+        config:setKey(GameConfig.static.RIGHT,key)
         readed=true
       end
   elseif (self._selectedOption==FIRE_OPTION) then
       if(key~=nil) then
-        config:setKeyFire(key)
+        config:setKey(GameConfig.static.FIRE,key)
         readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
-        config:setKeyFire(joypad, joypadbutton )
+        config:setKey(GameConfig.static.FIRE,joypad, joypadbutton )
         readed=true
       end
   elseif (self._selectedOption==PAUSE_OPTION) then
       if(key~=nil) then
-        config:setKeyPause(key)
+        config:setKey(GameConfig.static.PAUSE,key)
         readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
-        config:setKeyPause(joypad, joypadbutton )
+        config:setKey(GameConfig.static.PAUSE,joypad, joypadbutton )
         readed=true
       end
   elseif (self._selectedOption==ENTER_OPTION) then
       if(key~=nil) then
-        config:setKeyEnter(key)
+        config:setKey(GameConfig.static.ENTER,key)
         readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
-        config:setKeyEnter(joypad, joypadbutton )
+        config:setKey(GameConfig.static.ENTER,joypad, joypadbutton )
         readed=true
       end
   elseif (self._selectedOption==ESCAPE_OPTION) then
     if(key~=nil) then
-        config:setKeyEscape(key)
+        config:setKey(GameConfig.static.ESCAPE,key)
         readed=true
       end
       if(joypad~=nil and joypadbutton~=nil) then
-        config:setKeyEscape(joypad, joypadbutton )
+        config:setKey(GameConfig.static.ESCAPE,joypad, joypadbutton )
         readed=true
       end
   end

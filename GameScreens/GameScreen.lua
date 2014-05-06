@@ -130,7 +130,7 @@ function GameScreen:update(dt)
 end
 
 function GameScreen:readPressed()
-	if config:isDownEscape() then
+	if config:isDown(GameConfig.static.ESCAPE) then
       love.audio.stop()
     	return Screen:getExitMark()
   end

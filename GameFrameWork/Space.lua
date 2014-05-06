@@ -609,7 +609,7 @@ end
 function Space:readPressed()
 	local i=0
 	local j=0
-	if (GameConfig.getInstance():isDownPause()) then
+	if (GameConfig.getInstance():isDown(GameConfig.static.PAUSE)) then
 		self._pause= not self._pause
 	end
 

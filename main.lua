@@ -112,7 +112,7 @@ end
 function MainScreen:readPressed()
 
      if(selected_option==NONE_OPTION) then
-        if(config:isDownEscape()) then
+        if(config:isDown(GameConfig.static.ESCAPE)) then
           love.event.push("quit")   -- actually causes the app to quit
         end
         selected_option=mainMenu:readPressed()

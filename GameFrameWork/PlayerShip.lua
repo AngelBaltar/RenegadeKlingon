@@ -105,28 +105,28 @@ function PlayerShip:pilot(dt)
 
   local config=GameConfig.getInstance()
 
-  if config:isDownUp() then
+  if config:isDown(GameConfig.static.UP) then
     if(position_y-step>inf_y)then
       position_y=position_y-step
     end
    end
-  if config:isDownDown() then
+  if config:isDown(GameConfig.static.DOWN) then
     if(position_y+step<sup_y)then
       position_y=position_y+step
     end
    end
 
-   if config:isDownLeft() then
+   if config:isDown(GameConfig.static.LEFT) then
     if(position_x-step>inf_x)then
       position_x=position_x-step
     end
    end
-  if config:isDownRight() then
+  if config:isDown(GameConfig.static.RIGHT) then
     if(position_x+step<sup_x)then
       position_x=position_x+step
     end
    end
-  if config:isDownFire() then
+  if config:isDown(GameConfig.static.FIRE) then
     self._basic_weapon:fire(dt)
    end
    self:setPosition(position_x,position_y)

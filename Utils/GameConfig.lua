@@ -25,13 +25,20 @@ GameConfig = class('GameFrameWork.GameConfig')
 GameConfig.static.NONE = 0
 GameConfig.static.UP = 1
 GameConfig.static.DOWN = 2
-GameConfig.static.RIGHT = 3
-GameConfig.static.LEFT = 4
+GameConfig.static.LEFT = 3
+GameConfig.static.RIGHT = 4
 GameConfig.static.FIRE = 5
 GameConfig.static.PAUSE = 6
 GameConfig.static.ENTER = 7
 GameConfig.static.ESCAPE = 8
 
+local JOY_FIRE = 9
+local JOY_PAUSE = 10
+local JOY_ENTER = 11
+local JOY_ESCAPE = 12
+
+local MAX_DIRECTION=GameConfig.static.RIGHT
+local KEY_JOY_CONVERSION=4
 
 local _instance=nil
 local button_read=ButtonRead.getInstance()
@@ -76,6 +83,7 @@ local __initialize = function(self)
 	self._joyEnter_button=-1
 	self._joyEscape_button=-1
 
+	--NOTE THIS PROPERTIES NEED TO BE ALIGNED WITH GameConfig.static. constants
 	self._properties_ordered={
 								{value="_keyUp",type="string"},
 								{value="_keyDown",type="string"},
@@ -122,8 +130,6 @@ local _writeConfigFile=function(self)
 
 end
 
-
-
 --return the width of this ship
 function GameConfig.getInstance()
   if _instance==nil then
@@ -133,215 +139,83 @@ function GameConfig.getInstance()
   return _instance
 end
 
-function GameConfig:setKeyUp(keyUp)
-	self._keyUp=keyUp
-	_writeConfigFile(self)
-end
-
-function GameConfig:setKeyDown(keyDown)
-	self._keyDown=keyDown
-	_writeConfigFile(self)
-end
-
-
-function GameConfig:setKeyRight(keyRight)
-	self._keyRight=keyRight
-	_writeConfigFile(self)
-end
-
-
-function GameConfig:setKeyLeft(keyLeft)
-	self._keyLeft=keyLeft
-	_writeConfigFile(self)
-end
-
-function GameConfig:setKeyFire(joystick_key, button_nil )
-	
-	if(button_nil==nil) then
-		self._keyFire=joystick_key
+--sets the key or joy button for the action
+function GameConfig:setKey(action,key,button)
+	if(action<=MAX_DIRECTION) then
+		self[self._properties_ordered[action].value]=key
 	else
-		self._joyFire_button=button_nil
-	end
-	_writeConfigFile(self)
-	
-end
-
-function GameConfig:setKeyPause(joystick_key, button_nil )
-	
-	if(button_nil==nil) then
-		self._keyPause=joystick_key
-	else
-		self._joyPause_button=button_nil
-	end
-	_writeConfigFile(self)
-	
-end
-
-function GameConfig:setKeyEnter(joystick_key, button_nil )
-	
-	if(button_nil==nil) then
-		self._keyEnter=joystick_key
-	else
-		self._joyEnter_button=button_nil
-	end
-	_writeConfigFile(self)
-	
-end
-
-function GameConfig:setKeyEscape(joystick_key, button_nil )
-	
-	if(button_nil==nil) then
-		self._keyEscape=joystick_key
-	else
-		self._joyEscape_button=button_nil
-	end
-	_writeConfigFile(self)
-	
-end
-
-function GameConfig:getKeyUp()
-	return self._keyUp
-end
-
-
-function GameConfig:getKeyDown()
-	return self._keyDown
-end
-
-
-function GameConfig:getKeyRight()
-	return self._keyRight
-end
-
-
-function GameConfig:getKeyLeft()
-	return self._keyLeft
-end
-
-
-function GameConfig:getKeyFire()
-	ret=self._keyFire
-
-	if(self._activepad~=nil and self._joyFire_button~=-1) then
-		name = self._activepad:getName()
-		if(name~=nil) then
-			ret=ret.." OR "..name.." B"..self._joyFire_button
+		if(button==nil) then
+			self[self._properties_ordered[action].value]=key
+		else
+			self[self._properties_ordered[action+KEY_JOY_CONVERSION].value]=button
 		end
 	end
-
-	return ret
+	_writeConfigFile(self)
 end
 
-function GameConfig:getKeyPause()
-	ret=self._keyPause
+--gets the description of the key to perform the action passed
+function GameConfig:getKey(action)
+	local key=self[self._properties_ordered[action].value]
+	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION].value]
+	
+	if(action<=MAX_DIRECTION) then
+		return key
+	else
+		ret=key
 
-	if(self._activepad~=nil and self._joyPause_button~=-1) then
-		name = self._activepad:getName()
-		if(name~=nil) then
-			ret=ret.." OR "..name.." B"..self._joyPause_button
+		if(self._activepad~=nil and joy~=-1) then
+			name = self._activepad:getName(joy)
+			if(name~=nil) then
+				ret=ret.." OR "..name.." B"..joy
+			end
 		end
-	end
 
-	return ret
+		return ret
+	end
 end
 
-function GameConfig:getKeyEnter()
-	ret=self._keyEnter
-
-	if(self._activepad~=nil and self._joyEnter_button~=-1) then
-		name = self._activepad:getName()
-		if(name~=nil) then
-			ret=ret.." OR "..name.." B"..self._joyEnter_button
-		end
-	end
-
-	return ret
-end
-
-function GameConfig:getKeyEscape()
-	ret=self._keyEscape
-
-	if(self._activepad~=nil and self._joyEscape_button~=-1) then
-		name = self._activepad:getName(self._joyEscape_num)
-		if(name~=nil) then
-			ret=ret.." OR "..name.." B"..self._joyEscape_button
-		end
-	end
-
-	return ret
-end
-
+--gets the active joypad
 function GameConfig:getActiveJoyPad()
 	return self._activepad
 end
 
-function GameConfig:isDownUp()
-	local direction = 0
-	if(self._activepad~=nil) then
-		direction=self._activepad:getAxis( 2 )
+--true if the action passed by argument is down right now
+function GameConfig:isDown(action)
+	local key=self[self._properties_ordered[action].value]
+	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION].value]
+	local direction=0
+	local to_check_dir=math.pow(-1,action)
+	
+	if(action<=MAX_DIRECTION) then
+		if(action<=2) then
+			axe=2
+		else
+			axe=1
+		end
+		if(self._activepad~=nil) then
+			direction=self._activepad:getAxis(axe)
+		end
+		return direction==to_check_dir or love.keyboard.isDown(key)
+	else
+		return love.keyboard.isDown(key)
+				or (self._activepad~=nil
+					and self._activepad:isDown(joy))
 	end
-	return love.keyboard.isDown(self._keyUp) or direction==-1 
 end
 
-function GameConfig:isDownDown()
-	local direction = 0
-	if(self._activepad~=nil) then
-		direction=self._activepad:getAxis( 2 )
-	end
-	return love.keyboard.isDown(self._keyDown) or direction==1
-end
-
-function GameConfig:isDownRight()
-	local direction = 0
-	if(self._activepad~=nil) then
-		direction=self._activepad:getAxis( 1 )
-	end
-	return love.keyboard.isDown(self._keyRight) or direction==1
-end
-
-function GameConfig:isDownLeft()
-	local direction = 0
-	if(self._activepad~=nil) then
-		direction=self._activepad:getAxis( 1 )
-	end
-	return love.keyboard.isDown(self._keyLeft) or direction==-1
-end
-
-function GameConfig:isDownFire()
-	return love.keyboard.isDown(self._keyFire)	
-			or (self._activepad~=nil 
-					and self._activepad:isDown(self._joyFire_button))
-end
-
-function GameConfig:isDownPause()
-	return love.keyboard.isDown(self._keyPause)
-		or (self._activepad~=nil 
-				and self._activepad:isDown(self._joyPause_button))
-end
-
-function GameConfig:isDownEnter()
-	return love.keyboard.isDown(self._keyEnter)
-		or (self._activepad~=nil 
-			and self._activepad:isDown(self._joyEnter_button))
-end
-
-function GameConfig:isDownEscape()
-	return love.keyboard.isDown(self._keyEscape)
-		or (self._activepad~=nil
-				and self._activepad:isDown(self._joyEscape_button))
-end
-
+--true if something is pressed at the moment
 function GameConfig:isDownAnyThing()
-	return self:isDownUp() 	 or
-         	self:isDownDown()  or
-         	self:isDownRight() or
-         	self:isDownLeft()  or
-         	self:isDownFire()  or
-         	self:isDownPause() or
-         	self:isDownEnter() or
-         	self:isDownEscape()
+	return self:isDown(GameConfig.static.UP) 	 or
+         	self:isDown(GameConfig.static.DOWN)  or
+         	self:isDown(GameConfig.static.LEFT) or
+         	self:isDown(GameConfig.static.RIGHT)  or
+         	self:isDown(GameConfig.static.FIRE)  or
+         	self:isDown(GameConfig.static.PAUSE) or
+         	self:isDown(GameConfig.static.ENTER) or
+         	self:isDown(GameConfig.static.ESCAPE)
 end
 
+--reads one input at a time
 function GameConfig:readInput()
 	local direction = 0
 	local key=button_read:getKey()
@@ -397,6 +271,7 @@ function GameConfig:readInput()
 	return GameConfig.static.NONE
 end
 
+--gets controls description in string
 function GameConfig:getControlsDescription()
 	local desc=""
 	desc=desc.."up-> "..self._keyUp.."\n"
