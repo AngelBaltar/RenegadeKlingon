@@ -18,7 +18,8 @@
 --  */
 
 function love.conf(t)
-   	t.title = "RenegadeKlingon"        -- The title of the window the game is in (string)
+    
+    t.title = "RenegadeKlingon"        -- The title of the window the game is in (string)
     t.author = "Angel Baltar Diaz"        -- The author of the game (string)
     t.url = "www.with2balls.com/"                 -- The website of the game (string)
     t.identity = "RenegadeKlingonSaveGames"            -- The name of the save directory (string)
