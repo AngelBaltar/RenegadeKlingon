@@ -22,16 +22,6 @@ require 'Utils/ButtonRead'
 
 ControlsScreen = class('ControlsScreen', Screen)
 
-local NONE_OPTION=0
-local UP_OPTION=1
-local DOWN_OPTION=2
-local LEFT_OPTION=3
-local RIGHT_OPTION=4
-local FIRE_OPTION=5
-local PAUSE_OPTION=6
-local ENTER_OPTION=7
-local ESCAPE_OPTION=8
-
 local config=GameConfig.getInstance()
 
 local _loadMenus=function(self)
@@ -44,7 +34,7 @@ local _loadMenus=function(self)
   self._controlsMenu:addItem("Pause-->"..config:getKey(GameConfig.static.PAUSE))
   self._controlsMenu:addItem("Enter-->"..config:getKey(GameConfig.static.ENTER))
   self._controlsMenu:addItem("Escape->"..config:getKey(GameConfig.static.ESCAPE))
-  self._selectedOption=NONE_OPTION
+  self._selectedOption=GameConfig.static.NONE
 end
 
 function ControlsScreen:initialize()
@@ -54,7 +44,7 @@ end
 
 function ControlsScreen:draw()
 
-	if(self._selectedOption==NONE_OPTION) then
+	if(self._selectedOption==GameConfig.static.NONE) then
 		self._controlsMenu:print()
 	else
 		love.graphics.print("Press the key...", love.graphics.getWidth()/4,love.graphics.getHeight()/4)
@@ -62,7 +52,7 @@ function ControlsScreen:draw()
 end
 
 function ControlsScreen:update(dt)
-  if(self._selectedOption~=NONE_OPTION and ButtonRead.getInstance():isSomethingToRead()) then
+  if(self._selectedOption~=GameConfig.static.NONE and ButtonRead.getInstance():isSomethingToRead()) then
     self:readPressed()
   end
   return
@@ -70,7 +60,7 @@ end
 
 function ControlsScreen:readPressed()
 
-  if(self._selectedOption==NONE_OPTION) then
+  if(self._selectedOption==GameConfig.static.NONE) then
       self._selectedOption=self._controlsMenu:readPressed()
       if self._selectedOption==Screen:getExitMark() then
         _loadMenus(self)
@@ -83,62 +73,15 @@ function ControlsScreen:readPressed()
   local key=ButtonRead.getInstance():getKey()
   local readed=false
 
-  if (self._selectedOption==UP_OPTION) then
-      if(key~=nil) then
-        config:setKey(GameConfig.static.UP,key)
-        readed=true
-      end
-  elseif (self._selectedOption==DOWN_OPTION) then
-      if(key~=nil) then
-        config:setKey(GameConfig.static.DOWN,key)
-        readed=true
-      end
-  elseif (self._selectedOption==LEFT_OPTION) then
-      if(key~=nil) then
-        config:setKey(GameConfig.static.LEFT,key)
-        readed=true
-      end
-  elseif (self._selectedOption==RIGHT_OPTION) then
-      if(key~=nil) then
-        config:setKey(GameConfig.static.RIGHT,key)
-        readed=true
-      end
-  elseif (self._selectedOption==FIRE_OPTION) then
-      if(key~=nil) then
-        config:setKey(GameConfig.static.FIRE,key)
-        readed=true
-      end
-      if(joypad~=nil and joypadbutton~=nil) then
-        config:setKey(GameConfig.static.FIRE,joypad, joypadbutton )
-        readed=true
-      end
-  elseif (self._selectedOption==PAUSE_OPTION) then
-      if(key~=nil) then
-        config:setKey(GameConfig.static.PAUSE,key)
-        readed=true
-      end
-      if(joypad~=nil and joypadbutton~=nil) then
-        config:setKey(GameConfig.static.PAUSE,joypad, joypadbutton )
-        readed=true
-      end
-  elseif (self._selectedOption==ENTER_OPTION) then
-      if(key~=nil) then
-        config:setKey(GameConfig.static.ENTER,key)
-        readed=true
-      end
-      if(joypad~=nil and joypadbutton~=nil) then
-        config:setKey(GameConfig.static.ENTER,joypad, joypadbutton )
-        readed=true
-      end
-  elseif (self._selectedOption==ESCAPE_OPTION) then
+  if(self._selectedOption~=GameConfig.static.NONE) then
     if(key~=nil) then
-        config:setKey(GameConfig.static.ESCAPE,key)
+         config:setKey(self._selectedOption,key)
+         readed=true
+    end
+    if(joypad~=nil and joypadbutton~=nil) then
+        config:setKey(self._selectedOption,joypad, joypadbutton)
         readed=true
-      end
-      if(joypad~=nil and joypadbutton~=nil) then
-        config:setKey(GameConfig.static.ESCAPE,joypad, joypadbutton )
-        readed=true
-      end
+    end
   end
    if(readed) then
       _loadMenus(self)

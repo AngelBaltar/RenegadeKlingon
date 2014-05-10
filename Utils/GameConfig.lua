@@ -238,7 +238,7 @@ function GameConfig:readInput()
 			return GameConfig.static.RIGHT
 	end
 
-	if(joy==self._activepad) then
+	if(joy==self._activepad and joy~=nil) then
 		DEBUG_PRINT("joy enter="..self._joyEnter_button.."button"..button)
 		if(button==self._joyEscape_button) then
 			return GameConfig.static.ESCAPE
