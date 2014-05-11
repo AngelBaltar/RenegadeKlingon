@@ -51,6 +51,9 @@ local _FederationSaber_ship = love.graphics.newImage("Resources/gfx/FederationSa
 local _FederationExcelsior_ship=love.graphics.newImage("Resources/gfx/FederationExcelsior.png")
 local _FederationGalaxy_ship=love.graphics.newImage("Resources/gfx/FederationGalaxy.png")
 
+--Functions for tiles and objects creation from here
+
+
 local create_RomulanScout=function(x,y)
 	
 	local health=10
@@ -201,7 +204,10 @@ local create_animatedTileBlock=function(x,y)
 	return AnimatedTileBlock:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,animation)
 end
 
+--creation functions table to index by object class name
+
 local _creation_tab={}
+
 
 _creation_tab["DestructorKlingon"]=create_DestructorKlingon
 
@@ -225,7 +231,7 @@ _creation_tab["MusicObject"]=create_MusicObject
 
 
 
-
+--function to load a generic level
 function load_level(map_name,space)
 	local object_type=""
 	local imagePath=""
@@ -260,7 +266,7 @@ function load_level(map_name,space)
 	local ordered_paths={}
 	local max_x=0
 	--backgrounds
-	for x, y, _tile in _map("fondo"):iterate() do
+	for x, y, _tile in _map("background"):iterate() do
 		ordered_paths[x]=_tile.properties["img_path"]
 		DEBUG_PRINT(ordered_paths[x].." "..x.."\n")
 		if(max_x<x) then
@@ -274,18 +280,11 @@ function load_level(map_name,space)
 		end
 	end
 
-	if(map_name=="map1.tmx") then
-		TextMessageObject:new(_space,nil,
-							100,100,nil,
-							"Controls are\n#"
-							..GameConfig.getInstance():getControlsDescription().."#")
-	end
-
 	--all plane objects
 	for plane=1,n_bgs do
-		--DEBUG_PRINT("plano_"..plane)
-		if _map("plano_"..plane)~=nil then
-			for x, y, block in _map("plano_"..plane):iterate() do
+		--DEBUG_PRINT("plane_"..plane)
+		if _map("plane_"..plane)~=nil then
+			for x, y, block in _map("plane_"..plane):iterate() do
 				_tile=block
 				obj=nil
 				--avoid repeated _tiles
@@ -298,7 +297,7 @@ function load_level(map_name,space)
 						object_type=_tile.properties["object_type"]
 					end
 					
-			   		--DEBUG_PRINT( string.format("plano_"..plane.."_tile at (%d,%d) has an id of %d %s %s",
+			   		--DEBUG_PRINT( string.format("plane_"..plane.."_tile at (%d,%d) has an id of %d %s %s",
 			   		--				x, y, _tile.id,object_type,imagePath) )
 
 					if _creation_tab[object_type]~=nil then

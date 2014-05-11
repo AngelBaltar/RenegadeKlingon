@@ -7,7 +7,7 @@
  <tileset firstgid="172" source="Backgrounds2000x600.tsx"/>
  <tileset firstgid="174" source="tiles_0.tsx"/>
  <tileset firstgid="234" source="ship_tiles.tsx"/>
- <layer name="fondo" width="300" height="19">
+ <layer name="background" width="300" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -5711,7 +5711,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plano_1" width="300" height="19">
+ <layer name="plane_1" width="300" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -11415,7 +11415,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plano_2" width="300" height="19">
+ <layer name="plane_2" width="300" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -17119,7 +17119,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plano_3" width="300" height="19">
+ <layer name="plane_3" width="300" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -22823,7 +22823,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plano_4" width="300" height="19">
+ <layer name="plane_4" width="300" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>

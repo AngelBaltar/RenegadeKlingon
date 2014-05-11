@@ -82,6 +82,10 @@ function HighScore:initialize(hud)
 end 
 
 
+function HighScore:update(dt)
+	FlowDownTextScreen.setMessage(self,self:calculateMessage())
+end
+
 function HighScore:calculateMessage()
   local message=""
   for i=0,self._score_table_size do

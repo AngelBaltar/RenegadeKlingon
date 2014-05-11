@@ -49,11 +49,11 @@ function RandomPilotPattern:pilot(dt)
   local speed=ship:getSpeed()
   local my_space=ship:getSpace()
   local player=my_space:getPlayerShip()
-  local x_i=my_space:getXend()/4
+  local x_i=my_space:getXend()/3
   local x_e=my_space:getXend()-ship:getWidth()
 
   local y_i=my_space:getYinit()
-  local y_e=my_space:getYend()-ship:getHeight()
+  local y_e=my_space:getYend()-ship:getHeight()-5
 
   local pos_x=ship:getPositionX()
   local pos_y=ship:getPositionY()
