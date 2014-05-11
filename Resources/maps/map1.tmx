@@ -5,7 +5,7 @@
  <tileset firstgid="56" source="tileblocks2.tsx"/>
  <tileset firstgid="156" source="tileblocks3.tsx"/>
  <tileset firstgid="172" source="ship_tiles.tsx"/>
- <layer name="fondo" width="150" height="19">
+ <layer name="fondo" width="150" height="19" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -3623,7 +3623,7 @@
    <tile gid="6"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="8"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="6"/>
    <tile gid="0"/>
@@ -3773,7 +3773,7 @@
    <tile gid="6"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="6"/>
    <tile gid="0"/>
@@ -5713,7 +5713,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plano_2" width="150" height="19">
+ <layer name="plano_2" width="150" height="19" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -8567,7 +8567,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plano_3" width="150" height="19">
+ <layer name="plano_3" width="150" height="19" visible="0">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
