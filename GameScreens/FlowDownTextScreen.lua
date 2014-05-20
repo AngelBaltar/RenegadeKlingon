@@ -29,10 +29,12 @@ end
 
 function  FlowDownTextScreen:setMessage(message)
 	  self._xPos=400
-	  self._yPos=nil -- if depends of the font of the system, we cant do this here, will do in the first update
+	  self._yPos=nil
 	  self._message=message
 	  self._numLines=0
 	  for i in self._message:gmatch("\n") do self._numLines=self._numLines+1 end
+	  font=love.graphics.getFont()
+	  self._yPos=(2-self._numLines)*font:getHeight()
 end
 
 function FlowDownTextScreen:draw()

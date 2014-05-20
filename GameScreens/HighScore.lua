@@ -83,7 +83,7 @@ end
 
 
 function HighScore:update(dt)
-	FlowDownTextScreen.setMessage(self,self:calculateMessage())
+	FlowDownTextScreen.update(self,dt)
 end
 
 function HighScore:calculateMessage()
@@ -133,8 +133,8 @@ function HighScore:readPressed()
 			if(self._indexAct>=4) then
 				self._score_table_size=self._score_table_size+1
 				self._input=false
-				FlowDownTextScreen.setMessage(self,self:calculateMessage())
 				writeScoreFile(self)
+				FlowDownTextScreen.setMessage(self,self:calculateMessage())
 			end
 		end
 	end
