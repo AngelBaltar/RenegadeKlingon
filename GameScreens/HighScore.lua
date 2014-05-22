@@ -132,16 +132,16 @@ function HighScore:readPressed()
 			self._indexAct=self._indexAct+1
 			if(self._indexAct>=4) then
 				self._score_table_size=self._score_table_size+1
-				self._input=false
 				writeScoreFile(self)
 				FlowDownTextScreen.setMessage(self,self:calculateMessage())
+				self._input=false
 			end
 		end
 	end
 end
 
 function HighScore:draw()
-	if not self._input then
+	if self._hud==nil then --if no hud this object is only for drawing the scores
 		return FlowDownTextScreen.draw(self)
 	else
 		if self._score_table[self._score_table_size+1]==nil then
