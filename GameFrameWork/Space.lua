@@ -421,23 +421,23 @@ local _collisionCheck = function(self,soA,soB)
 		return false
 	end
 
-	--bullets do not hit harvestables
-	if soA:isBullet() and soB:isHarvestableObject() then
-		return false
-	end
+	-- --bullets do not hit harvestables
+	-- if soA:isBullet() and soB:isHarvestableObject() then
+	-- 	return false
+	-- end
 	
-	if soB:isBullet() and soA:isHarvestableObject() then
-		return false
-	end
+	-- if soB:isBullet() and soA:isHarvestableObject() then
+	-- 	return false
+	-- end
 
-	--enemies cant hit harvestables
-	if soA:isEnemyShip() and soB:isHarvestableObject() then
-		return false
-	end
+	-- --enemies cant hit harvestables
+	-- if soA:isEnemyShip() and soB:isHarvestableObject() then
+	-- 	return false
+	-- end
 	
-	if soB:isEnemyShip() and soA:isHarvestableObject() then
-		return false
-	end
+	-- if soB:isEnemyShip() and soA:isHarvestableObject() then
+	-- 	return false
+	-- end
 
 	--tiles cant hit tiles
 	if soA:isTileBlock() and soB:isTileBlock() then

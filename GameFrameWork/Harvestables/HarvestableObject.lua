@@ -35,9 +35,11 @@ function HarvestableObject:getSpeed()
 end
 
 function HarvestableObject:collision(object,damage)
-     if not (object:isBullet()) and
-     not (object:isEnemyShip()) and 
-     not (object:isHarvestableObject())then
+      local x,y=self._pilot_pattern:getDirection()
+      x=x*(-1)
+      y=y*(-1)
+      self._pilot_pattern:setDirection(x,y)
+     if (object:isPlayerShip()) then
        self:die()
      end
 end

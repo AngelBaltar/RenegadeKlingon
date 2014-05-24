@@ -27,12 +27,22 @@ function HarvestablePilotPattern:initialize(ship)
     self._timer=0
     self._directionX=-1
     self._directionY=1
-    self._avoid_collision=AvoidCollisionPilotPattern:new(ship)
+end
+
+function HarvestablePilotPattern:getDirection()
+  return self._directionX,self._directionY
+end
+
+function HarvestablePilotPattern:setDirection(x,y)
+  if(self._timer>0.1) then --avoid constant direction changes
+    self._directionX=x
+    self._directionY=y
+    self._timer=0
+  end
 end
 
 function HarvestablePilotPattern:setShip(ship)
   PilotPattern.setShip(self,ship)
-  self._avoidCollision:setShip(ship)
 end
 
 function HarvestablePilotPattern:pilot(dt)
@@ -88,9 +98,4 @@ function HarvestablePilotPattern:pilot(dt)
   end
 
   ship:setPosition(pos_x+self._directionX,pos_y+self._directionY)
-  local collides=self._avoid_collision:pilot(dt)
-  if(collides) then
-    self._directionY=self._directionY*(-1)
-    self._directionX=self._directionX*(-1)
-  end
 end
