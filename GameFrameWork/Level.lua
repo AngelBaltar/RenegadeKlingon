@@ -181,7 +181,12 @@ local create_TextMessageObject=function(x,y)
 	local msgFile=loader.path.."Messages/".._map_name..".msg.".._num_messages..".txt"
 	_num_messages=_num_messages+1
 	DEBUG_PRINT("text message ".._map.tileWidth*x.." ".._map.tileHeight*y)
-	return TextMessageObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,msgFile)
+	if(_map_name=="map1.tmx") and (_num_messages==1) then
+		return TextMessageObject:new(_space,_tile,
+					_map.tileWidth*x,_map.tileHeight*y,nil,GameConfig.getInstance():getControlsDescription())
+	else
+		return TextMessageObject:new(_space,_tile,_map.tileWidth*x,_map.tileHeight*y,msgFile)
+	end
 end
 
 local create_MusicObject=function(x,y)

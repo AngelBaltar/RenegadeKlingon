@@ -51,6 +51,11 @@ echo "extracting love binaries..."
 test unzip love-0.9.1-win32.zip 1>/dev/null
 test unzip love-0.9.1-macosx-x64.zip 1>/dev/null
 
+echo "setting compressed map sources to make a compressed deploy..."
+test mkdir ./tmpSources/
+test cp ./Resources/maps/mapSources/* ./tmpSources/
+test rm ./Resources/maps/mapSources/*
+test cp ./compressed_map_sources/* ./Resources/maps/mapSources/
 
 #lets deploy a .love for LINUX
 echo "deploying for linux..."
@@ -81,6 +86,11 @@ test sed -i 's/>org.love2d.love</>com.with2balls.RenegadeKlingon</g' $path_mac/R
 test sed -i 's/>LÖVE</>RENEGADEKLINGON</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
 test zip RenegadeKlingon.osx.zip -r $path_mac/RenegadeKlingon.app 1>/dev/null
 test rm -rf $path_mac/RenegadeKlingon.app
+
+echo "reset the mapSources..."
+test rm ./Resources/maps/mapSources/*
+test cp ./tmpSources/* ./Resources/maps/mapSources/
+test rm -rf ./tmpSources
 
 echo "Every deploy OK"
 exit_deploy 0
