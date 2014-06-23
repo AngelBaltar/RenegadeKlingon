@@ -26,10 +26,13 @@ MusicObject = class('GameFrameWork.MusicObject',SpaceObject)
 local _sounds_map={}
 
 _sounds_map["map1.tmx"]={}
+_sounds_map["map2.tmx"]={}
+_sounds_map["map3.tmx"]={}
 
 _sounds_map["map1.tmx"][0]=love.audio.newSource('Resources/sfx/map1.mp3',"static")
 _sounds_map["map1.tmx"][1]=love.audio.newSource('Resources/sfx/hold_the_line.mp3',"static")
---_sounds_map["map1.tmx"][1]=love.audio.newSource('Resources/sfx/explosion2.mp3',"static")
+_sounds_map["map2.tmx"][0]=love.audio.newSource('Resources/sfx/highenergy.mp3',"static")
+_sounds_map["map3.tmx"][0]=love.audio.newSource('Resources/sfx/Parasite.mp3',"static")
 
 --constructor
 --draw_object must be a drawable

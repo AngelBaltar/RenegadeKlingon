@@ -29,7 +29,7 @@ function Weapon:initialize(ship_to_attach)
 end
 
 function Weapon:PlayerCadence()
-	return 0.1
+	return 0.2
 end
 
 function Weapon:EnemieCadence()

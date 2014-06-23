@@ -7610,7 +7610,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plane_1" width="400" height="19" visible="0">
+ <layer name="plane_1" width="400" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -13219,7 +13219,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="18"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
