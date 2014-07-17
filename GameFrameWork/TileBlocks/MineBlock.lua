@@ -79,6 +79,15 @@ function MineBlock:pilot(dt)
   end   
 end
 
+function MineBlock:collision(object,damage)
+  --other enemies bullets do not hit me
+  if not (object:isBullet() and object:getEmmiter():isEnemyShip())
+  and not object:isEnemyShip() and
+  not object:isHarvestableObject() then
+    SpaceObject.collision(self,object,damage)
+    --DEBUG_PRINT("COLLIDING WITH DAMAGE "..damage.."\n")
+  end
+end
 --Draws the object in the screen
 function MineBlock:draw()
   self._mine:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom) 

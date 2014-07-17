@@ -148,6 +148,7 @@ function SpaceObject:collision(object,damage)
 		hud:addToScore(damage)
 	end
 	self:setHealth(self:getHealth()-damage)
+	--DEBUG_PRINT("space COLLIDING WITH DAMAGE "..damage.."\n")
 end
 
 --returns the space where this object is
