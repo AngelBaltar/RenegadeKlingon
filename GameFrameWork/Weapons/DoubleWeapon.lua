@@ -27,6 +27,11 @@ function DoubleWeapon:initialize(ship,bullet)
   Weapon.initialize(self,ship)
 end
 
+
+function DoubleWeapon:PlayerCadence()
+  return 0.3
+end
+
 function DoubleWeapon:doFire()
   local my_ship=self:getAttachedShip()
   local my_space=my_ship:getSpace()

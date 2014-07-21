@@ -6,7 +6,7 @@
  <tileset firstgid="156" source="tileblocks3.tsx"/>
  <tileset firstgid="172" source="Backgrounds2000x600.tsx"/>
  <tileset firstgid="175" source="tiles_0.tsx"/>
- <layer name="background" width="400" height="19" visible="0">
+ <layer name="background" width="400" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -9803,7 +9803,7 @@
    <tile gid="0"/>
    <tile gid="17"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="17"/>
    <tile gid="0"/>
@@ -9896,7 +9896,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -10900,7 +10900,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -11001,11 +11001,11 @@
    <tile gid="17"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="17"/>
@@ -11299,12 +11299,12 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="9"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="3"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -11590,7 +11590,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -12203,7 +12203,7 @@
    <tile gid="0"/>
    <tile gid="17"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="17"/>
    <tile gid="0"/>
@@ -13062,7 +13062,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="3"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -15214,7 +15214,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="plane_2" width="400" height="19" visible="0">
+ <layer name="plane_2" width="400" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>

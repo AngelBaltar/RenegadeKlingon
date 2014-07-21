@@ -79,7 +79,7 @@ end
 
 local create_RomulanWarBird=function(x,y)
 	
-	local health=400
+	local health=250
 	local speed=3
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
@@ -124,7 +124,7 @@ end
 
 
 local create_FederationGalaxy=function(x,y)
-	local health=400
+	local health=250
 	local speed=2.0
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.BLUE_ANIMATED)

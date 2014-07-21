@@ -199,9 +199,11 @@ function TextMessageObject:draw()
     local r, g, b, a = love.graphics.getColor( )
     love.graphics.setColor(10,10,150,140)
     love.graphics.rectangle("fill",x,y,self._width,self._height)
-
+     love.graphics.setColor(255,0,0,140)
+    love.graphics.rectangle( "line", x,y,self._width,self._height)
     love.graphics.setColor(255,0,0,self._transparency)
     love.graphics.print(self._msgDraw[self._msgNum],x+0.1*self._width, y)
+    love.graphics.setColor(255,0,0,self._transparency)
     love.graphics.setColor(r,g,b,a)
 
 end
