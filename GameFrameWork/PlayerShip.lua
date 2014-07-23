@@ -37,6 +37,8 @@ function PlayerShip:initialize(space,posx,posy)
   --self._basic_weapon=DoubleBasicWeapon:new(self)
   self._autopilot=false
   self._autoPattern=PlayerAutoPlayPilotPattern:new(self)
+  self._shieldpw=5
+  self._weaponpw=5
 end
 
 --return the width of this ship
@@ -80,16 +82,13 @@ function PlayerShip:collision(object,damage)
   end
 end
 
-function PlayerShip:autoPilot(dt)
-
-end
-
 --Performs movements changing the position of the object, firing bullets...
 function PlayerShip:pilot(dt)
   if not self:isEnabled() then
     return nil
   end
   if self._autopilot then
+    --autpilot here
     return self._autoPattern:pilot(dt)
   end
   local step=200*dt
@@ -128,8 +127,25 @@ function PlayerShip:pilot(dt)
    end
   if config:isDown(GameConfig.static.FIRE) then
     self._basic_weapon:fire(dt)
-   end
-   self:setPosition(position_x,position_y)
+  end
+  if config:readInput()==GameConfig.static.POWER then
+    --one step at a time updating power
+    self._shieldpw=self._shieldpw+1
+    self._shieldpw=self._shieldpw%11
+    self._weaponpw=10-self._shieldpw
+  end
+
+  self:setPosition(position_x,position_y)
+end
+
+--gets the object power on weapons
+function PlayerShip:getWeaponPower()
+  return self._weaponpw
+end
+
+--gets the object power on shields
+function PlayerShip:getShieldPower()
+  return self._shieldpw
 end
 
 function PlayerShip:toString()

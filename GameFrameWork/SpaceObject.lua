@@ -175,6 +175,15 @@ function SpaceObject:setBackGroundDistance(bd)
 	self._space:updateBucketFor(self)
 end
 
+--gets the object power on weapons
+function SpaceObject:getWeaponPower()
+	return 5
+end
+
+--gets the object power on shields
+function SpaceObject:getShieldPower()
+	return 5
+end
 
 function SpaceObject:toString()
 	return "spaceobject"

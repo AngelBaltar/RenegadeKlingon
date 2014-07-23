@@ -59,8 +59,13 @@ function Hud:draw()
   local health_str=" Health: "
   local score_str=" Score: "..self._score
 
+  local weaponpw=0
+  local shieldpw=0
+
   if player~=nil then
     player_health=player:getHealth()
+    weaponpw=player:getWeaponPower()
+    shieldpw=player:getShieldPower()
   end
 
   health_str=health_str..player_health
@@ -76,6 +81,19 @@ function Hud:draw()
   
   love.graphics.print(score_str, x_pos, y_pos)
   
+  x_pos=x_pos+150
+  love.graphics.setColor(255,0,0,255)
+  love.graphics.print("weapon", x_pos, y_pos)
+  x_pos=x_pos+love.graphics.getFont():getWidth("weapon")
+  love.graphics.rectangle("fill",x_pos,y_pos,weaponpw*20,10)
+  love.graphics.setColor(0,255,0,255)
+  x_pos=x_pos-love.graphics.getFont():getWidth("weapon")
+  y_pos=y_pos+love.graphics.getFont():getHeight()
+  love.graphics.print("shield ", x_pos, y_pos)
+  x_pos=x_pos+love.graphics.getFont():getWidth("shield ")
+  love.graphics.rectangle("fill",x_pos,y_pos,shieldpw*20,10)
+
+  love.graphics.setColor(255,255,255,255)
   SpaceObject.draw(self)
 end
 

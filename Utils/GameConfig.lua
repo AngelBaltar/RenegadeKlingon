@@ -28,9 +28,10 @@ GameConfig.static.DOWN = 2
 GameConfig.static.LEFT = 3
 GameConfig.static.RIGHT = 4
 GameConfig.static.FIRE = 5
-GameConfig.static.PAUSE = 6
-GameConfig.static.ENTER = 7
-GameConfig.static.ESCAPE = 8
+GameConfig.static.POWER = 6
+GameConfig.static.PAUSE = 7
+GameConfig.static.ENTER = 8
+GameConfig.static.ESCAPE = 9
 
 local JOY_FIRE = 9
 local JOY_PAUSE = 10
@@ -74,11 +75,13 @@ local __initialize = function(self)
 	self._keyLeft="left"
 	self._keyRight="right"
 	self._keyFire="a"
+	self._keyPower="s"
 	self._keyPause="p"
 	self._keyEnter="return"
 	self._keyEscape="escape"
 
 	self._joyFire_button=-1
+	self._joyPower_button=-1
 	self._joyPause_button=-1
 	self._joyEnter_button=-1
 	self._joyEscape_button=-1
@@ -90,11 +93,13 @@ local __initialize = function(self)
 								{value="_keyLeft",type="string"},
 								{value="_keyRight",type="string"},
 								{value="_keyFire",type="string"},
+								{value="_keyPower",type="string"},
 								{value="_keyPause",type="string"},
 								{value="_keyEnter",type="string"},
 								{value="_keyEscape",type="string"},
 								
 								{value="_joyFire_button",type="number"},
+								{value="_joyPower_button",type="number"},
 								{value="_joyPause_button",type="number"},
 								{value="_joyEnter_button",type="number"},
 								{value="_joyEscape_button",type="number"},
@@ -210,6 +215,7 @@ function GameConfig:isDownAnyThing()
          	self:isDown(GameConfig.static.LEFT) or
          	self:isDown(GameConfig.static.RIGHT)  or
          	self:isDown(GameConfig.static.FIRE)  or
+         	self:isDown(GameConfig.static.POWER)  or
          	self:isDown(GameConfig.static.PAUSE) or
          	self:isDown(GameConfig.static.ENTER) or
          	self:isDown(GameConfig.static.ESCAPE)
@@ -246,6 +252,8 @@ function GameConfig:readInput()
 			return GameConfig.static.ENTER
 		elseif (button==self._joyFire_button) then
 			return GameConfig.static.FIRE
+		elseif (button==self._joyPower_button) then
+			return GameConfig.static.POWER
 		elseif (button==self._joyPause_button) then
 			return GameConfig.static.PAUSE
 		end
@@ -261,6 +269,8 @@ function GameConfig:readInput()
 		return GameConfig.static.RIGHT
 	elseif (key==self._keyFire) then
 		return GameConfig.static.FIRE
+	elseif (key==self._keyPower) then
+		return GameConfig.static.POWER
 	elseif (key==self._keyPause) then
 		return GameConfig.static.PAUSE
 	elseif (key==self._keyEnter) then
@@ -279,6 +289,7 @@ function GameConfig:getControlsDescription()
 	desc=desc.."left-> "..self._keyLeft.."\n"
 	desc=desc.."right-> "..self._keyRight.."\n"
 	desc=desc.."fire-> "..self._keyFire.."\n"
+	desc=desc.."power-> "..self._keyPower.."\n"
 	desc=desc.."pause-> "..self._keyPause.."\n"
 	desc=desc.."enter-> "..self._keyEnter.."\n"
 	desc=desc.."exit-> "..self._keyEscape.."\n"
