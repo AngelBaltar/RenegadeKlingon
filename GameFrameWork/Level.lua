@@ -60,7 +60,10 @@ local create_RomulanScout=function(x,y)
 	local speed=1.5
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=BasicWeapon:new(nil)
-	local scout=Enemy:new(_space,_RomulanScout_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	local scout=Enemy:new(_space,_RomulanScout_ship,
+							_map.tileWidth*x,_map.tileHeight*y,
+							health,speed,movementPattern,weapon,
+							Enemy.static.ROMULAN)
 	weapon:setAttachedShip(scout)
 	movementPattern:setShip(scout)
 	return scout
@@ -83,7 +86,10 @@ local create_RomulanWarBird=function(x,y)
 	local speed=3
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
-	local warbird=Enemy:new(_space,_RomulanWarBird_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	local warbird=Enemy:new(_space,_RomulanWarBird_ship,
+							_map.tileWidth*x,_map.tileHeight*y,
+							health,speed,movementPattern,weapon,
+							Enemy.static.ROMULAN)
 	weapon:setAttachedShip(warbird)
 	movementPattern:setShip(warbird)
 	return warbird
@@ -94,7 +100,10 @@ local create_RomulanNorexan=function(x,y)
 	local speed=3
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
-	local norexan=Enemy:new(_space,_RomulanNorexan_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	local norexan=Enemy:new(_space,_RomulanNorexan_ship,
+							_map.tileWidth*x,_map.tileHeight*y,health,
+							speed,movementPattern,weapon,
+							Enemy.static.ROMULAN)
 	weapon:setAttachedShip(norexan)
 	movementPattern:setShip(norexan)
 	return norexan
@@ -105,7 +114,10 @@ local create_FederationSaber=function(x,y)
 	local speed=1.5
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=BasicWeapon:new(nil)
-	local runabout=Enemy:new(_space,_FederationSaber_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	local runabout=Enemy:new(_space,_FederationSaber_ship,
+							_map.tileWidth*x,_map.tileHeight*y,
+							health,speed,movementPattern,weapon,
+							Enemy.static.FEDERATION)
 	weapon:setAttachedShip(runabout)
 	movementPattern:setShip(runabout)
 	return runabout
@@ -116,7 +128,10 @@ local create_FederationExcelsior=function(x,y)
 	local speed=1.7
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleBasicWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
-	local excelsior=Enemy:new(_space,_FederationExcelsior_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	local excelsior=Enemy:new(_space,_FederationExcelsior_ship,
+								_map.tileWidth*x,_map.tileHeight*y,
+								health,speed,movementPattern,weapon,
+								Enemy.static.FEDERATION)
 	weapon:setAttachedShip(excelsior)
 	movementPattern:setShip(excelsior)
 	return excelsior
@@ -128,7 +143,10 @@ local create_FederationGalaxy=function(x,y)
 	local speed=2.0
 	local movementPattern=RandomPilotPattern:new(nil)
 	local weapon=DoubleWeapon:new(nil,AnimatedBullet.static.BLUE_ANIMATED)
-	local galaxy=Enemy:new(_space,_FederationGalaxy_ship,_map.tileWidth*x,_map.tileHeight*y,health,speed,movementPattern,weapon)
+	local galaxy=Enemy:new(_space,_FederationGalaxy_ship,
+							_map.tileWidth*x,_map.tileHeight*y,
+							health,speed,movementPattern,weapon,
+							Enemy.static.FEDERATION)
 	weapon:setAttachedShip(galaxy)
 	movementPattern:setShip(galaxy)
 	return galaxy

@@ -79,10 +79,12 @@ function Hud:draw()
 
   love.graphics.print(health_str, x_pos, y_pos)
 
-  x_pos=x_pos+love.graphics.getFont():getWidth(health_str)
+  y_pos=y_pos+love.graphics.getFont():getHeight()
   
   love.graphics.print(score_str, x_pos, y_pos)
-  x_pos=x_pos+math.max(love.graphics.getFont():getWidth(score_str),190)
+  y_pos=y_pos-love.graphics.getFont():getHeight()
+  x_pos=x_pos+math.max(love.graphics.getFont():getWidth(score_str),
+                        math.max(love.graphics.getFont():getWidth(score_str),190))
   
   love.graphics.setColor(255,0,0,127+(weaponpw/totalpw)*128)
   love.graphics.print("weapon", x_pos, y_pos)

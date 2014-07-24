@@ -21,18 +21,32 @@ require 'Utils/Debugging'
 
 Enemy = class('GameFrameWork.Enemies.Enemy',SpaceObject)
 
+Enemy.static.FEDERATION = 1
+Enemy.static.ROMULAN = 2
+
 
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
-function Enemy:initialize(space,drawable,posx,posy,health,speed,movementPattern,weapon)
+function Enemy:initialize(space,drawable,posx,posy,health,speed,movementPattern,weapon,race)
   --100 health for the enemy
   SpaceObject.initialize(self,space, drawable,posx,posy,health)
   self._speed=speed
   self._movementPattern=movementPattern
   self._weapon=weapon
-  --place it in free space
- 
+  self._race=race
+end
+
+--gets the player red color
+function Enemy:getShipColor()
+  if(self._race==Enemy.static.FEDERATION) then
+    return 64,128,255
+  elseif(self._race==Enemy.static.ROMULAN) then
+    return 0,255,0
+  else
+    return SpaceObject.getShipColor(self)
+  end
+
 end
 
 function Enemy:getSpeed()

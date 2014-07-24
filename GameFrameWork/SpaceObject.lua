@@ -70,7 +70,7 @@ function SpaceObject:draw()
 	      self._shielddraw=0
 	    end
 	end
-   	love.graphics.draw(self._toDraw, self._xPos, self._yPos)
+	love.graphics.draw(self._toDraw, self._xPos, self._yPos)
 end
 
 --Read from keyboard
@@ -160,16 +160,15 @@ function SpaceObject:collision(object,damage)
 		emmiter=object:getEmmiter()
 		damage=damage*((emmiter:getWeaponPower()/emmiter:getTotalPower())+1)
 	end
-	if(object:isBullet() and emmiter==player) then
-		hud:addToScore(damage)
-	end
 	if(damage>0) then
 		--apply shield only on positive damages
 		damage=damage-damage*(self:getShieldPower()/(self:getTotalPower()+1))
 		self._shielddraw=255*(self:getShieldPower()/self:getTotalPower())
 	end
 	self:setHealth(self:getHealth()-damage)
-	
+	if(object:isBullet() and emmiter==player) then
+		hud:addToScore(damage)
+	end
 	--DEBUG_PRINT("space COLLIDING WITH DAMAGE "..damage.."\n")
 end
 
