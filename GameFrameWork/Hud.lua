@@ -57,13 +57,13 @@ function Hud:draw()
   local player=self._space:getPlayerShip()
   local player_health=0
   local health_str=" Health: "
-  local score_str=" Score: "..self._score
+  local score_str=" Score: "..math.floor(self._score)
 
   local weaponpw=0
   local shieldpw=0
 
   if player~=nil then
-    player_health=player:getHealth()
+    player_health=math.floor(player:getHealth())
     weaponpw=player:getWeaponPower()
     shieldpw=player:getShieldPower()
   end
@@ -80,8 +80,7 @@ function Hud:draw()
   x_pos=x_pos+love.graphics.getFont():getWidth(health_str)
   
   love.graphics.print(score_str, x_pos, y_pos)
-  
-  x_pos=x_pos+150
+  x_pos=x_pos+math.max(love.graphics.getFont():getWidth(score_str),200)
   love.graphics.setColor(255,0,0,255)
   love.graphics.print("weapon", x_pos, y_pos)
   x_pos=x_pos+love.graphics.getFont():getWidth("weapon")

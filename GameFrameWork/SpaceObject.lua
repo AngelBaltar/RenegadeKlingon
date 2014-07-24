@@ -144,9 +144,15 @@ function SpaceObject:collision(object,damage)
 	local my_space=self:getSpace()
 	local player=my_space:getPlayerShip()
 	local hud=my_space:getHud()
-	if(object:isBullet() and object:getEmmiter()==player) then
+	local emmiter=nil
+	if(object:isBullet()) then
+		emmiter=object:getEmmiter()
+		damage=damage*((emmiter:getWeaponPower()/emmiter:getTotalPower())+1)
+	end
+	if(object:isBullet() and emmiter==player) then
 		hud:addToScore(damage)
 	end
+	damage=damage-damage*(self:getShieldPower()/(self:getTotalPower()+1))
 	self:setHealth(self:getHealth()-damage)
 	--DEBUG_PRINT("space COLLIDING WITH DAMAGE "..damage.."\n")
 end
@@ -173,6 +179,10 @@ function SpaceObject:setBackGroundDistance(bd)
 	self._backgroundDistance=bd
 	--update the bucket on switching between planes
 	self._space:updateBucketFor(self)
+end
+
+function SpaceObject:getTotalPower()
+	return 10
 end
 
 --gets the object power on weapons
