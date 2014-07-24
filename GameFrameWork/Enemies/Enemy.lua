@@ -85,6 +85,16 @@ function Enemy:pilot(dt)
   self._movementPattern:pilot(dt)
 end
 
+--gets the object power on weapons
+function Enemy:getWeaponPower()
+  return SpaceObject.getTotalPower()/2;
+end
+
+--gets the object power on shields
+function Enemy:getShieldPower()
+  return SpaceObject.getTotalPower()/2;
+end
+
 --im the enemy, ovewritting from SpaceObject
 function Enemy:isEnemyShip()
 	return true

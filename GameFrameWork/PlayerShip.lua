@@ -39,7 +39,6 @@ function PlayerShip:initialize(space,posx,posy)
   self._autoPattern=PlayerAutoPlayPilotPattern:new(self)
   self._shieldpw=5
   self._weaponpw=5
-  self._shielddraw=0
 end
 
 --return the width of this ship
@@ -81,7 +80,6 @@ function PlayerShip:collision(object,damage)
   if not ( object:isBullet() and object:getEmmiter():isPlayerShip()) then
     SpaceObject.collision(self,object,damage)
   end
-  self._shielddraw=255*(self._shieldpw/self:getTotalPower())
 end
 
 --Performs movements changing the position of the object, firing bullets...
@@ -140,18 +138,9 @@ function PlayerShip:pilot(dt)
   self:setPosition(position_x,position_y)
 end
 
---Draws the object in the screen
-function PlayerShip:draw()
-    local shieldstep=2
-    if(self._shielddraw>shieldstep) then
-      love.graphics.setColor(255,0,0,self._shielddraw)
-      love.graphics.circle( "fill", self:getPositionX()+self:getWidth()/2, self:getPositionY()+self:getHeight()/2, self:getStimatedSize()/2, 700 )
-      love.graphics.setColor(255,255,255,255)
-      self._shielddraw=self._shielddraw-shieldstep
-    else
-      self._shielddraw=0
-    end
-    SpaceObject.draw(self)
+--gets the player red color
+function PlayerShip:getShipColor()
+  return 255,0,0
 end
 
 --gets the object power on weapons

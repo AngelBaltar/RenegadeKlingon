@@ -34,6 +34,7 @@ function SpaceObject:initialize(space,draw_object,posx,posy,health)
   self._backgroundDistance=1
   self._isEnabled=space:isObjectEnabled(self)
   self._dead=false
+  self._shielddraw=0
   space:addSpaceObject(self)
 end
 
@@ -57,8 +58,18 @@ end
 
 --Draws the object in the screen
 function SpaceObject:draw()
-	--love.graphics.setColor(255,255,255,255)
-   	--love.graphics.setBackgroundColor(0,0,0)
+	if(self:isPlayerShip() or self:isEnemyShip()) then
+		local shieldstep=2
+	    if(self._shielddraw>shieldstep) then
+	      local r,g,b=self:getShipColor()
+	      love.graphics.setColor(r,g,b,self._shielddraw)
+	      love.graphics.circle( "fill", self:getPositionX()+self:getWidth()/2, self:getPositionY()+self:getHeight()/2, self:getStimatedSize()/2, 700 )
+	      love.graphics.setColor(255,255,255,255)
+	      self._shielddraw=self._shielddraw-shieldstep
+	    else
+	      self._shielddraw=0
+	    end
+	end
    	love.graphics.draw(self._toDraw, self._xPos, self._yPos)
 end
 
@@ -152,8 +163,13 @@ function SpaceObject:collision(object,damage)
 	if(object:isBullet() and emmiter==player) then
 		hud:addToScore(damage)
 	end
-	damage=damage-damage*(self:getShieldPower()/(self:getTotalPower()+1))
+	if(damage>0) then
+		--apply shield only on positive damages
+		damage=damage-damage*(self:getShieldPower()/(self:getTotalPower()+1))
+		self._shielddraw=255*(self:getShieldPower()/self:getTotalPower())
+	end
 	self:setHealth(self:getHealth()-damage)
+	
 	--DEBUG_PRINT("space COLLIDING WITH DAMAGE "..damage.."\n")
 end
 
@@ -187,12 +203,16 @@ end
 
 --gets the object power on weapons
 function SpaceObject:getWeaponPower()
-	return 5
+	return 10
 end
 
 --gets the object power on shields
 function SpaceObject:getShieldPower()
-	return 5
+	return 0
+end
+
+function SpaceObject:getShipColor()
+	return 255,255,255
 end
 
 function SpaceObject:toString()

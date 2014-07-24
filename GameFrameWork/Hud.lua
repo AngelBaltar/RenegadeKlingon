@@ -61,11 +61,13 @@ function Hud:draw()
 
   local weaponpw=0
   local shieldpw=0
+  local totalpw=0
 
   if player~=nil then
     player_health=math.floor(player:getHealth())
     weaponpw=player:getWeaponPower()
     shieldpw=player:getShieldPower()
+    totalpw=player:getTotalPower()
   end
 
   health_str=health_str..player_health
@@ -80,17 +82,22 @@ function Hud:draw()
   x_pos=x_pos+love.graphics.getFont():getWidth(health_str)
   
   love.graphics.print(score_str, x_pos, y_pos)
-  x_pos=x_pos+math.max(love.graphics.getFont():getWidth(score_str),200)
-  love.graphics.setColor(255,0,0,255)
+  x_pos=x_pos+math.max(love.graphics.getFont():getWidth(score_str),190)
+  
+  love.graphics.setColor(255,0,0,127+(weaponpw/totalpw)*128)
   love.graphics.print("weapon", x_pos, y_pos)
-  x_pos=x_pos+love.graphics.getFont():getWidth("weapon")
-  love.graphics.rectangle("fill",x_pos,y_pos,weaponpw*20,10)
-  love.graphics.setColor(0,255,0,255)
-  x_pos=x_pos-love.graphics.getFont():getWidth("weapon")
-  y_pos=y_pos+love.graphics.getFont():getHeight()
-  love.graphics.print("shield ", x_pos, y_pos)
-  x_pos=x_pos+love.graphics.getFont():getWidth("shield ")
-  love.graphics.rectangle("fill",x_pos,y_pos,shieldpw*20,10)
+  
+  x_pos=x_pos+love.graphics.getFont():getWidth("weapon")+40
+  
+  love.graphics.setColor(0,255,0,127+(shieldpw/totalpw)*128)
+  love.graphics.print("shield", x_pos, y_pos)
+  x_pos=x_pos-love.graphics.getFont():getWidth("weapon")-40
+  
+  love.graphics.setColor(255,0,0,127+(weaponpw/totalpw)*128)
+  love.graphics.rectangle("fill",x_pos,y_pos+love.graphics.getFont():getHeight(),weaponpw*10,10)
+  love.graphics.setColor(0,255,0,127+(shieldpw/totalpw)*128)
+  x_pos=x_pos+love.graphics.getFont():getWidth("weapon")+40
+  love.graphics.rectangle("fill",x_pos,y_pos+love.graphics.getFont():getHeight(),shieldpw*10,10)
 
   love.graphics.setColor(255,255,255,255)
   SpaceObject.draw(self)
@@ -108,7 +115,7 @@ end
 
 --gets the score
 function Hud:getScore()
-  return self._score
+  return math.floor(self._score)
 end
 
 --adds sc points to score
