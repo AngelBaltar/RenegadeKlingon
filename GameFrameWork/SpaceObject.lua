@@ -168,6 +168,7 @@ function SpaceObject:collision(object,damage)
 	self:setHealth(self:getHealth()-damage)
 	if(object:isBullet() and emmiter==player) then
 		hud:addToScore(damage)
+		hud:setEnemy(self)
 	end
 	--DEBUG_PRINT("space COLLIDING WITH DAMAGE "..damage.."\n")
 end

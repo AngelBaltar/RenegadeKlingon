@@ -26,6 +26,7 @@ Hud = class('GameFrameWork.Hud',SpaceObject)
 function Hud:initialize(space)
   local bar=love.graphics.newImage("Resources/gfx/hud.png")
   self._score=0
+  self._enemy=nil
   SpaceObject.initialize(self,space, bar,0,0,200000)
 end
 
@@ -42,7 +43,9 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function Hud:pilot(dt)
-
+  if(self._enemy~=nil and self._enemy:isDead())then
+    self._enemy=nil
+  end
 end
 
 --overwrite draw function
@@ -101,7 +104,16 @@ function Hud:draw()
   x_pos=x_pos+love.graphics.getFont():getWidth("weapon")+40
   love.graphics.rectangle("fill",x_pos,y_pos+love.graphics.getFont():getHeight(),shieldpw*10,10)
 
+
+  if(self._enemy~=nil) then
+    x_pos=x_pos+200
+    local r,g,b=self._enemy:getShipColor()
+    love.graphics.setColor(r,g,b,255)
+    love.graphics.print(self._enemy:toString()..":"..math.floor(self._enemy:getHealth()),
+                       x_pos, y_pos)
+  end
   love.graphics.setColor(255,255,255,255)
+
   SpaceObject.draw(self)
 end
 
@@ -123,4 +135,8 @@ end
 --adds sc points to score
 function Hud:addToScore(sc)
   self._score=self._score+sc
+end
+
+function Hud:setEnemy(enemy)
+  self._enemy=enemy
 end
