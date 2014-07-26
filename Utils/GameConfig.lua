@@ -53,6 +53,7 @@ local _readConfigFile=function(self)
 	local i=1
 	local iterator=love.filesystem.lines("RenegadeKlingon.conf")
 	local sub_ini=0
+	--todo count the line number if is not correct frop the file and start a new one
 	for line in iterator do
 		if self._properties_ordered[i] ~= nil then
      		self[self._properties_ordered[i].value]=string.sub(line, sub_ini, -1)

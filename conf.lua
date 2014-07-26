@@ -25,10 +25,10 @@ function love.conf(t)
     t.identity = "RenegadeKlingonSaveGames"            -- The name of the save directory (string)
     t.version = "0.9.1"         -- The LÖVE version this game was made for (string)
     t.console = false           -- Attach a console (boolean, Windows only)
-    t.release = false           -- Enable release mode (boolean)
+    t.release = true           -- Enable release mode (boolean)
     
-    t.window.title = "RenegadeKlingon"        -- The window title (string)
-    t.window.icon = "Resources/gfx/hud.png"                -- Filepath to an image to use as the window's icon (string)
+    t.window.title = "RenegadeKlingon"      -- The window title (string)
+    t.window.icon = "Resources/gfx/hud.png" -- Filepath to an image to use as the window's icon (string)
     t.window.width = 800               -- The window width (number)
     t.window.height = 600              -- The window height (number)
     t.window.borderless = false        -- Remove all border visuals from the window (boolean)
@@ -38,10 +38,10 @@ function love.conf(t)
     t.window.fullscreen = false        -- Enable fullscreen (boolean)
     t.window.fullscreentype = "normal" -- Standard fullscreen or desktop fullscreen mode (string)
     t.window.vsync = true              -- Enable vertical sync (boolean)
-    t.window.fsaa = 0                  -- The number of samples to use with multi-sampled antialiasing (number)
+    t.window.fsaa = 16                  -- The number of samples to use with multi-sampled antialiasing (number)
     t.window.display = 1               -- Index of the monitor to show the window in (number)
-    t.window.highdpi = false           -- Enable high-dpi mode for the window on a Retina display (boolean). Added in 0.9.1
-    t.window.srgb = false              -- Enable sRGB gamma correction when drawing to the screen (boolean). Added in 0.9.1
+    t.window.highdpi = true           -- Enable high-dpi mode for the window on a Retina display (boolean). Added in 0.9.1
+    t.window.srgb = true              -- Enable sRGB gamma correction when drawing to the screen (boolean). Added in 0.9.1
 
     t.modules.joystick = true   -- Enable the joystick module (boolean)
     t.modules.audio = true      -- Enable the audio module (boolean)
@@ -52,5 +52,5 @@ function love.conf(t)
     t.modules.timer = true      -- Enable the timer module (boolean)
     t.modules.mouse = true      -- Enable the mouse module (boolean)
     t.modules.sound = true      -- Enable the sound module (boolean)
-    t.modules.physics = false    -- 
+    t.modules.physics = false    -- Enable the physiscs module (boolean)
 end
