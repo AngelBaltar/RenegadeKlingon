@@ -23,81 +23,51 @@ require 'Utils/Animation'
 
 WeaponObject = class('GameFrameWork.Harverstables.WeaponObject',HarvestableObject)
 
-WeaponObject.static.MACHINE_GUN = love.graphics.newImage("Resources/gfx/crystal_pink.png")
-WeaponObject.static.DOUBLE_BLUE = love.graphics.newImage("Resources/gfx/crystal_blue.png")
-WeaponObject.static.DOUBLE_GREEN = love.graphics.newImage("Resources/gfx/crystal_green.png")
-WeaponObject.static.DOUBLE_BASIC = love.graphics.newImage("Resources/gfx/crystal_red.png")
+WeaponObject.static.MACHINE_GUN =1 
+WeaponObject.static.DOUBLE_BLUE = 2
+WeaponObject.static.DOUBLE_GREEN = 3
+WeaponObject.static.DOUBLE_BASIC = 4
 
-local WP_MACHINEGUN=1
-local WP_DOUBLE_BLUE=2
-local WP_DOUBLE_GREEN=3
-local WP_DOUBLE_BASIC=4
+local weapon_sprite=love.graphics.newImage("Resources/gfx/crystal.png")
 
 
-local weapons_tab={}
-weapons_tab[WeaponObject.static.MACHINE_GUN]={
+local weapons_animation={
 												size_x=17,
 												size_y=18,
 												n_steps=4,
 												mode="loop",
                         delay=0.3,
-                        zoom=3,
-												weapon=WP_MACHINEGUN}
-
-weapons_tab[WeaponObject.static.DOUBLE_BLUE]={
-                        size_x=17,
-                        size_y=18,
-                        n_steps=4,
-                        mode="loop",
-                        delay=0.3,
-                        zoom=3,
-                        weapon=WP_DOUBLE_BLUE}
-
-weapons_tab[WeaponObject.static.DOUBLE_GREEN]={
-                        size_x=17,
-                        size_y=18,
-                        n_steps=4,
-                        mode="loop",
-                        delay=0.3,
-                        zoom=3,
-                        weapon=WP_DOUBLE_GREEN}
-
-weapons_tab[WeaponObject.static.DOUBLE_BASIC]={
-                        size_x=17,
-                        size_y=18,
-                        n_steps=4,
-                        mode="loop",
-                        delay=0.3,
-                        zoom=3,
-                        weapon=WP_DOUBLE_BASIC}
+                        zoom=3}
 
 --constructor
 function WeaponObject:initialize(space,weapon_type,posx,posy)
 
- self._animation = newAnimation(weapon_type,
-  					                   weapons_tab[weapon_type].size_x,
-  					                   weapons_tab[weapon_type].size_y,
-                               weapons_tab[weapon_type].delay,
-                               weapons_tab[weapon_type].n_steps)
-  self._animation:setMode(weapons_tab[weapon_type].mode)
+  self._animation = newAnimation(weapon_sprite,
+  					                   weapons_animation.size_x,
+  					                   weapons_animation.size_y,
+                               weapons_animation.delay,
+                               weapons_animation.n_steps)
 
-  if(weapons_tab[weapon_type].weapon==WP_MACHINEGUN) then
+  self._animation:setMode(weapons_animation.mode)
+  self._weaponType=weapon_type
+
+  if(self._weaponType==WeaponObject.static.MACHINE_GUN) then
   	self._weapon=MachineGunWeapon:new(nil)
   end
 
-  if(weapons_tab[weapon_type].weapon==WP_DOUBLE_BLUE) then
+  if(self._weaponType==WeaponObject.static.DOUBLE_BLUE) then
     self._weapon=DoubleWeapon:new(nil,AnimatedBullet.static.BLUE_ANIMATED)
   end
 
-  if(weapons_tab[weapon_type].weapon==WP_DOUBLE_GREEN) then
+  if(self._weaponType==WeaponObject.static.DOUBLE_GREEN) then
     self._weapon=DoubleWeapon:new(nil,AnimatedBullet.static.GREEN_ANIMATED)
   end
 
-  if(weapons_tab[weapon_type].weapon==WP_DOUBLE_BASIC) then
+  if(self._weaponType==WeaponObject.static.DOUBLE_BASIC) then
     self._weapon=DoubleBasicWeapon:new(nil)
   end
 
-  self._zoom=weapons_tab[weapon_type].zoom
+  self._zoom=weapons_animation.zoom
   HarvestableObject.initialize(self,space,weapon_type,posx,posy,0)
 
 end
@@ -124,8 +94,23 @@ function WeaponObject:getHeight()
 end
 
 function WeaponObject:draw()
+  if(self._weaponType==WeaponObject.static.MACHINE_GUN) then
+    love.graphics.setColor(0,255,255,255)
+  end
 
-  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom) 
+  if(self._weaponType==WeaponObject.static.DOUBLE_BLUE) then
+     love.graphics.setColor(0,0,255,255)
+  end
+
+  if(self._weaponType==WeaponObject.static.DOUBLE_GREEN) then
+     love.graphics.setColor(0,255,0,255)
+  end
+
+  if(self._weaponType==WeaponObject.static.DOUBLE_BASIC) then
+     love.graphics.setColor(255,0,0,255)
+  end
+  self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom)
+  love.graphics.setColor(255,255,255,255)
 end
 
 function WeaponObject:toString()
