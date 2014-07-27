@@ -40,7 +40,7 @@ function GameScreen:initialize(autoplay)
 
   --UNCOMMENT FOR TESTING
   --  self._levels[0]="testing_map.tmx"
-    self._levels[0]="map3.tmx"
+    self._levels[0]="map1.tmx"
     self._levels[1]="map2.tmx"
     self._levels[2]="map3.tmx"
 
