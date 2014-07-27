@@ -47,7 +47,7 @@ animation_tab[AnimatedBullet.static.PINK_ANIMATED]={size_x=32,
                                                     n_steps=4,
                                                     mode="bounce",
                                                     zoom=2,
-                                                    health=20,
+                                                    health=16,
                                                     source=love.audio.newSource( 'Resources/sfx/machine_gun.mp3',"static")
                                                   }
 
