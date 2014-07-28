@@ -33,13 +33,14 @@ GameConfig.static.PAUSE = 7
 GameConfig.static.ENTER = 8
 GameConfig.static.ESCAPE = 9
 
-local JOY_FIRE = 9
-local JOY_PAUSE = 10
-local JOY_ENTER = 11
-local JOY_ESCAPE = 12
+local JOY_FIRE = 10
+local JOY_POWER = 11
+local JOY_PAUSE = 12
+local JOY_ENTER = 13
+local JOY_ESCAPE = 14
 
 local MAX_DIRECTION=GameConfig.static.RIGHT
-local KEY_JOY_CONVERSION=4
+local KEY_JOY_CONVERSION=5
 
 local _instance=nil
 local button_read=ButtonRead.getInstance()
