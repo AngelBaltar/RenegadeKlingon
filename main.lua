@@ -43,19 +43,26 @@ function MainScreen:initialize()
   main_self=self
 end 
 
-function love.load()
+function love.errhand(msg)
+  print(msg)
+  love.event.push("quit")   -- actually causes the app to quit
+end
+
+function love.load(args)
    DEBUG_PRINT("LOADING GAME...")
+   -- for a,e in pairs(args) do
+   --  print(a)
+   --  print(e)
+   -- end
    disableDebug()
    mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2-50)
    mainMenu:addItem("Play")
    mainMenu:addItem("Options")  
    image=love.graphics.newImage("Resources/gfx/kelogo.jpg")
    optionsMenu=OptionsScreen:new()
-   
    local scr_main=MainScreen:new()
-
    play=nil
-
+   --kk=pp+1
    local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",35)
    love.graphics.setFont(f)
    
