@@ -93,5 +93,7 @@ test cp ./tmpSources/* ./Resources/maps/mapSources/
 test rm -rf ./tmpSources
 
 echo "Every deploy OK"
+echo "testing the basic game works..."
+test love RenegadeKlingon.love --debug --timeout 15 1>/dev/null
 exit_deploy 0
 

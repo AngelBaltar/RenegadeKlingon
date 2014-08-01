@@ -31,10 +31,11 @@ test() {
     status=$?
     if [ $status -ne 0 ]; then
         echo "error with $1";
-		exit_deploy 10;
+		exit 10;
     fi
 
 }
 echo "I am on " $path_act
 test sh auto_deploy_static.sh
-test love RenegadeKlingon.love --debug --timeout 120
+#we can not do this on jenkins because jenkins has not access to MIR server
+#test love RenegadeKlingon.love --debug --timeout 120
