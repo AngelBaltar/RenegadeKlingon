@@ -36,4 +36,5 @@ test() {
 
 }
 echo "I am on " $path_act
-love .
+test sh auto_deploy_static.sh
+test love RenegadeKlingon.love --debug --timeout 120

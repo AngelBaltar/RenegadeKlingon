@@ -38,9 +38,12 @@ local OPTIONS_OPTION=2
 
 MainScreen = class('MainScreen',Screen)
 
-function MainScreen:initialize()
+function MainScreen:initialize(timeout)
   Screen.initialize(self)
   main_self=self
+  self._timeout=timeout
+  self._apply_timeout=(timeout~=nil)
+  --DEBUG_PRINT("eeee "..timeout)
 end 
 
 function love.errhand(msg)
@@ -50,17 +53,33 @@ end
 
 function love.load(args)
    DEBUG_PRINT("LOADING GAME...")
-   -- for a,e in pairs(args) do
-   --  print(a)
-   --  print(e)
-   -- end
    disableDebug()
+   local settimeout=false
+   local timeout=0
+   for a,e in pairs(args) do
+     if settimeout then
+        timeout=tonumber(e)
+        settimeout=false
+     end
+     if e=="--debug" then
+        enableDebug()
+     end
+     if e=="--timeout" then
+        settimeout=true
+     end
+   end
    mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2-50)
    mainMenu:addItem("Play")
    mainMenu:addItem("Options")  
    image=love.graphics.newImage("Resources/gfx/kelogo.jpg")
    optionsMenu=OptionsScreen:new()
-   local scr_main=MainScreen:new()
+   local scr_main=nil
+
+   if timeout>0 then
+      scr_main=MainScreen:new(timeout)
+   else
+      scr_main=MainScreen:new()
+   end
    play=nil
    --kk=pp+1
    local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",35)
@@ -76,7 +95,12 @@ end
 function MainScreen:update(dt)
   Screen.update(self,dt)
   -- make it work with joypad too using update to get joypad axis buttons
-
+   if self._apply_timeout then
+      self._timeout=self._timeout-dt
+      if(self._timeout<=0) then
+        love.event.push("quit")
+      end
+   end
    if(selected_option==PLAY_OPTION) then
        if play:update(dt)==Screen:getExitMark() then
             selected_option=NONE_OPTION
