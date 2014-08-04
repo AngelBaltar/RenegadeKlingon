@@ -107,7 +107,7 @@ test cp ./tmpSources/* ./Resources/maps/mapSources/
 
 echo "testing the basic game works..."
 me=`whoami`
-if [ "$me" != "jenkinsTest" ]; then
+if [ "$me" != "jenkins" ]; then
 	#do not test the launch of the game on jenkins we haven't graphics server
 	test love RenegadeKlingon.love --debug --timeout 15 1>/dev/null;
 fi
