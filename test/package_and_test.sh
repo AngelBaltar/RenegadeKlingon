@@ -34,5 +34,6 @@ test() {
 		exit 10;
     fi
 }
-echo "I am on " $path_act
+me=`whoami`
+echo "I am $me and I am on the path" $path_act
 test ./auto_deploy_static.sh
