@@ -94,6 +94,12 @@ test rm -rf ./tmpSources
 
 echo "Every deploy OK"
 echo "testing the basic game works..."
-test love RenegadeKlingon.love --debug --timeout 15 1>/dev/null
+me=`whoami`
+if ["$me" ne "jenkinsTest" ]
+	#do not test the launch of the game on jenkins we haven't graphics server
+	test love RenegadeKlingon.love --debug --timeout 15 1>/dev/null
+else
+	
+fi
 exit_deploy 0
 

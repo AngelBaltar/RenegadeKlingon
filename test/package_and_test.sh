@@ -37,5 +37,4 @@ test() {
 }
 echo "I am on " $path_act
 test sh auto_deploy_static.sh
-#we can not do this on jenkins because jenkins has not access to MIR server
 #test love RenegadeKlingon.love --debug --timeout 120
