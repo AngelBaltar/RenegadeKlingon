@@ -34,13 +34,17 @@ blue="\e[34m"
 pink="\e[35m"
 reset="\e[0m"
 
-exit_deploy() {
-
+drop_all_temporals() {
 	rm -rf $path_linux
 	rm -rf $path_windows
 	rm -rf $path_mac
 	rm -rf love.app
 	rm -rf love-0.9.1-win32
+}
+
+exit_deploy() {
+
+	drop_all_temporals
 	exit "$@";
 }
 
@@ -55,6 +59,7 @@ test() {
     fi
 
 }
+drop_all_temporals
 echo "extracting love binaries..."
 test unzip -o love-0.9.1-win32.zip 1>/dev/null
 test unzip -o love-0.9.1-macosx-x64.zip 1>/dev/null
