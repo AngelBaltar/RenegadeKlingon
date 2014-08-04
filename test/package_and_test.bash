@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # -- /* RenegadeKlingon - LÖVE2D GAME
-# --  * package_and_test.sh
+# --  * package_and_test.bash
 # --  * Copyright (C) Angel Baltar Diaz
 # --  *
 # --  * This program is free software: you can redistribute it and/or
@@ -36,4 +36,4 @@ test() {
 }
 me=`whoami`
 echo "I am $me and I am on the path" $path_act
-test ./auto_deploy_static.sh
+test ./auto_deploy_static.bash

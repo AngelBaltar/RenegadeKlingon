@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # -- /* RenegadeKlingon - LÖVE2D GAME
-# --  * auto_deploy_static.sh
+# --  * auto_deploy_static.bash
 # --  * Copyright (C) Angel Baltar Diaz
 # --  *
 # --  * This program is free software: you can redistribute it and/or
