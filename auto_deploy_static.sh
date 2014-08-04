@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # -- /* RenegadeKlingon - LÖVE2D GAME
 # --  * auto_deploy_static.sh
@@ -27,6 +27,12 @@ path_windows=RenegadeKlingon_windows
 path_mac=RenegadeKlingon_mac
 path_act=`pwd`
 
+red="\e[31m"
+green="\e[32m"
+yellow="\e[33m"
+blue="\e[34m"
+pink="\e[35m"
+reset="\e[0m"
 
 exit_deploy() {
 
@@ -42,14 +48,16 @@ test() {
     "$@"
     status=$?
     if [ $status -ne 0 ]; then
+        echo -e $red
         echo "error with $1";
+        echo -e $reset
 		exit_deploy 10;
     fi
 
 }
 echo "extracting love binaries..."
-test unzip love-0.9.1-win32.zip 1>/dev/null
-test unzip love-0.9.1-macosx-x64.zip 1>/dev/null
+test unzip -o love-0.9.1-win32.zip 1>/dev/null
+test unzip -o love-0.9.1-macosx-x64.zip 1>/dev/null
 
 echo "setting compressed map sources to make a compressed deploy..."
 test mkdir ./tmpSources/
@@ -92,12 +100,12 @@ test rm ./Resources/maps/mapSources/*
 test cp ./tmpSources/* ./Resources/maps/mapSources/
 test rm -rf ./tmpSources
 
-echo "Every deploy OK"
 echo "testing the basic game works..."
 me=`whoami`
-if ["$me" ne "jenkinsTest" ] then
+if [ "$me" != "jenkinsTest" ]; then
 	#do not test the launch of the game on jenkins we haven't graphics server
-	test love RenegadeKlingon.love --debug --timeout 15 1>/dev/null
+	test love RenegadeKlingon.love --debug --timeout 15 1>/dev/null;
 fi
+echo "Every deploy OK"
 exit_deploy 0
 
