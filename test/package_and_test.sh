@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # -- /* RenegadeKlingon - LÖVE2D GAME
 # --  * package_and_test.sh
@@ -33,7 +33,6 @@ test() {
         echo "error with $1";
 		exit 10;
     fi
-
 }
 echo "I am on " $path_act
 test ./auto_deploy_static.sh

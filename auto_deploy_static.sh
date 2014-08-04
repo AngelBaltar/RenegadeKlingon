@@ -40,6 +40,7 @@ drop_all_temporals() {
 	rm -rf $path_mac
 	rm -rf love.app
 	rm -rf love-0.9.1-win32
+	rm -rf ./tmpSources
 }
 
 exit_deploy() {
@@ -103,7 +104,6 @@ test rm -rf $path_mac/RenegadeKlingon.app
 echo "reset the mapSources..."
 test rm ./Resources/maps/mapSources/*
 test cp ./tmpSources/* ./Resources/maps/mapSources/
-test rm -rf ./tmpSources
 
 echo "testing the basic game works..."
 me=`whoami`
