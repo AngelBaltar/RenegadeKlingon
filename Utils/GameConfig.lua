@@ -33,6 +33,8 @@ GameConfig.static.PAUSE = 7
 GameConfig.static.ENTER = 8
 GameConfig.static.ESCAPE = 9
 
+GameConfig.static.VERSION_NUMBER="0.0.1 beta"
+
 local JOY_FIRE = 10
 local JOY_POWER = 11
 local JOY_PAUSE = 12

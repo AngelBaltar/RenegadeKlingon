@@ -17,6 +17,7 @@
 --  * <http://www.gnu.org/licenses/>.
 --  */
 require 'GameScreens/FlowDownTextScreen'
+require "Utils/GameConfig"
 
 CreditsScreen = class('CreditsScreen', FlowDownTextScreen)
 
@@ -37,6 +38,7 @@ function CreditsScreen:initialize()
 	 					"GAME DESIGN:\n"..
 	 					"    Angel Baltar Diaz\n\n"..
 	 					"GAME PROGRAMMING:\n"..
-	 					"    Angel Baltar Diaz\n\n"
+	 					"    Angel Baltar Diaz\n\n"..
+	 					"RenegadeKlingon "..GameConfig.static.VERSION_NUMBER.."\n\n"
     FlowDownTextScreen.initialize(self,message)
 end 
