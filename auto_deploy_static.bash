@@ -67,9 +67,9 @@ test unzip -o love-0.9.1-macosx-x64.zip 1>/dev/null
 
 echo "setting compressed map sources to make a compressed deploy..."
 test mkdir ./tmpSources/
-test cp ./Resources/maps/mapSources/* ./tmpSources/
+test cp -r ./Resources/maps/mapSources/* ./tmpSources/
 test rm ./Resources/maps/mapSources/*
-test cp ./compressed_map_sources/* ./Resources/maps/mapSources/
+test cp -r ./compressed_map_sources/* ./Resources/maps/mapSources/
 
 #lets deploy a .love for LINUX
 echo "deploying for linux..."
@@ -102,8 +102,8 @@ test zip -9 RenegadeKlingon.osx.zip -r $path_mac/RenegadeKlingon.app 1>/dev/null
 test rm -rf $path_mac/RenegadeKlingon.app
 
 echo "reset the mapSources..."
-test rm ./Resources/maps/mapSources/*
-test cp ./tmpSources/* ./Resources/maps/mapSources/
+test rm -rf ./Resources/maps/mapSources/*
+test cp -r ./tmpSources/* ./Resources/maps/mapSources/
 
 echo "testing the basic game works..."
 me=`whoami`
