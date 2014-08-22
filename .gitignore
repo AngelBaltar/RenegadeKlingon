@@ -9,5 +9,5 @@ RenegadeKlingon.sublime-workspace
 ScreenShots/*
 
 #BINARIES
-./bin/*.zip
+bin/*.zip
 *.love
