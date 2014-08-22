@@ -22,9 +22,9 @@
 #deploy the game to binary executables in deployments directory
 necesary_files="GameFrameWork GameScreens Resources Utils main.lua conf.lua"
 
-path_linux=RenegadeKlingon_linux
-path_windows=RenegadeKlingon_windows
-path_mac=RenegadeKlingon_mac
+path_linux=./bin/RenegadeKlingon_linux
+path_windows=./bin/RenegadeKlingon_windows
+path_mac=./bin/RenegadeKlingon_mac
 path_act=`pwd`
 
 red="\e[31m"
@@ -62,8 +62,8 @@ test() {
 }
 drop_all_temporals
 echo "extracting love binaries..."
-test unzip -o love-0.9.1-win32.zip 1>/dev/null
-test unzip -o love-0.9.1-macosx-x64.zip 1>/dev/null
+test unzip -o ./bin/love-0.9.1-win32.zip 1>/dev/null
+test unzip -o ./bin/love-0.9.1-macosx-x64.zip 1>/dev/null
 
 echo "setting compressed map sources to make a compressed deploy..."
 test mkdir ./tmpSources/
@@ -78,7 +78,7 @@ test mkdir $path_linux
 test zip  -9 $path_linux/RenegadeKlingon.zip -r $necesary_files 1>/dev/null
 test mv $path_linux/RenegadeKlingon.zip $path_linux/RenegadeKlingon.love
 test cp $path_linux/RenegadeKlingon.love ./RenegadeKlingon.love
-test zip -9 -r RenegadeKlingon_linux.zip $path_linux 1>/dev/null
+test zip -9 -r ./bin/RenegadeKlingon.linux.zip $path_linux 1>/dev/null
 
 # # lets deploy a .exe for WINDOWS
 echo "deploying for windows..."
@@ -88,7 +88,7 @@ test cp ./RenegadeKlingon.love $path_windows/game.love
 test cp -R ./love-0.9.1-win32/* $path_windows/
 test cat $path_windows/love.exe $path_windows/game.love > $path_windows/RenegadeKlingon.exe
 test rm $path_windows/*.love $path_windows/love.exe
-test zip -9 -r RenegadeKlingon_windows.zip $path_windows 1>/dev/null
+test zip -9 -r ./bin/RenegadeKlingon.windows.zip $path_windows 1>/dev/null
 
 # #lets deploy a .app for MAC OSX
 echo "deploying for mac..."
@@ -98,7 +98,7 @@ test cp -R ./love.app $path_mac/RenegadeKlingon.app
 test cp ./RenegadeKlingon.love $path_mac/RenegadeKlingon.app/Contents/Resources/
 test sed -i 's/>org.love2d.love</>com.with2balls.RenegadeKlingon</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
 test sed -i 's/>LÖVE</>RENEGADEKLINGON</g' $path_mac/RenegadeKlingon.app/Contents/Info.plist
-test zip -9 RenegadeKlingon.osx.zip -r $path_mac/RenegadeKlingon.app 1>/dev/null
+test zip -9 ./bin/RenegadeKlingon.osx.zip -r $path_mac/RenegadeKlingon.app 1>/dev/null
 test rm -rf $path_mac/RenegadeKlingon.app
 
 echo "reset the mapSources..."
