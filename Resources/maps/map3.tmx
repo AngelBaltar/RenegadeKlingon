@@ -8,7 +8,7 @@
  <tileset firstgid="175" source="tiles_0.tsx"/>
  <tileset firstgid="235" source="ship_tiles.tsx"/>
  <tileset firstgid="267" source="tileblocks3.tsx"/>
- <layer name="background" width="460" height="19" visible="0">
+ <layer name="background" width="460" height="19">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
