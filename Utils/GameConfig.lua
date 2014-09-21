@@ -196,10 +196,10 @@ function GameConfig:isDown(action)
 	local to_check_dir=math.pow(-1,action)
 	
 	if(action<=MAX_DIRECTION) then
-		if(action<=2) then
-			axe=2
+		if(action<=GameConfig.static.DOWN) then
+			axe=2 --up and down axis
 		else
-			axe=1
+			axe=1 --left and right axis
 		end
 		if(self._activepad~=nil) then
 			direction=self._activepad:getAxis(axe)
@@ -230,22 +230,24 @@ function GameConfig:readInput()
 	local direction = 0
 	local key=button_read:getKey()
 	local joy,button=button_read:getJoys()
+
 	if(button==nil and joy==nil) then
 		DEBUG_PRINT("nilllllllllllll")
 	end
 	if(self._activepad~=nil) then
 		directiony=self._activepad:getAxis( 1 )
 		directionx=self._activepad:getAxis( 2 )
-	end
-	--joy directions first
-	if (directionx==-1) then
-		return GameConfig.static.UP
-	elseif (directionx==1) then
-		return GameConfig.static.DOWN
-	elseif (directiony==-1) then
-		return GameConfig.static.LEFT
-	elseif (directiony==1) then
-			return GameConfig.static.RIGHT
+
+		--joy directions first
+		if (directionx==-1) then
+			return GameConfig.static.UP
+		elseif (directionx==1) then
+			return GameConfig.static.DOWN
+		elseif (directiony==-1) then
+			return GameConfig.static.LEFT
+		elseif (directiony==1) then
+				return GameConfig.static.RIGHT
+		end
 	end
 
 	if(joy==self._activepad and joy~=nil) then
