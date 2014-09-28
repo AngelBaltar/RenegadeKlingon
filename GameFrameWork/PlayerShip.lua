@@ -39,6 +39,7 @@ function PlayerShip:initialize(space,posx,posy)
   self._autoPattern=PlayerAutoPlayPilotPattern:new(self)
   self._shieldpw=5
   self._weaponpw=5
+  self._powertimer=0
 end
 
 --return the width of this ship
@@ -128,13 +129,14 @@ function PlayerShip:pilot(dt)
   if config:isDown(GameConfig.static.FIRE) then
     self._basic_weapon:fire(dt)
   end
-  if config:readInput()==GameConfig.static.POWER then
+  if config:isDown(GameConfig.static.POWER) and self._powertimer>=0.2 then
     --one step at a time updating power
     self._shieldpw=self._shieldpw+1
     self._shieldpw=self._shieldpw%11
     self._weaponpw=10-self._shieldpw
+    self._powertimer=0
   end
-
+  self._powertimer=self._powertimer+dt
   self:setPosition(position_x,position_y)
 end
 
