@@ -19,6 +19,7 @@
 
 require 'Utils/Debugging'
 require 'Utils/ButtonRead'
+require 'Utils/ConfigPropertie'
 
 GameConfig = class('GameFrameWork.GameConfig')
 
@@ -120,7 +121,10 @@ local __initialize = function(self)
         break
     end
 	--DEBUG_PRINT("ACTIVE PAD IS: "..self["_activepad"])
-	
+	-- local props=ConfigPropertie:new("kk.prop",false)
+	-- print(props:getProp("pepe"))
+	-- props:setProp("numero",props:getProp("numero")+10)
+	-- props:save("pp.prop")
 
 end
 
