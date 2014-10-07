@@ -2,13 +2,42 @@ require 'Utils/middleclass/middleclass'
 
 ConfigPropertie = class('Utils.ConfigPropertie')
 
+
+local _file_exists=function(name)
+   local f=io.open(name,"r")
+   if f~=nil then 
+   	io.close(f) 
+   	return true 
+   else 
+   	return false 
+   end
+end
+
 --constructor
-function ConfigPropertie:initialize(path,love_filesys)
-	if love_filesys then
-		path=love.filesystem.getUserDirectory( )..path
+function ConfigPropertie:initialize(path)
+	self._prop_tab={}
+	self._path=""
+	if path~=nil then
+		self._path=path
+		if love.filesystem.exists(path) then	
+			path=love.filesystem.getSaveDirectory( ).."/"..path
+		else
+			path=love.filesystem.getWorkingDirectory( ).."/"..path
+		end
+		print("loading... ",path)
+		if _file_exists(path) then
+			self._prop_tab=dofile(path)
+		end
+		
 	end
-	self._prop_tab=dofile(path)
-	self._path=path
+end
+
+function ConfigPropertie:clearProps()
+	self._prop_tab={}
+end
+
+function ConfigPropertie:getIterator()
+	return pairs(self._prop_tab)
 end
 
 --get a property
@@ -21,12 +50,22 @@ function ConfigPropertie:setProp(name,value)
 	self._prop_tab[name]=value
 end
 
+function ConfigPropertie:getPropTab()
+	return self._prop_tab
+end
+
+function ConfigPropertie:setPath(path)
+	self._path=path
+end
+
 --save the properties again
 function ConfigPropertie:save(path)
 	if path==nil then
 		path=self._path
 	end
-	file = io.open(path, "w")
+	--print("path is"..path)
+	file =love.filesystem.newFile( path )
+	file:open('w')
 	file:write("return{")
 	not_first=false
 	for k,prop in pairs(self._prop_tab) do
@@ -35,7 +74,13 @@ function ConfigPropertie:save(path)
 		else
 			file:write("\n")
 		end
-		file:write(k.."="..prop)
+		-- print(k)
+		-- print(type(k))
+		if type(prop)=="string" then
+			file:write(k.."=\""..prop.."\"")
+		else
+			file:write(k.."="..prop)
+		end
 		not_first=true
 	end
 	file:write("\n}\n")

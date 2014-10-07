@@ -51,30 +51,17 @@ local button_read=ButtonRead.getInstance()
 
 local _readConfigFile=function(self)
 
-	if not love.filesystem.exists( "RenegadeKlingon.conf") then
-		return nil
+	local props=ConfigPropertie:new("RenegadeKlingon.conf")
+	if props:getPropTab()==nil then
+		props=ConfigPropertie:new("RenegadeKlingon.conf")
 	end
-	local i=1
-	local iterator=love.filesystem.lines("RenegadeKlingon.conf")
-	local sub_ini=0
-	--todo count the line number if is not correct frop the file and start a new one
-	for line in iterator do
-		if self._properties_ordered[i] ~= nil then
-     		self[self._properties_ordered[i].value]=string.sub(line, sub_ini, -1)
-     		if(self._properties_ordered[i].type=="number") then
-     			self[self._properties_ordered[i].value]=tonumber(self[self._properties_ordered[i].value])
-     		end
-    		i=i+1
-    		sub_ini=2
-    		DEBUG_PRINT(string.sub(line,sub_ini, -1))
-    	end
-   	end
+	for key,value in props:getIterator() do
+		self[key]=value
+	end
 
 end
 
---constructor
-local __initialize = function(self)
-	
+local __initializeBasics=function(self)
 	self._keyUp="up"
 	self._keyDown="down"
 	self._keyLeft="left"
@@ -90,28 +77,42 @@ local __initialize = function(self)
 	self._joyPause_button=-1
 	self._joyEnter_button=-1
 	self._joyEscape_button=-1
+	self._version_number=GameConfig.static.VERSION_NUMBER
+end
+
+--constructor
+local __initialize = function(self)
+
+	
 
 	--NOTE THIS PROPERTIES NEED TO BE ALIGNED WITH GameConfig.static. constants
 	self._properties_ordered={
-								{value="_keyUp",type="string"},
-								{value="_keyDown",type="string"},
-								{value="_keyLeft",type="string"},
-								{value="_keyRight",type="string"},
-								{value="_keyFire",type="string"},
-								{value="_keyPower",type="string"},
-								{value="_keyPause",type="string"},
-								{value="_keyEnter",type="string"},
-								{value="_keyEscape",type="string"},
+								"_keyUp",
+								"_keyDown",
+								"_keyLeft",
+								"_keyRight",
+								"_keyFire",
+								"_keyPower",
+								"_keyPause",
+								"_keyEnter",
+								"_keyEscape",
 								
-								{value="_joyFire_button",type="number"},
-								{value="_joyPower_button",type="number"},
-								{value="_joyPause_button",type="number"},
-								{value="_joyEnter_button",type="number"},
-								{value="_joyEscape_button",type="number"},
-								nil}
+								"_joyFire_button",
+								"_joyPower_button",
+								"_joyPause_button",
+								"_joyEnter_button",
+								"_joyEscape_button",
+
+								"_version_number",
+								nil
+							}
 
 	_readConfigFile(self)
-
+	--different version so remove the file
+	if self._version_number~=GameConfig.static.VERSION_NUMBER then
+		__initializeBasics(self)
+		love.filesystem.remove("RenegadeKlingon.conf")
+	end
 	name =nil
 	self._activepad=nil
 	local joysticks = love.joystick.getJoysticks()
@@ -129,18 +130,12 @@ local __initialize = function(self)
 end
 
 local _writeConfigFile=function(self)
-	local File conf_file=love.filesystem.newFile("RenegadeKlingon.conf")
-	conf_file:open('w')
-
-	local i=1
-
-	 for _,prop in pairs(self._properties_ordered) do
-	 	conf_file:write(self[prop.value].."\n\r")
-	 	i=i+1
-	 end
-
-	conf_file:close()
-
+	local props=ConfigPropertie:new()
+	for key,value in pairs(self._properties_ordered) do
+		props:setProp(value,self[value])
+	end
+	props:setPath("RenegadeKlingon.conf")
+	props:save()
 end
 
 --return the width of this ship
@@ -155,12 +150,12 @@ end
 --sets the key or joy button for the action
 function GameConfig:setKey(action,key,button)
 	if(action<=MAX_DIRECTION) then
-		self[self._properties_ordered[action].value]=key
+		self[self._properties_ordered[action]]=key
 	else
 		if(button==nil) then
-			self[self._properties_ordered[action].value]=key
+			self[self._properties_ordered[action]]=key
 		else
-			self[self._properties_ordered[action+KEY_JOY_CONVERSION].value]=button
+			self[self._properties_ordered[action+KEY_JOY_CONVERSION]]=button
 		end
 	end
 	_writeConfigFile(self)
@@ -168,8 +163,8 @@ end
 
 --gets the description of the key to perform the action passed
 function GameConfig:getKey(action)
-	local key=self[self._properties_ordered[action].value]
-	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION].value]
+	local key=self[self._properties_ordered[action]]
+	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION]]
 	
 	if(action<=MAX_DIRECTION) then
 		return key
@@ -194,8 +189,8 @@ end
 
 --true if the action passed by argument is down right now
 function GameConfig:isDown(action)
-	local key=self[self._properties_ordered[action].value]
-	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION].value]
+	local key=self[self._properties_ordered[action]]
+	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION]]
 	local direction=0
 	local to_check_dir=math.pow(-1,action)
 	
