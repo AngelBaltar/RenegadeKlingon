@@ -36,6 +36,9 @@ GameConfig.static.ESCAPE = 9
 
 GameConfig.static.VERSION_NUMBER="0.0.1 beta"
 
+GameConfig.static.PC="PC"
+GameConfig.static.ANDROID="ANDROID"
+
 local JOY_FIRE = 10
 local JOY_POWER = 11
 local JOY_PAUSE = 12
@@ -77,7 +80,9 @@ local __initializeBasics=function(self)
 	self._joyPause_button=-1
 	self._joyEnter_button=-1
 	self._joyEscape_button=-1
+
 	self._version_number=GameConfig.static.VERSION_NUMBER
+	self._target_machine=GameConfig.static.PC
 end
 
 --constructor
@@ -104,6 +109,7 @@ local __initialize = function(self)
 								"_joyEscape_button",
 
 								"_version_number",
+								"_target_machine"
 								nil
 							}
 
@@ -121,11 +127,6 @@ local __initialize = function(self)
         name=joystick:getName()
         break
     end
-	--DEBUG_PRINT("ACTIVE PAD IS: "..self["_activepad"])
-	-- local props=ConfigPropertie:new("kk.prop",false)
-	-- print(props:getProp("pepe"))
-	-- props:setProp("numero",props:getProp("numero")+10)
-	-- props:save("pp.prop")
 
 end
 
