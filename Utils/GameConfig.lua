@@ -34,7 +34,7 @@ GameConfig.static.PAUSE = 7
 GameConfig.static.ENTER = 8
 GameConfig.static.ESCAPE = 9
 
-GameConfig.static.VERSION_NUMBER="0.0.1 beta"
+GameConfig.static.VERSION_NUMBER="0.0.2 beta"
 
 GameConfig.static.PC="PC"
 GameConfig.static.ANDROID="ANDROID"
@@ -109,7 +109,7 @@ local __initialize = function(self)
 								"_joyEscape_button",
 
 								"_version_number",
-								"_target_machine"
+								"_target_machine",
 								nil
 							}
 
