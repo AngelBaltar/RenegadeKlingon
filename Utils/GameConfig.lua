@@ -64,7 +64,16 @@ local _readConfigFile=function(self)
 
 end
 
-local __initializeBasics=function(self)
+local __initializeJoystick=function(self)
+	self._joyFire_button=-1
+	self._joyPower_button=-1
+	self._joyPause_button=-1
+	self._joyEnter_button=-1
+	self._joyEscape_button=-1
+	self._joyName="nil"
+end
+
+local __initializeKeyboard=function(self)
 	self._keyUp="up"
 	self._keyDown="down"
 	self._keyLeft="left"
@@ -75,12 +84,12 @@ local __initializeBasics=function(self)
 	self._keyEnter="return"
 	self._keyEscape="escape"
 
-	self._joyFire_button=-1
-	self._joyPower_button=-1
-	self._joyPause_button=-1
-	self._joyEnter_button=-1
-	self._joyEscape_button=-1
+end
 
+local __initializeProperties=function(self)
+
+	__initializeKeyboard(self)
+	__initializeJoystick(self)
 	self._version_number=GameConfig.static.VERSION_NUMBER
 	self._target_machine=GameConfig.static.PC
 end
@@ -107,6 +116,7 @@ local __initialize = function(self)
 								"_joyPause_button",
 								"_joyEnter_button",
 								"_joyEscape_button",
+								"_joyName",
 
 								"_version_number",
 								"_target_machine",
@@ -127,6 +137,10 @@ local __initialize = function(self)
         name=joystick:getName()
         break
     end
+    if name~=self._joyName then
+    	__initializeJoystick(self)
+    end
+    self._joyName=name
 
 end
 
@@ -194,7 +208,7 @@ function GameConfig:isDown(action)
 	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION]]
 	local direction=0
 	local to_check_dir=math.pow(-1,action)
-	
+
 	if(action<=MAX_DIRECTION) then
 		if(action<=GameConfig.static.DOWN) then
 			axe=2 --up and down axis
@@ -204,7 +218,8 @@ function GameConfig:isDown(action)
 		if(self._activepad~=nil) then
 			direction=self._activepad:getAxis(axe)
 		end
-		return direction==to_check_dir or love.keyboard.isDown(key)
+		return ((self._activepad~=nil) and (direction<0)==(to_check_dir<0)and (direction~=0))
+				or love.keyboard.isDown(key)
 	else
 		return love.keyboard.isDown(key)
 				or (self._activepad~=nil
