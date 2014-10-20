@@ -98,7 +98,7 @@ end
 local __initialize = function(self)
 
 	
-
+	__initializeProperties(self)
 	--NOTE THIS PROPERTIES NEED TO BE ALIGNED WITH GameConfig.static. constants
 	self._properties_ordered={
 								"_keyUp",
