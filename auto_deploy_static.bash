@@ -43,6 +43,30 @@ drop_all_temporals() {
 	rm -rf ./tmpSources
 }
 
+check_and_download_binaries()  {
+	#check if all binaries needed exist, if not download them
+	echo "checking love binaries..."
+	ls ./bin 1>/dev/null 2>/dev/null
+	if [ $? -ne 0 ]; then
+		mkdir bin
+	fi
+	ls ./bin/love-0.9.1-win32.zip 1>/dev/null 2>/dev/null
+	if [ $? -ne 0 ]; then
+		cd bin
+		echo "	downloading love2d windows binary..."
+		wget https://bitbucket.org/rude/love/downloads/love-0.9.1-win32.zip 1>/dev/null 2>/dev/null
+		cd ..
+	fi
+	ls ./bin/love-0.9.1-macosx-x64.zip 1>/dev/null 2>/dev/null
+	if [ $? -ne 0 ]; then
+		#deployments for mac will need
+		cd bin
+		echo "	downloading love2d mac binary..."
+		wget https://bitbucket.org/rude/love/downloads/love-0.9.1-macosx-x64.zip 1>/dev/null 2>/dev/null
+		cd ..
+	fi
+}
+
 exit_deploy() {
 
 	drop_all_temporals
@@ -60,6 +84,7 @@ test() {
     fi
 
 }
+check_and_download_binaries
 drop_all_temporals
 echo "extracting love binaries..."
 test unzip -o ./bin/love-0.9.1-win32.zip 1>/dev/null
