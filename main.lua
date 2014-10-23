@@ -90,6 +90,12 @@ function love.load(args)
 
    love.keyboard.setKeyRepeat(0.0002, 0.0001)
    love.mouse.setVisible(false)
+   modes = love.window.getFullscreenModes()
+   table.sort(modes, function(a, b) return a.width*a.height > b.width*b.height end) 
+   -- sort from largest to smallest
+   love.window.setMode(modes[1].width, modes[1].height,
+         {resizable=false, vsync=true, minwidth=800, minheight=600,fullscreen = true})
+  
 end
 
 function MainScreen:update(dt)

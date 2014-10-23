@@ -25,6 +25,7 @@ necesary_files="GameFrameWork GameScreens Resources Utils main.lua conf.lua"
 path_linux=./bin/RenegadeKlingon_linux
 path_windows=./bin/RenegadeKlingon_windows
 path_mac=./bin/RenegadeKlingon_mac
+path_android=./bin/RenegadeKlingon_android
 path_act=`pwd`
 
 red="\e[31m"
@@ -34,13 +35,28 @@ blue="\e[34m"
 pink="\e[35m"
 reset="\e[0m"
 
+test() {
+    "$@"
+    status=$?
+    if [ $status -ne 0 ]; then
+        echo -e $red
+        echo "error with $1";
+        echo -e $reset
+		exit_deploy 10;
+    fi
+
+}
+
 drop_all_temporals() {
 	rm -rf $path_linux
 	rm -rf $path_windows
 	rm -rf $path_mac
+	rm -rf $path_android
 	rm -rf love.app
 	rm -rf love-0.9.1-win32
+	rm -rf love-0.9.1-android
 	rm -rf ./tmpSources
+	rm -rf ./__MACOSX
 }
 
 check_and_download_binaries()  {
@@ -72,18 +88,6 @@ exit_deploy() {
 	drop_all_temporals
 	exit "$@";
 }
-
-test() {
-    "$@"
-    status=$?
-    if [ $status -ne 0 ]; then
-        echo -e $red
-        echo "error with $1";
-        echo -e $reset
-		exit_deploy 10;
-    fi
-
-}
 check_and_download_binaries
 drop_all_temporals
 echo "extracting love binaries..."
@@ -96,10 +100,22 @@ test cp -r ./Resources/maps/mapSources/* ./tmpSources/
 test rm ./Resources/maps/mapSources/*
 test cp -r ./compressed_map_sources/* ./Resources/maps/mapSources/
 
+
+echo "deploying for android..."
+rm -rf ./bin/RenegadeKlingon.android.apk
+test cp RenegadeKlingon.android.conf RenegadeKlingon.conf
+test zip  -9 ./bin/game.zip -r $necesary_files 1>/dev/null
+test mv ./bin/game.zip ./bin/android/love-android-sdl2/assets/game.love
+test cd ./bin/android/love-android-sdl2/
+test ant debug
+test cd ./../../../
+test mv ./bin/android/love-android-sdl2/bin/love_android_sdl2-debug.apk ./bin/RenegadeKlingon.android.apk
+
 #lets deploy a .love for LINUX
 echo "deploying for linux..."
-rm -rf RenegadeKlingon_linux.zip
+rm -rf ./bin/RenegadeKlingon.linux.zip
 test mkdir $path_linux
+test cp RenegadeKlingon.pc.conf RenegadeKlingon.conf
 test zip  -9 $path_linux/RenegadeKlingon.zip -r $necesary_files 1>/dev/null
 test mv $path_linux/RenegadeKlingon.zip $path_linux/RenegadeKlingon.love
 test cp $path_linux/RenegadeKlingon.love ./RenegadeKlingon.love
@@ -107,7 +123,7 @@ test zip -9 -r ./bin/RenegadeKlingon.linux.zip $path_linux 1>/dev/null
 
 # # lets deploy a .exe for WINDOWS
 echo "deploying for windows..."
-rm -rf RenegadeKlingon_windows.zip
+rm -rf ./bin/RenegadeKlingon.windows.zip
 test mkdir $path_windows
 test cp ./RenegadeKlingon.love $path_windows/game.love
 test cp -R ./love-0.9.1-win32/* $path_windows/
@@ -117,7 +133,7 @@ test zip -9 -r ./bin/RenegadeKlingon.windows.zip $path_windows 1>/dev/null
 
 # #lets deploy a .app for MAC OSX
 echo "deploying for mac..."
-rm -rf RenegadeKlingon_mac.zip
+rm -rf ./bin/RenegadeKlingon.osx.zip
 test mkdir $path_mac
 test cp -R ./love.app $path_mac/RenegadeKlingon.app
 test cp ./RenegadeKlingon.love $path_mac/RenegadeKlingon.app/Contents/Resources/
