@@ -53,18 +53,6 @@ function Enemy:getSpeed()
   return self._speed
 end
 
---return the width of this ship
-function Enemy:getWidth()
-  local ship=SpaceObject.getDrawableObject(self)
-	return ship:getWidth()
-end
-
---return the height of this ship
-function Enemy:getHeight()
-  local ship=SpaceObject.getDrawableObject(self)
-	return ship:getHeight()
-end
-
 function Enemy:collision(object,damage)
   --other enemies bullets do not hit me
   if not (object:isBullet() and object:getEmmiter():isEnemyShip())

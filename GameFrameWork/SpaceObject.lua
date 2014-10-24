@@ -17,6 +17,7 @@
 --  * <http://www.gnu.org/licenses/>.
 --  */
 require 'GameFrameWork/Space'
+require 'Utils/GameConfig'
 
 SpaceObject = class('GameFrameWork.SpaceObject')
 
@@ -70,7 +71,8 @@ function SpaceObject:draw()
 	      self._shielddraw=0
 	    end
 	end
-	love.graphics.draw(self._toDraw, self._xPos, self._yPos)
+	sx,sy=GameConfig.getInstance():getScale()
+	love.graphics.draw(self._toDraw, self._xPos, self._yPos,0,sx,sy)
 end
 
 --Read from keyboard
@@ -118,14 +120,24 @@ function SpaceObject:setPosition(x,y)
 
 end
 
---must be implemented in subclasses
 function SpaceObject:getWidth()
-
+	local ship=SpaceObject.getDrawableObject(self)
+	sx,sy=GameConfig.getInstance():getScale()
+	if ship~=nil then
+		return ship:getWidth()*sx
+	else
+		return 0
+	end
 end
 
---must be implemented in subclasses
 function SpaceObject:getHeight()
-
+	local ship=SpaceObject.getDrawableObject(self)
+	sx,sy=GameConfig.getInstance():getScale()
+	if ship~=nil then
+		return ship:getHeight()*sy
+	else
+		return 0
+	end
 end
 
 --gets the stimated size of the object to get an idea how big it is

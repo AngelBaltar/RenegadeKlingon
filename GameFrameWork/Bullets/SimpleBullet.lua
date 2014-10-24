@@ -18,6 +18,7 @@
 --  */
 require 'GameFrameWork/Bullets/Bullet'
 require 'GameFrameWork/Explosions/ParticleExplosion'
+require 'Utils/GameConfig'
 
 
 SimpleBullet = class('GameFrameWork.SimpleBullet',Bullet)
@@ -41,9 +42,11 @@ end
 
 --return the width of this ship
 function SimpleBullet:getWidth()
-  return 4
+  sx,sy=GameConfig.getInstance():getScale()
+  return 4*sx
 end
 --return the height of this shiplove.graphics.newImage("Resources/gfx/blue_SimpleBullet.png")
 function SimpleBullet:getHeight()
-  return 4
+  sx,sy=GameConfig.getInstance():getScale()
+  return 4*sy
 end

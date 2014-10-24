@@ -68,20 +68,6 @@ function love.load(args)
         settimeout=true
      end
    end
-   mainMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2-50)
-   mainMenu:addItem("Play")
-   mainMenu:addItem("Options")  
-   image=love.graphics.newImage("Resources/gfx/kelogo.jpg")
-   optionsMenu=OptionsScreen:new()
-   local scr_main=nil
-
-   if timeout>0 then
-      scr_main=MainScreen:new(timeout)
-   else
-      scr_main=MainScreen:new()
-   end
-   play=nil
-   --kk=pp+1
    local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",35)
    love.graphics.setFont(f)
    
@@ -95,6 +81,23 @@ function love.load(args)
    -- sort from largest to smallest
    love.window.setMode(modes[1].width, modes[1].height,
          {resizable=false, vsync=true, minwidth=800, minheight=600,fullscreen = true})
+   config:setScale(modes[1].width/800,modes[1].height/600)
+   --print(modes[1].width.."x"..modes[1].height)
+   sx,sy=config:getScale()
+   image=love.graphics.newImage("Resources/gfx/kelogo.jpg")
+   mainMenu=Menu:new(image:getWidth()*sx+4*sx,image:getHeight()/2-50*sy)
+   mainMenu:addItem("Play")
+   mainMenu:addItem("Options")  
+   optionsMenu=OptionsScreen:new()
+   local scr_main=nil
+
+   if timeout>0 then
+      scr_main=MainScreen:new(timeout)
+   else
+      scr_main=MainScreen:new()
+   end
+   play=nil
+   --kk=pp+1
   
 end
 
@@ -136,7 +139,8 @@ function love.draw()
     if(selected_option==NONE_OPTION) then
         mainMenu:print()
         love.graphics.setColor(255,255,255,255)
-        love.graphics.draw(image, 0, 0)
+        sx,sy=config:getScale()
+        love.graphics.draw(image, 0, 0,0,sx,sy)
     end
     if(selected_option==PLAY_OPTION) then
         play:draw()

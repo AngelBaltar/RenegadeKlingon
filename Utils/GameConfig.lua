@@ -39,6 +39,7 @@ GameConfig.static.VERSION_NUMBER="0.0.2 beta"
 GameConfig.static.PC="PC"
 GameConfig.static.ANDROID="ANDROID"
 
+
 local JOY_FIRE = 10
 local JOY_POWER = 11
 local JOY_PAUSE = 12
@@ -315,4 +316,13 @@ function GameConfig:getControlsDescription()
 	desc=desc.."enter-> "..self._keyEnter.."\n"
 	desc=desc.."exit-> "..self._keyEscape.."\n"
 	return desc
+end
+
+function GameConfig:setScale(x,y)
+	self._scalex=x
+	self._scaley=y
+end
+
+function GameConfig:getScale(x,y)
+	return self._scalex,self._scaley
 end

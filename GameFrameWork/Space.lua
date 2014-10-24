@@ -22,12 +22,11 @@ require 'Utils/GameConfig'
 
 Space = class('GameFrameWork.Space')
 
-local BUCKET_SIZE=32
-local SIZE_BUCKETS_X=0
-local SIZE_BUCKETS_Y=0
-
 local SCREEN_WD=love.graphics.getWidth()
 local SCREEN_HT=love.graphics.getHeight()
+local BUCKET_SIZE=32--SCREEN_WD*SCREEN_HT/10000
+local SIZE_BUCKETS_X=(SCREEN_WD/BUCKET_SIZE)
+local SIZE_BUCKETS_Y=(SCREEN_HT/BUCKET_SIZE)
 
 --creates the space must create only one space for the game
 function Space:initialize()
@@ -36,6 +35,12 @@ function Space:initialize()
 
     --collision system implementation
     self._buckets={}
+
+    SCREEN_WD=love.graphics.getWidth()
+	SCREEN_HT=love.graphics.getHeight()
+	local sx,sy=GameConfig.getInstance():getScale()
+	BUCKET_SIZE=math.ceil((SCREEN_WD/5))--math.ceil(32*sx*sy)
+	--print("bucket size is:"..BUCKET_SIZE)
 
     --create empty list of buckets
     
@@ -222,9 +227,10 @@ end
 local _printBackground=function(self)
 
    local size=self._bgList[self._bgActual]:getWidth()
-   love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0) -- this is the left image
+   sx,sy=GameConfig.getInstance():getScale()
+   love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0,0,sx,sy) -- this is the left image
    love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
-    								+ size, 0) -- this is the right image
+    								+ size, 0,0,sx,sy) -- this is the right image
 end
 
 function Space:getBackGroundCadence()

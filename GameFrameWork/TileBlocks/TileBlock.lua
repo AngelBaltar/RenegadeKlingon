@@ -18,6 +18,7 @@
 --  */
 require 'GameFrameWork/SpaceObject'
 require 'Utils/Debugging'
+require 'Utils/GameConfig'
 
 TileBlock = class('GameFrameWork.TileBlocks.TileBlock',SpaceObject)
 
@@ -61,7 +62,8 @@ function TileBlock:draw()
   local y=self:getPositionY()
   --DEBUG_PRINT("draw tileblock "..x.." "..y)
   --love.graphics.draw(self._tile.tileset.image,x,y)
-  self._tile:draw(x, y, 0, 1, 1, 0,0)
+  sx,sy=GameConfig.getInstance():getScale()
+  self._tile:draw(x, y,0,sx,sy)
 end
 
 

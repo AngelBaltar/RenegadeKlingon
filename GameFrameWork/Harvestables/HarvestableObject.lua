@@ -44,17 +44,6 @@ function HarvestableObject:collision(object,damage)
      end
 end
 
-
-function HarvestableObject:getWidth()
-  local obj=SpaceObject.getDrawableObject(self)
- return obj:getWidth()
-end
---return the height of this shiplove.graphics.newImage("Resources/gfx/blue_HarvestableObject.png")
-function HarvestableObject:getHeight()
-  local obj=SpaceObject.getDrawableObject(self)
- return obj:getHeight()
-end
-
 function HarvestableObject:pilot(dt)
   self._pilot_pattern:pilot(dt)
 end

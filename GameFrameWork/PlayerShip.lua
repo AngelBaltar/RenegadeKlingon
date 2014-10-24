@@ -42,17 +42,6 @@ function PlayerShip:initialize(space,posx,posy)
   self._powertimer=0
 end
 
---return the width of this ship
-function PlayerShip:getWidth()
-  local ship=SpaceObject.getDrawableObject(self)
-	return ship:getWidth()
-end
-
---return the height of this ship
-function PlayerShip:getHeight()
-  local ship=SpaceObject.getDrawableObject(self)
-	return ship:getHeight()
-end
 
 function PlayerShip:setWeapon(weapon)
   self._basic_weapon=weapon
