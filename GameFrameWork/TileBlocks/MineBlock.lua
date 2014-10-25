@@ -19,6 +19,7 @@
 require 'GameFrameWork/TileBlocks/TileBlock'
 require 'Utils/Animation'
 require 'Utils/Debugging'
+require 'Utils/GameConfig'
 
 
 MineBlock = class('GameFrameWork.TileBlocks.MineBlock',TileBlock)
@@ -31,7 +32,7 @@ mines_tab[0]={     sprite=MINE1,
                         n_steps=3,
                         delay=0.1,
                         mode="loop",
-                        zoom=0.7}
+                        zoom=0.6}
 
 --constructor
 function MineBlock:initialize(space,tile,weapon,x,y)
@@ -64,11 +65,13 @@ function MineBlock:die()
 end
 
 function MineBlock:getWidth()
-  return self._mine:getWidth()*self._zoom
+  local sx,sy=GameConfig.getInstance():getScale()
+  return self._mine:getWidth()*self._zoom*sx
 end
 --return the height of this shiplove.graphics.newImage("Resources/gfx/blue_MineBlock.png")
 function MineBlock:getHeight()
-  return self._mine:getHeight()*self._zoom
+  local sx,sy=GameConfig.getInstance():getScale()
+  return self._mine:getHeight()*self._zoom*sy
 end
 
 function MineBlock:pilot(dt)
@@ -90,7 +93,8 @@ function MineBlock:collision(object,damage)
 end
 --Draws the object in the screen
 function MineBlock:draw()
-  self._mine:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom) 
+  local sx,sy=GameConfig.getInstance():getScale()
+  self._mine:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom*sx,self._zoom*sy) 
 end
 
 function MineBlock:isEnemyShip()

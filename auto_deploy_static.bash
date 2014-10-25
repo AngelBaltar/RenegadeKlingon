@@ -81,6 +81,25 @@ check_and_download_binaries()  {
 		wget https://bitbucket.org/rude/love/downloads/love-0.9.1-macosx-x64.zip 1>/dev/null 2>/dev/null
 		cd ..
 	fi
+	ls ./bin/android 1>/dev/null 2>/dev/null
+	if [ $? -ne 0 ]; then
+		cd bin
+		mkdir android
+		cd ..
+	fi
+	ls ./bin/android/love-android-sdl2/ 1>/dev/null 2>/dev/null
+	if [ $? -ne 0 ]; then
+		cd ./bin/android
+		echo "	downloading love2d android port..."
+		echo "	you will need to install:"
+		echo "		android-sdk"
+		echo "		apache-ant"
+		echo "		android-ndk-r9c"
+		echo "		and probably some other things check the port repo wiki at "
+		echo "		https://bitbucket.org/MartinFelis/love-android-sdl2"
+		git clone https://bitbucket.org/MartinFelis/love-android-sdl2.git 1>/dev/null 2>/dev/null
+		cd ../../
+	fi
 }
 
 exit_deploy() {
@@ -107,7 +126,7 @@ test cp RenegadeKlingon.android.conf RenegadeKlingon.conf
 test zip  -9 ./bin/game.zip -r $necesary_files 1>/dev/null
 test mv ./bin/game.zip ./bin/android/love-android-sdl2/assets/game.love
 test cd ./bin/android/love-android-sdl2/
-test ant debug
+test ant debug 1>/dev/null 2>/dev/null
 test cd ./../../../
 test mv ./bin/android/love-android-sdl2/bin/love_android_sdl2-debug.apk ./bin/RenegadeKlingon.android.apk
 

@@ -98,8 +98,8 @@ function Space:updateBucketFor(so)
 	local y=so:getPositionY()
 	local bc_x_new=math.floor(x/BUCKET_SIZE)
 	local bc_y_new=math.floor(y/BUCKET_SIZE)
-	local delta_x=math.floor(so:getWidth()/BUCKET_SIZE)
-	local delta_y=math.floor(so:getHeight()/BUCKET_SIZE)
+	local delta_x=math.ceil(so:getWidth()/BUCKET_SIZE)
+	local delta_y=math.ceil(so:getHeight()/BUCKET_SIZE)
 
 	if(so:isDead()) then
 		DEBUG_PRINT("updating bucket for dead object\n")

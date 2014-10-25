@@ -68,8 +68,6 @@ function love.load(args)
         settimeout=true
      end
    end
-   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",35)
-   love.graphics.setFont(f)
    
    love.graphics.setColor(255,255,255,255)
    love.graphics.setBackgroundColor(0,0,0)
@@ -81,7 +79,12 @@ function love.load(args)
    -- sort from largest to smallest
    love.window.setMode(modes[1].width, modes[1].height,
          {resizable=false, vsync=true, minwidth=800, minheight=600,fullscreen = true})
-   config:setScale(modes[1].width/800,modes[1].height/600)
+   
+
+   config:setScale(love.graphics.getWidth()/800,love.graphics.getHeight()/600)
+   local sx,sy=config:getScale()
+   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30*sx)
+   love.graphics.setFont(f)
    --print(modes[1].width.."x"..modes[1].height)
    sx,sy=config:getScale()
    image=love.graphics.newImage("Resources/gfx/kelogo.jpg")

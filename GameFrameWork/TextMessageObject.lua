@@ -57,9 +57,8 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
         self._msgTxt=self._msgTxt..line.."\n"
   end
   DEBUG_PRINT(self._msgTxt)
-  
- local font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30)
- love.graphics.setFont(font)
+ local sx,sy=GameConfig.getInstance():getScale()
+ self._font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30*sy)
  local ch_act=0
  local count=0
  while (ch_act<string.len(self._msgTxt)) do
@@ -67,18 +66,19 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
    self._msgDraw[count]=""
    n_lines=0
    local line=""
+
    for i = ch_act, string.len(self._msgTxt) do
         ch=string.sub(self._msgTxt, i, i)
         ch_act=i
         if(ch==frame_exit_char) then
-          ch_act=i+1
+          ch_act=i+2 --SKIP \n after #
           break
         end
         if(ch=='\n') then
           n_lines=n_lines+1
           line=line..ch
-          if(self._width<font:getWidth(line)+font:getWidth("A")*4) then
-              self._width=font:getWidth(line)+font:getWidth("A")*4
+          if(self._width<font:getWidth(line)+font:getWidth("A")*2) then
+              self._width=font:getWidth(line)+font:getWidth("A")*2
           end
           line=""
         else
@@ -86,14 +86,13 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
         end
         self._msgDraw[count]=self._msgDraw[count]..ch
     end
-
+    n_lines=n_lines+1
     if(self._height<font:getHeight()*n_lines) then
       self._height=font:getHeight()*n_lines
     end
 
     count=count+1
  end
- self._height=self._height*1.5
  self._NumMsgs=count
  self._msgNum=0
  SpaceObject.initialize(self,space, tile,posx,posy,2000)
@@ -196,15 +195,19 @@ function TextMessageObject:draw()
     if self._msgDraw[self._msgNum]==nil then
       return nil
     end
+    local sx,sy=GameConfig.getInstance():getScale()
+    local fnt=love.graphics.getFont()
+    love.graphics.setFont(self._font)
     local r, g, b, a = love.graphics.getColor( )
     love.graphics.setColor(10,10,150,140)
     love.graphics.rectangle("fill",x,y,self._width,self._height)
      love.graphics.setColor(255,0,0,140)
     love.graphics.rectangle( "line", x,y,self._width,self._height)
     love.graphics.setColor(255,0,0,self._transparency)
-    love.graphics.print(self._msgDraw[self._msgNum],x+0.1*self._width, y)
+    love.graphics.print(self._msgDraw[self._msgNum],x+self._font:getWidth("A"), y)
     love.graphics.setColor(255,0,0,self._transparency)
     love.graphics.setColor(r,g,b,a)
+    love.graphics.setFont(fnt)
 
 end
 

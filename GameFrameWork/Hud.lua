@@ -17,6 +17,7 @@
 --  * <http://www.gnu.org/licenses/>.
 --  */
 require 'GameFrameWork/SpaceObject'
+require 'Utils/GameConfig'
 
 Hud = class('GameFrameWork.Hud',SpaceObject)
 
@@ -35,12 +36,6 @@ function Hud:getWidth()
 	return SpaceObject.getSpace(self):getXend()
 end
 
---return the height of this ship
-function Hud:getHeight()
-  local bar=SpaceObject.getDrawableObject(self)
-	return bar:getHeight()
-end
-
 --Performs movements changing the position of the object, firing bullets...
 function Hud:pilot(dt)
   if(self._enemy~=nil and self._enemy:isDead())then
@@ -53,7 +48,8 @@ function Hud:draw()
 
   local my_space=SpaceObject.getSpace(self)
   local bar=SpaceObject.getDrawableObject(self)
-  local x_pos=self:getPositionX()+bar:getWidth()
+  local sx,sy=GameConfig.getInstance():getScale()
+  local x_pos=self:getPositionX()+bar:getWidth()*sx
   local y_pos=self:getPositionY()
 
 
@@ -86,8 +82,7 @@ function Hud:draw()
   
   love.graphics.print(score_str, x_pos, y_pos)
   y_pos=y_pos-love.graphics.getFont():getHeight()
-  x_pos=x_pos+math.max(love.graphics.getFont():getWidth(score_str),
-                        math.max(love.graphics.getFont():getWidth(score_str),190))
+  x_pos=x_pos+love.graphics.getFont():getWidth(score_str)+love.graphics.getFont():getWidth("A")*3
   
   love.graphics.setColor(255,0,0,127+(weaponpw/totalpw)*128)
   love.graphics.print("weapon", x_pos, y_pos)
