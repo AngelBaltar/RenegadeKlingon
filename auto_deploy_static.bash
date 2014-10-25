@@ -20,7 +20,7 @@
 # --  */
 
 #deploy the game to binary executables in deployments directory
-necesary_files="GameFrameWork GameScreens Resources Utils main.lua conf.lua"
+necesary_files="GameFrameWork GameScreens Resources Utils main.lua conf.lua RenegadeKlingon.conf"
 
 path_linux=./bin/RenegadeKlingon_linux
 path_windows=./bin/RenegadeKlingon_windows
@@ -122,6 +122,7 @@ test cp -r ./compressed_map_sources/* ./Resources/maps/mapSources/
 
 echo "deploying for android..."
 rm -rf ./bin/RenegadeKlingon.android.apk
+rm -rf ./bin/game.zip
 test cp RenegadeKlingon.android.conf RenegadeKlingon.conf
 test zip  -9 ./bin/game.zip -r $necesary_files 1>/dev/null
 test mv ./bin/game.zip ./bin/android/love-android-sdl2/assets/game.love

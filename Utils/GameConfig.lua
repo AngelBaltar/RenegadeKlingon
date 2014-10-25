@@ -56,9 +56,6 @@ local button_read=ButtonRead.getInstance()
 local _readConfigFile=function(self)
 
 	local props=ConfigPropertie:new("RenegadeKlingon.conf")
-	if props:getPropTab()==nil then
-		props=ConfigPropertie:new("RenegadeKlingon.conf")
-	end
 	for key,value in props:getIterator() do
 		self[key]=value
 	end

@@ -39,14 +39,10 @@ function ConfigPropertie:initialize(path)
 	self._path=""
 	if path~=nil then
 		self._path=path
-		if love.filesystem.exists(path) then	
-			path=love.filesystem.getSaveDirectory( ).."/"..path
-		else
-			path=love.filesystem.getWorkingDirectory( ).."/"..path
-		end
-		print("loading... ",path)
-		if _file_exists(path) then
-			self._prop_tab=dofile(path)
+		if love.filesystem.exists( path ) then
+			print("loading... ",path)
+			chunk = love.filesystem.load( path ) -- load the chunk
+			self._prop_tab=chunk() -- execute the chunk
 		end
 		
 	end
