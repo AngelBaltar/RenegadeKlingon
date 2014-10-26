@@ -58,7 +58,7 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
   end
   DEBUG_PRINT(self._msgTxt)
  local sx,sy=GameConfig.getInstance():getScale()
- self._font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30*sy)
+ self._font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",20*sx*sy)
  local ch_act=0
  local count=0
  while (ch_act<string.len(self._msgTxt)) do

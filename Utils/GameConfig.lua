@@ -323,3 +323,7 @@ end
 function GameConfig:getScale(x,y)
 	return self._scalex,self._scaley
 end
+
+function GameConfig:getTargetMachine()
+	return self._target_machine
+end

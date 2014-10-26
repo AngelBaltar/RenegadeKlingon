@@ -17,6 +17,7 @@
 --  * <http://www.gnu.org/licenses/>.
 --  */
 require 'Utils/Menu'
+require 'Utils/GameConfig'
 require 'GameScreens/Screen'
 require 'GameScreens/CreditsScreen'
 require 'GameScreens/ControlsScreen'
@@ -34,11 +35,17 @@ local HIGH_SCORE_OPTION=3
 function OptionsScreen:initialize()
   self._optionsMenu=Menu:new(love.graphics.getWidth()/2,love.graphics.getHeight()/2)
   self._optionsMenu:addItem("Credits")
-  self._optionsMenu:addItem("Controls")
+  if GameConfig.getInstance():getTargetMachine()==GameConfig.static.ANDROID then
+  	--no way to change controls on android
+  	HIGH_SCORE_OPTION=CREDITS_OPTION+1
+  	CONTROLS_OPTION=-1
+  else
+  	 self._optionsMenu:addItem("Controls")
+  	 self._controls=ControlsScreen:new()
+  end
   self._optionsMenu:addItem("High Score")
   self._selectedOption=NONE_OPTION
   self._credits=CreditsScreen:new()
-  self._controls=ControlsScreen:new()
   self._scores=HighScore:new()
   Screen.initialize(self)
 end 

@@ -73,20 +73,23 @@ function love.load(args)
    love.graphics.setBackgroundColor(0,0,0)
 
    love.keyboard.setKeyRepeat(0.0002, 0.0001)
-   love.mouse.setVisible(false)
    modes = love.window.getFullscreenModes()
    table.sort(modes, function(a, b) return a.width*a.height > b.width*b.height end) 
    -- sort from largest to smallest
    love.window.setMode(modes[1].width, modes[1].height,
-         {resizable=false, vsync=true, minwidth=320, minheight=240,fullscreen = true})
+         {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
    
 
    config:setScale(love.graphics.getWidth()/800,love.graphics.getHeight()/600)
    local sx,sy=config:getScale()
-   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30*sx)
+   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",20*sx*sy)
    love.graphics.setFont(f)
    --print(modes[1].width.."x"..modes[1].height)
    sx,sy=config:getScale()
+   if config:getTargetMachine()~=GameConfig.static.ANDROID then
+      love.mouse.setVisible(false)
+   end
+   
    image=love.graphics.newImage("Resources/gfx/kelogo.jpg")
    mainMenu=Menu:new(image:getWidth()*sx,(image:getHeight()*sy)/2)
    mainMenu:addItem("Play")
