@@ -19,6 +19,8 @@
 
 require 'Utils/middleclass/middleclass'
 require	'Utils/GameConfig'
+require 'GameFrameWork/AndroidMenu'
+
 Menu = class('Menu') 
 
 local config=GameConfig.getInstance()
@@ -51,6 +53,7 @@ function Menu:print()
            y=y+love.graphics.getFont():getHeight()+3
            i=i+1
     end
+    AndroidMenu.getInstance():draw()
 end
 
 function Menu:readPressed()

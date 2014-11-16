@@ -19,6 +19,7 @@
 require 'Utils/middleclass/middleclass'
 require 'Utils/Debugging'
 require 'Utils/GameConfig'
+require 'GameFrameWork/AndroidMenu'
 
 Space = class('GameFrameWork.Space')
 
@@ -339,7 +340,7 @@ function Space:draw()
 			end
 		end
 	end
-
+	AndroidMenu.getInstance():draw()
 	if(self._pause) then
 		love.graphics.setColor(255,0,0,255)
         love.graphics.print("PAUSE",100,100)
@@ -683,7 +684,7 @@ function Space:getYinit()
 end
 
 function Space:getYend()
-	return love.graphics.getHeight()
+	return love.graphics.getHeight()-AndroidMenu.getInstance():gethigh()
 end
 
 

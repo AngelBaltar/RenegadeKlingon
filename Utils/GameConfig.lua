@@ -320,7 +320,7 @@ function GameConfig:setScale(x,y)
 	self._scaley=y
 end
 
-function GameConfig:getScale(x,y)
+function GameConfig:getScale()
 	return self._scalex,self._scaley
 end
 
