@@ -18,23 +18,45 @@
 --  */
 
 require 'Utils/Debugging'
-require 'Utils/GameConfig'
 
 AndroidMenu = class('GameFrameWork.AndroidMenu')
 
-local _instance=nil
-local config=GameConfig.getInstance()
 
+AndroidMenu.static.NONE = 0
+AndroidMenu.static.UP = 1
+AndroidMenu.static.DOWN = 2
+AndroidMenu.static.LEFT = 3
+AndroidMenu.static.RIGHT = 4
+AndroidMenu.static.FIRE = 5
+AndroidMenu.static.POWER = 6
+AndroidMenu.static.PAUSE = 7
+AndroidMenu.static.ENTER = 8
+AndroidMenu.static.ESCAPE = 9
+
+local _instance=nil
+local button_read=ButtonRead.getInstance()
+local sx,sy=0,0
 --constructor
 local __initialize = function(self)
-	sx,sy=config:getScale()
-	if config:getTargetMachine()==GameConfig.static.ANDROID then
-		self._width=love.graphics.getWidth()
-		self._heigh=67*sy
-	else
-		self._width=0
-		self._heigh=0
-	end
+    sx,sy=love.graphics.getWidth()/800,love.graphics.getHeight()/600
+	self._width=love.graphics.getWidth()
+	self._heigh=67*sy
+    self._key_width=9*sy*sx
+    self._margin=1.5*self._key_width
+    self._menu_y_begin=love.graphics.getHeight()-self._heigh
+    self._center_up_x=self._margin+self._key_width*2
+    self._center_up_y=self._menu_y_begin+self._margin
+    self._center_down_x=self._margin+self._key_width*2
+    self._center_down_y=self._menu_y_begin+self._margin+self._key_width*2
+    self._center_left_x=self._margin
+    self._center_left_y=self._menu_y_begin+self._margin+self._key_width*2
+    self._center_right_x=self._margin+self._key_width*4
+    self._center_right_y=self._menu_y_begin+self._margin+self._key_width*2
+    self._center_a_x=self._width-self._margin*2-self._key_width*6
+    self._center_a_y=self._menu_y_begin+self._heigh/2
+    self._center_b_x=self._width-self._margin-self._key_width*2
+    self._center_b_y=self._menu_y_begin+self._heigh/2
+    self._arrows_font=love.graphics.newFont("Resources/fonts/Arrows.ttf",self._key_width*2)
 end
 
 --return the width of this ship
@@ -55,38 +77,62 @@ function AndroidMenu:getwidth()
 end
 
 function AndroidMenu:draw()
-	if config:getTargetMachine()==GameConfig.static.ANDROID then
-		sx,sy=config:getScale()
-		menu_y_begin=love.graphics.getHeight()-self._heigh
-		love.graphics.setColor(10,10,150,140)
-    	love.graphics.rectangle("fill",0,menu_y_begin,self._width,self._heigh)
-    	local key_width=10*sy
-    	local margin=1.5*key_width
-    	local center_up_x=margin+key_width*2
-    	local center_up_y=menu_y_begin+margin
-    	local center_down_x=margin+key_width*2
-    	local center_down_y=menu_y_begin+margin+key_width*4
-    	local center_left_x=margin
-    	local center_left_y=menu_y_begin+margin+key_width*2
-    	local center_right_x=margin+key_width*4
-    	local center_right_y=menu_y_begin+margin+key_width*2
-    	love.graphics.setColor(255,0,0,255)
-    	love.graphics.circle( "fill",center_up_x ,center_up_y , key_width, 700 )
-    	love.graphics.circle( "fill",center_down_x ,center_down_y , key_width, 700 )
-    	love.graphics.circle( "fill",center_left_x ,center_left_y , key_width, 700 )
-    	love.graphics.circle( "fill",center_right_x ,center_right_y , key_width, 700 )
-    	love.graphics.setColor(0,255,0,255)
-    	local backup_font=love.graphics.getFont()
-    	local font=love.graphics.newFont("Resources/fonts/Arrows.ttf",key_width*2)
-    	love.graphics.setFont(font)
-    	love.graphics.print('b', center_left_x-font:getWidth('b')/2, center_left_y-font:getHeight('b')/2)
-    	love.graphics.print('a', center_right_x-font:getWidth('a')/2, center_right_y-font:getHeight('a')/2)
-    	love.graphics.print('c', center_up_x-font:getWidth('c')/2, center_up_y-font:getHeight('c')/2)
-    	love.graphics.print('d', center_down_x-font:getWidth('d')/2, center_down_y-font:getHeight('d')/2)
-    	love.graphics.setFont(backup_font)
-	end
+	love.graphics.setColor(10,10,150,140)
+	love.graphics.rectangle("fill",0,self._menu_y_begin,self._width,self._heigh)
+	love.graphics.setColor(255,0,0,255)
+	love.graphics.circle( "fill",self._center_up_x ,self._center_up_y , self._key_width, 700 )
+	love.graphics.circle( "fill",self._center_down_x ,self._center_down_y , self._key_width, 700 )
+	love.graphics.circle( "fill",self._center_left_x ,self._center_left_y , self._key_width, 700 )
+	love.graphics.circle( "fill",self._center_right_x ,self._center_right_y , self._key_width, 700 )
+    love.graphics.circle( "fill",self._center_a_x ,self._center_a_y , self._key_width*2, 700 )
+    love.graphics.circle( "fill",self._center_b_x ,self._center_b_y , self._key_width*2, 700 )
+	love.graphics.setColor(0,255,0,255)
+	local backup_font=love.graphics.getFont()
+	love.graphics.setFont(self._arrows_font)
+	love.graphics.print('b', self._center_left_x-self._arrows_font:getWidth('b')/2, self._center_left_y-self._arrows_font:getHeight('b')/2)
+	love.graphics.print('a', self._center_right_x-self._arrows_font:getWidth('a')/2, self._center_right_y-self._arrows_font:getHeight('a')/2)
+	love.graphics.print('c', self._center_up_x-self._arrows_font:getWidth('c')/2, self._center_up_y-self._arrows_font:getHeight('c')/2)
+	love.graphics.print('d', self._center_down_x-self._arrows_font:getWidth('d')/2, self._center_down_y-font:getHeight('d')/2.5)
+	love.graphics.setFont(backup_font)
+    love.graphics.print('A', self._center_a_x-backup_font:getWidth('A')/2, self._center_a_y-backup_font:getHeight('A')/2)
+    love.graphics.print('B', self._center_b_x-backup_font:getWidth('B')/2, self._center_b_y-backup_font:getHeight('B')/2)
 end
 
+function AndroidMenu:isDown(key)
+    local x,y=nil,nil
+    if love.mouse.isDown("l") then
+        x, y = love.mouse.getPosition( )
+    end
+    if x==nil or y==nil then
+        return false
+    end
+    if key==AndroidMenu.static.DOWN then
+        return ((x-self._center_down_x)*(x-self._center_down_x)+(y-self._center_down_y)*(y-self._center_down_y)<self._key_width)
+    end
+    return false
+end
 
+function AndroidMenu:isDownAnyThing()
 
+    return self:isDown(AndroidMenu.static.UP)     or
+            self:isDown(AndroidMenu.static.DOWN)  or
+            self:isDown(AndroidMenu.static.LEFT)  or
+            self:isDown(AndroidMenu.static.RIGHT)  or
+            self:isDown(AndroidMenu.static.FIRE)  or
+            self:isDown(AndroidMenu.static.POWER)  or
+            self:isDown(AndroidMenu.static.PAUSE) or
+            self:isDown(AndroidMenu.static.ENTER) or
+            self:isDown(AndroidMenu.static.ESCAPE)
+end
+
+function AndroidMenu:readInput()
+    local x,y=button_read:getMouse()
+    if x==nil and y==nil then
+        return AndroidMenu.static.NONE
+    end
+    if (x-self._center_down_x)*(x-self._center_down_x)+(y-self._center_down_y)*(y-self._center_down_y)<self._key_width then
+        return AndroidMenu.static.DOWN
+    end
+    return AndroidMenu.static.NONE
+end
 

@@ -35,9 +35,16 @@ local __initialize_key=function(self)
 	self._unicode=0
 end
 
+local __initialize_mouse=function(self)
+	self._mouse=false
+	self._mouse_x=0
+	self._mouse_y=0
+end
+
 local __initialize = function(self)
 	__initialize_key(self)
 	__initialize_joy(self)
+	__initialize_mouse(self)
 end
 
 --return the width of this ship
@@ -51,6 +58,12 @@ end
 
 function ButtonRead:cleanBuffer()
 	__initialize(self)
+end
+
+function ButtonRead:setMouse(x,y)
+	self._mouse=true
+	self._mouse_x=x
+	self._mouse_y=y
 end
 
 function ButtonRead:setKey(key,unicode)
@@ -67,7 +80,7 @@ end
 
 --returns true if there is something to read in the buffer
 function ButtonRead:isSomethingToRead()
-	return self._keyboard or self._joypad
+	return self._keyboard or self._joypad or self._mouse
 end
 
 function ButtonRead:getKey()
@@ -92,5 +105,17 @@ function ButtonRead:getJoys()
 		__initialize_joy(self) --only 1 read
 		DEBUG_PRINT("button read "..button)
 		return joy,button
+	end
+end
+
+function ButtonRead:getMouse()
+	if not self._mouse then
+		return nil,nil
+	else
+
+		local x=self._mouse_x
+		local y=self._mouse_y
+		__initialize_mouse(self)--only 1 read
+		return x,y
 	end
 end

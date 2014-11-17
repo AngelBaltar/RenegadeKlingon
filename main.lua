@@ -201,3 +201,10 @@ function love.keypressed(key, unicode)
     button_read:setKey(key,unicode)
     --DEBUG_PRINT("key pressed "..key)
 end
+
+function love.mousepressed(x, y, button)
+   time_inactive=0
+   if button == "l" then
+      button_read:setMouse(x,y)
+   end
+end

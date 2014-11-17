@@ -53,7 +53,9 @@ function Menu:print()
            y=y+love.graphics.getFont():getHeight()+3
            i=i+1
     end
-    AndroidMenu.getInstance():draw()
+    if config:getTargetMachine()==GameConfig.static.ANDROID then
+    	AndroidMenu.getInstance():draw()
+	end
 end
 
 function Menu:readPressed()

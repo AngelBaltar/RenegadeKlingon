@@ -20,6 +20,7 @@
 require 'Utils/Debugging'
 require 'Utils/ButtonRead'
 require 'Utils/ConfigPropertie'
+require 'GameFrameWork/AndroidMenu'
 
 GameConfig = class('GameFrameWork.GameConfig')
 
@@ -206,7 +207,9 @@ function GameConfig:isDown(action)
 	local joy=self[self._properties_ordered[action+KEY_JOY_CONVERSION]]
 	local direction=0
 	local to_check_dir=math.pow(-1,action)
-
+	if (self._target_machine==GameConfig.static.ANDROID) then
+		return AndroidMenu.getInstance():isDown(action)
+	end
 	if(action<=MAX_DIRECTION) then
 		if(action<=GameConfig.static.DOWN) then
 			axe=2 --up and down axis
@@ -227,6 +230,9 @@ end
 
 --true if something is pressed at the moment
 function GameConfig:isDownAnyThing()
+	if (self._target_machine==GameConfig.static.ANDROID) then
+		return AndroidMenu.getInstance():isDownAnyThing()
+	end
 	return self:isDown(GameConfig.static.UP) 	 or
          	self:isDown(GameConfig.static.DOWN)  or
          	self:isDown(GameConfig.static.LEFT) or
@@ -243,7 +249,9 @@ function GameConfig:readInput()
 	local direction = 0
 	local key=button_read:getKey()
 	local joy,button=button_read:getJoys()
-
+	if(self._target_machine==GameConfig.static.ANDROID) then
+		return AndroidMenu.getInstance():readInput()
+	end
 	if(button==nil and joy==nil) then
 		DEBUG_PRINT("nilllllllllllll")
 	end

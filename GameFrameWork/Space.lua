@@ -684,7 +684,11 @@ function Space:getYinit()
 end
 
 function Space:getYend()
-	return love.graphics.getHeight()-AndroidMenu.getInstance():gethigh()
+	if GameConfig.getInstance():getTargetMachine()==GameConfig.static.ANDROID then
+		return love.graphics.getHeight()-AndroidMenu.getInstance():gethigh()
+	else
+		return love.graphics.getHeight()
+	end
 end
 
 
