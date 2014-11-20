@@ -39,11 +39,13 @@ local sx,sy=0,0
 --constructor
 local __initialize = function(self)
     sx,sy=love.graphics.getWidth()/800,love.graphics.getHeight()/600
-	self._width=love.graphics.getWidth()
+	
+    self._width=love.graphics.getWidth()
 	self._heigh=67*sy
     self._key_width=9*sy*sx
     self._margin=1.5*self._key_width
     self._menu_y_begin=love.graphics.getHeight()-self._heigh
+    
     self._center_up_x=self._margin+self._key_width*2
     self._center_up_y=self._menu_y_begin+self._margin
     self._center_down_x=self._margin+self._key_width*2
@@ -52,10 +54,18 @@ local __initialize = function(self)
     self._center_left_y=self._menu_y_begin+self._margin+self._key_width*2
     self._center_right_x=self._margin+self._key_width*4
     self._center_right_y=self._menu_y_begin+self._margin+self._key_width*2
+    
     self._center_a_x=self._width-self._margin*2-self._key_width*6
     self._center_a_y=self._menu_y_begin+self._heigh/2
     self._center_b_x=self._width-self._margin-self._key_width*2
     self._center_b_y=self._menu_y_begin+self._heigh/2
+    
+    self._enter_x=love.graphics.getWidth()/2-self._key_width*8
+    self._enter_y=self._menu_y_begin+self._key_width
+
+    self._exit_x=love.graphics.getWidth()/2-self._key_width*4+self._margin
+    self._exit_y=self._menu_y_begin+self._key_width   
+
     self._arrows_font=love.graphics.newFont("Resources/fonts/Arrows.ttf",self._key_width*2)
 end
 
@@ -77,6 +87,7 @@ function AndroidMenu:getwidth()
 end
 
 function AndroidMenu:draw()
+    local r,g,b,t=love.graphics.getColor()
 	love.graphics.setColor(10,10,150,140)
 	love.graphics.rectangle("fill",0,self._menu_y_begin,self._width,self._heigh)
 	love.graphics.setColor(255,0,0,255)
@@ -86,20 +97,40 @@ function AndroidMenu:draw()
 	love.graphics.circle( "fill",self._center_right_x ,self._center_right_y , self._key_width, 700 )
     love.graphics.circle( "fill",self._center_a_x ,self._center_a_y , self._key_width*2, 700 )
     love.graphics.circle( "fill",self._center_b_x ,self._center_b_y , self._key_width*2, 700 )
-	love.graphics.setColor(0,255,0,255)
+	
+    love.graphics.setColor(0,255,0,255)
 	local backup_font=love.graphics.getFont()
+    love.graphics.print('A', self._center_a_x-backup_font:getWidth('A')/2, self._center_a_y-backup_font:getHeight('A')/2)
+    love.graphics.print('B', self._center_b_x-backup_font:getWidth('B')/2, self._center_b_y-backup_font:getHeight('B')/2)
+
+    
 	love.graphics.setFont(self._arrows_font)
 	love.graphics.print('b', self._center_left_x-self._arrows_font:getWidth('b')/2, self._center_left_y-self._arrows_font:getHeight('b')/2)
 	love.graphics.print('a', self._center_right_x-self._arrows_font:getWidth('a')/2, self._center_right_y-self._arrows_font:getHeight('a')/2)
 	love.graphics.print('c', self._center_up_x-self._arrows_font:getWidth('c')/2, self._center_up_y-self._arrows_font:getHeight('c')/2)
 	love.graphics.print('d', self._center_down_x-self._arrows_font:getWidth('d')/2, self._center_down_y-font:getHeight('d')/2.5)
-	love.graphics.setFont(backup_font)
-    love.graphics.print('A', self._center_a_x-backup_font:getWidth('A')/2, self._center_a_y-backup_font:getHeight('A')/2)
-    love.graphics.print('B', self._center_b_x-backup_font:getWidth('B')/2, self._center_b_y-backup_font:getHeight('B')/2)
+	
+
+    love.graphics.setColor(128,128,128,255)
+    love.graphics.rectangle("fill",self._enter_x,self._enter_y,self._key_width*3,self._key_width*1.5)
+    love.graphics.rectangle("fill",self._exit_x,self._exit_y,self._key_width*3,self._key_width*1.5)
+
+    love.graphics.setColor(255,0,0,255)
+    love.graphics.print('Q',self._enter_x+self._key_width*1.5,self._enter_y)
+    love.graphics.print('R',self._exit_x+self._key_width*1.5,self._exit_y)
+
+    love.graphics.setFont(backup_font)
+    
+    
+   
+    love.graphics.setColor(r,g,b,t)
+
 end
 
 function AndroidMenu:isDown(key)
     local x,y=nil,nil
+    local wdt=self._key_width*self._key_width
+    local wdt2=self._key_width*2*self._key_width*2
     if love.mouse.isDown("l") then
         x, y = love.mouse.getPosition( )
     end
@@ -107,7 +138,16 @@ function AndroidMenu:isDown(key)
         return false
     end
     if key==AndroidMenu.static.DOWN then
-        return ((x-self._center_down_x)*(x-self._center_down_x)+(y-self._center_down_y)*(y-self._center_down_y)<self._key_width)
+        return ((x-self._center_down_x)*(x-self._center_down_x)+(y-self._center_down_y)*(y-self._center_down_y)<wdt)
+    end
+    if key==AndroidMenu.static.UP then
+        return ((x-self._center_up_x)*(x-self._center_up_x)+(y-self._center_up_y)*(y-self._center_up_y)<wdt)
+    end
+    if key==AndroidMenu.static.LEFT then
+        return ((x-self._center_left_x)*(x-self._center_left_x)+(y-self._center_left_y)*(y-self._center_left_y)<wdt)
+    end
+    if key==AndroidMenu.static.RIGHT then
+        return ((x-self._center_right_x)*(x-self._center_right_x)+(y-self._center_right_y)*(y-self._center_right_y)<wdt)
     end
     return false
 end
@@ -127,11 +167,22 @@ end
 
 function AndroidMenu:readInput()
     local x,y=button_read:getMouse()
+    local wdt=self._key_width*self._key_width
     if x==nil and y==nil then
         return AndroidMenu.static.NONE
     end
-    if (x-self._center_down_x)*(x-self._center_down_x)+(y-self._center_down_y)*(y-self._center_down_y)<self._key_width then
+
+    if (x-self._center_down_x)*(x-self._center_down_x)+(y-self._center_down_y)*(y-self._center_down_y)<wdt then
         return AndroidMenu.static.DOWN
+    end
+    if (x-self._center_up_x)*(x-self._center_up_x)+(y-self._center_up_y)*(y-self._center_up_y)<wdt then
+        return AndroidMenu.static.UP
+    end
+    if (x-self._center_left_x)*(x-self._center_left_x)+(y-self._center_left_y)*(y-self._center_left_y)<wdt then
+        return AndroidMenu.static.LEFT
+    end
+    if (x-self._center_right_x)*(x-self._center_right_x)+(y-self._center_right_y)*(y-self._center_right_y)<wdt then
+        return AndroidMenu.static.RIGHT
     end
     return AndroidMenu.static.NONE
 end
