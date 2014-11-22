@@ -60,11 +60,11 @@ local __initialize = function(self)
     self._center_b_x=self._width-self._margin-self._key_width*2
     self._center_b_y=self._menu_y_begin+self._heigh/2
     
-    self._enter_x=love.graphics.getWidth()/2-self._key_width*8
-    self._enter_y=self._menu_y_begin+self._key_width
+    self._exit_x=love.graphics.getWidth()/2-self._key_width*8
+    self._exit_y=self._menu_y_begin+self._key_width
 
-    self._exit_x=love.graphics.getWidth()/2-self._key_width*4+self._margin
-    self._exit_y=self._menu_y_begin+self._key_width   
+    self._enter_x=love.graphics.getWidth()/2-self._key_width*4+self._margin
+    self._enter_y=self._menu_y_begin+self._key_width   
 
     self._arrows_font=love.graphics.newFont("Resources/fonts/Arrows.ttf",self._key_width*2)
 end
@@ -149,6 +149,20 @@ function AndroidMenu:isDown(key)
     if key==AndroidMenu.static.RIGHT then
         return ((x-self._center_right_x)*(x-self._center_right_x)+(y-self._center_right_y)*(y-self._center_right_y)<wdt)
     end
+    if key==AndroidMenu.static.FIRE then
+        return ((x-self._center_a_x)*(x-self._center_a_x)+(y-self._center_a_y)*(y-self._center_a_y)<wdt)
+    end
+    if key==AndroidMenu.static.POWER then
+        return ((x-self._center_b_x)*(x-self._center_b_x)+(y-self._center_b_y)*(y-self._center_b_y)<wdt)
+    end
+    if key==AndroidMenu.static.ENTER then
+        return (x>self._enter_x and x<self._enter_x+self._key_width*3
+                and y>self._enter_y and y<self._enter_y+self._key_width*1.5)
+    end
+    if key==AndroidMenu.ESCAPE then
+        return (x>self._exit_x and x<self._exit_x+self._key_width*3
+                and y>self._exit_y and y<self._exit_y+self._key_width*1.5)
+    end
     return false
 end
 
@@ -168,6 +182,7 @@ end
 function AndroidMenu:readInput()
     local x,y=button_read:getMouse()
     local wdt=self._key_width*self._key_width
+    local wdt2=self._key_width*2*self._key_width*2
     if x==nil and y==nil then
         return AndroidMenu.static.NONE
     end
@@ -184,6 +199,34 @@ function AndroidMenu:readInput()
     if (x-self._center_right_x)*(x-self._center_right_x)+(y-self._center_right_y)*(y-self._center_right_y)<wdt then
         return AndroidMenu.static.RIGHT
     end
+    if (x-self._center_a_x)*(x-self._center_a_x)+(y-self._center_a_y)*(y-self._center_a_y)<wdt2 then
+        return AndroidMenu.static.FIRE
+    end
+    if (x-self._center_b_x)*(x-self._center_b_x)+(y-self._center_b_y)*(y-self._center_b_y)<wdt2 then
+        return AndroidMenu.static.POWER
+    end
+    if x>self._enter_x and x<self._enter_x+self._key_width*3
+        and y>self._enter_y and y<self._enter_y+self._key_width*1.5 then
+        return AndroidMenu.static.ENTER
+    end
+    if x>self._exit_x and x<self._exit_x+self._key_width*3
+        and y>self._exit_y and y<self._exit_y+self._key_width*1.5 then
+        return AndroidMenu.static.ESCAPE
+    end
     return AndroidMenu.static.NONE
 end
 
+
+function AndroidMenu:getControlsDescription()
+    local desc=""
+    desc=desc.."up-> up arrow\n"
+    desc=desc.."down-> down arrow\n"
+    desc=desc.."left-> ..left arrow\n"
+    desc=desc.."right-> right arrow\n"
+    desc=desc.."fire-> A\n"
+    desc=desc.."power-> B\n"
+    desc=desc.."pause-> >(Enter)\n"
+    desc=desc.."enter-> >(Enter)\n"
+    desc=desc.."exit-> <(exit)\n"
+    return desc
+end

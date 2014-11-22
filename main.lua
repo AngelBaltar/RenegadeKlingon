@@ -203,8 +203,17 @@ function love.keypressed(key, unicode)
 end
 
 function love.mousepressed(x, y, button)
-   time_inactive=0
-   if button == "l" then
+   if (config:getTargetMachine()==GameConfig.static.ANDROID) then
+    time_inactive=0
+    if button == "l" then
       button_read:setMouse(x,y)
-   end
+    end
+  end
+end
+
+function love.touchpressed( id, x, y, pressure )
+  if (config:getTargetMachine()==GameConfig.static.ANDROID) then
+    time_inactive=0
+    button_read:setMouse(x,y)
+  end
 end

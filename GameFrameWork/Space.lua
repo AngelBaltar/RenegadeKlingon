@@ -340,7 +340,9 @@ function Space:draw()
 			end
 		end
 	end
-	AndroidMenu.getInstance():draw()
+	if GameConfig.getInstance():getTargetMachine()==GameConfig.static.ANDROID then
+		AndroidMenu.getInstance():draw()
+	end
 	if(self._pause) then
 		love.graphics.setColor(255,0,0,255)
         love.graphics.print("PAUSE",100,100)

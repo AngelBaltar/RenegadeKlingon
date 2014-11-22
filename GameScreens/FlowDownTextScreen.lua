@@ -17,6 +17,7 @@
 --  * <http://www.gnu.org/licenses/>.
 --  */
 require 'GameScreens/Screen'
+require 'GameFrameWork/AndroidMenu'
 
 FlowDownTextScreen = class('FlowDownTextScreen', Screen)
 
@@ -43,7 +44,9 @@ function FlowDownTextScreen:draw()
 	 love.graphics.print(self._message
 	 					, self._xPos, self._yPos)
 	end
-
+	if config:getTargetMachine()==GameConfig.static.ANDROID then
+		AndroidMenu.getInstance():draw()
+	end
 end
 
 function FlowDownTextScreen:update(dt)

@@ -310,6 +310,9 @@ end
 
 --gets controls description in string
 function GameConfig:getControlsDescription()
+	if self._target_machine==GameConfig.static.ANDROID then
+		return AndroidMenu.getInstance():getControlsDescription()
+	end
 	local desc=""
 	desc=desc.."up-> "..self._keyUp.."\n"
 	desc=desc.."down-> "..self._keyDown.."\n"

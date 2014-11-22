@@ -135,7 +135,7 @@ function TextMessageObject:readPressed()
     return 
   end
   local config=GameConfig.getInstance()
-  if config:isDown(GameConfig.static.ENTER) then
+  if config:isDownAnyThing() then
     self._skip_frame=true --skip message frame on intro
   end
 end
