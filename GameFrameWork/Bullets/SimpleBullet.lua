@@ -35,18 +35,19 @@ end
 
 function SimpleBullet:draw()
 	local r,g,b=self:getEmmiter():getShipColor()
+  local sx,sy=GameConfig.getInstance():getScale()
 	love.graphics.setColor(r,g,b,255)
-	love.graphics.circle( "fill", self:getPositionX(), self:getPositionY(),4, 700 )
+	love.graphics.circle( "fill", self:getPositionX(), self:getPositionY(),4*sx, 700 )
 	love.graphics.setColor(255,255,255,255)
 end
 
 --return the width of this ship
 function SimpleBullet:getWidth()
-  sx,sy=GameConfig.getInstance():getScale()
+  local sx,sy=GameConfig.getInstance():getScale()
   return 4*sx
 end
 --return the height of this shiplove.graphics.newImage("Resources/gfx/blue_SimpleBullet.png")
 function SimpleBullet:getHeight()
-  sx,sy=GameConfig.getInstance():getScale()
+  local sx,sy=GameConfig.getInstance():getScale()
   return 4*sy
 end

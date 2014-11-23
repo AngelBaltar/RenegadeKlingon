@@ -42,9 +42,9 @@ local __initialize = function(self)
 	
     self._width=love.graphics.getWidth()
 	self._heigh=67*sy
-    self._key_width=9*sy*sx
-    self._margin=1.5*self._key_width
-    self._menu_y_begin=love.graphics.getHeight()-self._heigh
+    self._key_width=self._heigh/4
+    self._margin=1.1*self._key_width
+    self._menu_y_begin=(love.graphics.getHeight()-self._heigh)
     
     self._center_up_x=self._margin+self._key_width*2
     self._center_up_y=self._menu_y_begin+self._margin

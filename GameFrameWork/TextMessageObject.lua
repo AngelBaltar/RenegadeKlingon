@@ -58,7 +58,7 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
   end
   DEBUG_PRINT(self._msgTxt)
  local sx,sy=GameConfig.getInstance():getScale()
- self._font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",20*sx*sy)
+ self._font = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",30)
  local ch_act=0
  local count=0
  while (ch_act<string.len(self._msgTxt)) do
@@ -77,8 +77,8 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
         if(ch=='\n') then
           n_lines=n_lines+1
           line=line..ch
-          if(self._width<font:getWidth(line)+font:getWidth("A")*2) then
-              self._width=font:getWidth(line)+font:getWidth("A")*2
+          if(self._width<self._font:getWidth(line)+self._font:getWidth("A")*2) then
+              self._width=self._font:getWidth(line)+self._font:getWidth("A")*2
           end
           line=""
         else
@@ -87,8 +87,8 @@ function TextMessageObject:initialize(space,tile,posx,posy,messageFile,messageTe
         self._msgDraw[count]=self._msgDraw[count]..ch
     end
     n_lines=n_lines+1
-    if(self._height<font:getHeight()*n_lines) then
-      self._height=font:getHeight()*n_lines
+    if(self._height<self._font:getHeight()*n_lines) then
+      self._height=self._font:getHeight()*n_lines
     end
 
     count=count+1
