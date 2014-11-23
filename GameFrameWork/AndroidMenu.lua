@@ -108,7 +108,7 @@ function AndroidMenu:draw()
 	love.graphics.print('b', self._center_left_x-self._arrows_font:getWidth('b')/2, self._center_left_y-self._arrows_font:getHeight('b')/2)
 	love.graphics.print('a', self._center_right_x-self._arrows_font:getWidth('a')/2, self._center_right_y-self._arrows_font:getHeight('a')/2)
 	love.graphics.print('c', self._center_up_x-self._arrows_font:getWidth('c')/2, self._center_up_y-self._arrows_font:getHeight('c')/2)
-	love.graphics.print('d', self._center_down_x-self._arrows_font:getWidth('d')/2, self._center_down_y-font:getHeight('d')/2.5)
+	love.graphics.print('d', self._center_down_x-self._arrows_font:getWidth('d')/2, self._center_down_y-font:getHeight('d')/2)
 	
 
     love.graphics.setColor(128,128,128,255)
@@ -150,10 +150,10 @@ function AndroidMenu:isDown(key)
         return ((x-self._center_right_x)*(x-self._center_right_x)+(y-self._center_right_y)*(y-self._center_right_y)<wdt)
     end
     if key==AndroidMenu.static.FIRE then
-        return ((x-self._center_a_x)*(x-self._center_a_x)+(y-self._center_a_y)*(y-self._center_a_y)<wdt)
+        return ((x-self._center_a_x)*(x-self._center_a_x)+(y-self._center_a_y)*(y-self._center_a_y)<wdt2)
     end
     if key==AndroidMenu.static.POWER then
-        return ((x-self._center_b_x)*(x-self._center_b_x)+(y-self._center_b_y)*(y-self._center_b_y)<wdt)
+        return ((x-self._center_b_x)*(x-self._center_b_x)+(y-self._center_b_y)*(y-self._center_b_y)<wdt2)
     end
     if key==AndroidMenu.static.ENTER then
         return (x>self._enter_x and x<self._enter_x+self._key_width*3

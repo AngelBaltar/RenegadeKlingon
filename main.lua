@@ -52,6 +52,17 @@ function love.errhand(msg)
 end
 
 function love.load(args)
+
+  modes = love.window.getFullscreenModes()
+   table.sort(modes, function(a, b) return a.width*a.height > b.width*b.height end) 
+   -- sort from largest to smallest
+   love.window.setMode(modes[1].width, modes[1].height,
+         {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
+
+   --love.window.setMode(800, 600,
+   --      {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
+
+
    DEBUG_PRINT("LOADING GAME...")
    disableDebug()
    local settimeout=false
@@ -73,19 +84,10 @@ function love.load(args)
    love.graphics.setBackgroundColor(0,0,0)
 
    love.keyboard.setKeyRepeat(0.0002, 0.0001)
-   modes = love.window.getFullscreenModes()
-   table.sort(modes, function(a, b) return a.width*a.height > b.width*b.height end) 
-   -- sort from largest to smallest
-   --love.window.setMode(modes[1].width, modes[1].height,
-   --      {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
-
-   love.window.setMode(420, 380,
-         {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
    
-
    config:setScale(love.graphics.getWidth()/800,love.graphics.getHeight()/600)
    local sx,sy=config:getScale()
-   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",20)
+   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",36*(1/sx))
    love.graphics.setFont(f)
    --print(modes[1].width.."x"..modes[1].height)
    sx,sy=config:getScale()
