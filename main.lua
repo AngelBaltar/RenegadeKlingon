@@ -87,7 +87,7 @@ function love.load(args)
    
    config:setScale(love.graphics.getWidth()/800,love.graphics.getHeight()/600)
    local sx,sy=config:getScale()
-   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",36*(1/sx))
+   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",36*sx)
    love.graphics.setFont(f)
    --print(modes[1].width.."x"..modes[1].height)
    sx,sy=config:getScale()

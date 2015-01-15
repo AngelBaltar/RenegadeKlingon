@@ -85,10 +85,10 @@ function GameScreen:draw()
     love.graphics.setColor(255,255,255,255)
 
     love.graphics.setColor(255,255,255,255)
-    love.graphics.print("FPS: "..love.timer.getFPS(), 570, 510)
-    love.graphics.print("Memory: "..memory.." Mb", 570, 530)
-    love.graphics.print("Entities: "..self._space:getNumObjects(), 570, 550)
-    love.graphics.print("Bucket Entities: "..self._space:getNumBucketObjects(), 570, 570)
+    love.graphics.print("FPS: "..love.timer.getFPS(),  self._space:getXend()-200, self._space:getYend()-100)
+    love.graphics.print("Memory: "..memory.." Mb", self._space:getXend()-200, self._space:getYend()-100+20)
+    love.graphics.print("Entities: "..self._space:getNumObjects(), self._space:getXend()-200, self._space:getYend()-100+40)
+    love.graphics.print("Bucket Entities: "..self._space:getNumBucketObjects(), self._space:getXend()-200, self._space:getYend()-100+60)
     -- local all_enemies=self._space:getAllEnemies()
     -- local count=12
     -- for en,_ in pairs(all_enemies) do
