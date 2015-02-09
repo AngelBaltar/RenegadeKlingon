@@ -56,11 +56,13 @@ function love.load(args)
   modes = love.window.getFullscreenModes()
    table.sort(modes, function(a, b) return a.width*a.height > b.width*b.height end) 
    -- sort from largest to smallest
-   love.window.setMode(modes[1].width, modes[1].height,
+   s_width=math.min(modes[1].width,1024)
+   s_height=math.min(modes[1].height,768)
+   love.window.setMode(s_width,s_height,
          {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
 
-   --love.window.setMode(800, 600,
-   --      {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
+   love.window.setMode(1024, 768,
+         {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
 
 
    DEBUG_PRINT("LOADING GAME...")
@@ -87,7 +89,7 @@ function love.load(args)
    
    config:setScale(love.graphics.getWidth()/800,love.graphics.getHeight()/600)
    local sx,sy=config:getScale()
-   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",36*sx)
+   local f = love.graphics.newFont("Resources/fonts/klingon_blade.ttf",36*(sx/sy))
    love.graphics.setFont(f)
    --print(modes[1].width.."x"..modes[1].height)
    sx,sy=config:getScale()
