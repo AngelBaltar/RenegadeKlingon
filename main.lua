@@ -56,13 +56,13 @@ function love.load(args)
   modes = love.window.getFullscreenModes()
    table.sort(modes, function(a, b) return a.width*a.height > b.width*b.height end) 
    -- sort from largest to smallest
-   s_width=math.min(modes[1].width,1024)
-   s_height=math.min(modes[1].height,768)
+   s_width=math.min(modes[1].width,1280)
+   s_height=math.min(modes[1].height,1024)
    love.window.setMode(s_width,s_height,
          {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
 
-   love.window.setMode(1024, 768,
-         {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
+   --love.window.setMode(800, 600,
+   --      {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
 
 
    DEBUG_PRINT("LOADING GAME...")

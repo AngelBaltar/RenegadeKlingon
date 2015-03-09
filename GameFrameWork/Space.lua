@@ -229,9 +229,9 @@ local _printBackground=function(self)
 
    local size=self._bgList[self._bgActual]:getWidth()
    sx,sy=GameConfig.getInstance():getScale()
-   love.graphics.draw(self._bgList[self._bgActual], self._bgPos, 0,0,sx,sy) -- this is the left image
+   love.graphics.draw(self._bgList[self._bgActual], self._bgPos,0,0, sx,sy) -- this is the left image
    love.graphics.draw(self._bgList[(self._bgActual+1)%self._bgSize],self._bgPos
-    								+ size, 0,0,sx,sy) -- this is the right image
+    								+ size*sx,0,0, sx,sy) -- this is the right image
 end
 
 function Space:getBackGroundCadence()

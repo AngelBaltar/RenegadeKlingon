@@ -24,8 +24,8 @@ Weapon = class('GameFrameWork.Weapons.Weapon')
 --constructor
 function Weapon:initialize(ship_to_attach)	
   self._shot_cadence=self:EnemieCadence() --enemie cadence by default
-  self._last_shot=0
   self:setAttachedShip(ship_to_attach)
+  self._last_shot=math.random(self._shot_cadence)
 end
 
 function Weapon:PlayerCadence()
@@ -50,7 +50,6 @@ function Weapon:calculateFire()
 
 	 if(my_ship:isEnemyShip()) then
 	 	--CALCULATE THE FIRE FOR THE ENEMIES
-   		shot_emit_x=shot_emit_x-my_ship:getWidth()
    		player=my_space:getPlayerShip()
 
    		local player_x=0
@@ -69,7 +68,7 @@ function Weapon:calculateFire()
 		end
 		return shot_emit_x,shot_emit_y,delta_x,delta_y
 	 else
-	 	shot_emit_x=shot_emit_x+my_ship:getWidth()
+	 	shot_emit_x=shot_emit_x+my_ship:getWidth() --add this for my player on the left side
 	 end
 
 	 return shot_emit_x,shot_emit_y,x_relative_step,y_relative_step
