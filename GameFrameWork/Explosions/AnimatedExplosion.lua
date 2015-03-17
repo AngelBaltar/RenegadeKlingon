@@ -77,6 +77,7 @@ function AnimatedExplosion:initialize(space,x,y)
   self._animation:setMode(explosions_tab[self._random_explosion].mode)
   self._zoom=explosions_tab[self._random_explosion].zoom
   Explosion.initialize(self,space,x,y,explosions_tab[self._random_explosion].sprite)
+  explosions_tab[self._random_explosion].source:setVolume(0.5)
   explosions_tab[self._random_explosion].source:stop( )
   explosions_tab[self._random_explosion].source:play()
 end

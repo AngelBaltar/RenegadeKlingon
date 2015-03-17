@@ -29,6 +29,7 @@ function ParticleExplosion:initialize(space,x,y,intensity,particle_path)
   SpaceObject.initialize(self,space,ps,x,y,0)
   Explosion.initialize(self,space,0,0,ps)
   ps:start()
+  source:setVolume(0.1)
   source:stop()
   source:play()
 

@@ -29,6 +29,7 @@ local source=love.audio.newSource( 'Resources/sfx/basic_weapon.mp3',"static")
 function SimpleBullet:initialize(space,emmiter,x,y,stepx,stepy)
   --3 health for the SimpleBullet
   Bullet.initialize(self,space,emmiter,x,y,stepx,stepy,3,nil)
+  source:setVolume(0.1)
   source:stop()
   source:play()
 end
