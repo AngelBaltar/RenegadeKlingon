@@ -97,4 +97,10 @@
    <property name="object_type" value="MusicObject"/>
   </properties>
  </tile>
+ <tile id="18">
+  <properties>
+      <property name="object_type" value="WeaponObject"/>
+      <property name="weapon_type" value="PLAYER_DUMMY"/>
+  </properties>
+ </tile>
 </tileset>

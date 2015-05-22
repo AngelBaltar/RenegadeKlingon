@@ -17,7 +17,7 @@
 --  * <http://www.gnu.org/licenses/>.
 --  */
 require 'Utils/middleclass/middleclass'
-require 'GameFrameWork/PlayerShip'
+require 'GameFrameWork/PlayerTeam/PlayerShip'
 require 'GameFrameWork/TextMessageObject'
 require 'GameFrameWork/MusicObject'
 require 'GameFrameWork/Harvestables/HealthObject'
@@ -72,6 +72,7 @@ end
 local create_DestructorKlingon=function(x,y)
 	
 	local ship=_space:getPlayerShip()
+			DEBUG_PRINT("\t\tcreate player!")
 	if(ship==nil) then
 		ship=PlayerShip:new(_space,_map.tileWidth*x,_map.tileHeight*y)
 	else
@@ -172,6 +173,9 @@ local create_WeaponObject=function(x,y)
 	end
 	if _tile.properties["weapon_type"]=="DOUBLE_BASIC" then
 		gun=WeaponObject.static.DOUBLE_BASIC
+	end
+	if _tile.properties["weapon_type"]=="PLAYER_DUMMY" then
+		gun=WeaponObject.static.PLAYER_DUMMY
 	end
 
 
@@ -283,8 +287,6 @@ function load_level(map_name,space)
 	if(player~=nil) then --keep the previous player if exists
 		_space:addSpaceObject(player)
 	end
-
-
 	_map=loader.load(map_name)
 	local ordered_paths={}
 	local max_x=0

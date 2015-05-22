@@ -19,6 +19,7 @@
 require 'GameFrameWork/Harvestables/HarvestableObject'
 require 'GameFrameWork/Weapons/MachineGunWeapon'
 require 'GameFrameWork/Weapons/DoubleWeapon'
+require 'GameFrameWork/PlayerTeam/PlayerDummy'
 require 'Utils/Animation'
 
 WeaponObject = class('GameFrameWork.Harverstables.WeaponObject',HarvestableObject)
@@ -27,6 +28,7 @@ WeaponObject.static.MACHINE_GUN =1
 WeaponObject.static.DOUBLE_BLUE = 2
 WeaponObject.static.DOUBLE_GREEN = 3
 WeaponObject.static.DOUBLE_BASIC = 4
+WeaponObject.static.PLAYER_DUMMY = 5
 
 local weapon_sprite=love.graphics.newImage("Resources/gfx/crystal.png")
 
@@ -66,7 +68,9 @@ function WeaponObject:initialize(space,weapon_type,posx,posy)
   if(self._weaponType==WeaponObject.static.DOUBLE_BASIC) then
     self._weapon=DoubleBasicWeapon:new(nil)
   end
-
+  if(self._weaponType==WeaponObject.static.PLAYER_DUMMY) then
+    self._weapon=PlayerDummy:new()
+  end
   self._zoom=weapons_animation.zoom
   HarvestableObject.initialize(self,space,weapon_type,posx,posy,0)
 
@@ -108,6 +112,9 @@ function WeaponObject:draw()
 
   if(self._weaponType==WeaponObject.static.DOUBLE_BASIC) then
      love.graphics.setColor(255,0,0,255)
+  end
+  if(self._weaponType==WeaponObject.static.PLAYER_DUMMY) then
+     love.graphics.setColor(128,0,0,128)
   end
   self._animation:draw(SpaceObject.getPositionX(self), SpaceObject.getPositionY(self),0,self._zoom)
   love.graphics.setColor(255,255,255,255)

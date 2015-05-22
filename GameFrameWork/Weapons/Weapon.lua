@@ -96,9 +96,7 @@ function Weapon:setAttachedShip(ship)
   if (self._ship~=nil) and  (self._ship:isEnemyShip()) then
   	self._shot_cadence=self:EnemieCadence()
   end
-  
-  if (self._ship~=nil) and  (self._ship:isPlayerShip()) then
+  if ((self._ship~=nil) and  (self._ship:isPlayerShip() or self._ship:isPlayerDummy())) then
   	self._shot_cadence=self:PlayerCadence()
   end
-	
 end

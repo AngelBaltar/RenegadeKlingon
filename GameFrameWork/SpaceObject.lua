@@ -272,6 +272,10 @@ function SpaceObject:isMusicObject()
   return false
 end
 
+function SpaceObject:isPlayerDummy()
+  return false
+end
+
 function SpaceObject:isDead()
 	return self._dead
 end
