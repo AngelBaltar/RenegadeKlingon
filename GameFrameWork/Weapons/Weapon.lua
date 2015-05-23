@@ -100,3 +100,19 @@ function Weapon:setAttachedShip(ship)
   	self._shot_cadence=self:PlayerCadence()
   end
 end
+
+function Weapon:copy(x)
+	x._ship=self._ship
+	x._shot_cadence=self._shot_cadence
+	x._last_shot=self._last_shot
+end
+
+function Weapon:clone()
+	x=Weapon:new(nil)
+	self:copy(x)
+	return x
+end
+
+function Weapon:toString()
+  return "weapon"
+end

@@ -86,6 +86,9 @@ function WeaponObject:collision(object,damage)
     if(object:isPlayerShip()) then
     	object:setWeapon(self._weapon)
     end
+    if(object:isPlayerDummy()) then
+      object:getAttachedShip():setWeapon(self._weapon)
+    end
 end
 
 --return the width of this ship
@@ -121,5 +124,5 @@ function WeaponObject:draw()
 end
 
 function WeaponObject:toString()
-  return "weapon"
+  return "weaponHarvestable"
 end

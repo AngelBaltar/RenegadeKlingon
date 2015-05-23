@@ -40,12 +40,28 @@ function PlayerShip:initialize(space,posx,posy)
   self._shieldpw=5
   self._weaponpw=5
   self._powertimer=0
+  self._player_dummies={}
+  self._player_dummies_size=0
 end
 
 
 function PlayerShip:setWeapon(weapon)
-  self._basic_weapon=weapon
-  weapon:setAttachedShip(self)
+  if weapon:toString()=="playerDummy" then
+    if self._player_dummies_size<2 then --at least 2 player dummies
+      weapon:setWeapon(self._basic_weapon:clone())
+      self._player_dummies[self._player_dummies_size]=weapon
+      self._player_dummies_size=self._player_dummies_size+1
+      weapon:setAttachedShip(self)
+    end
+  else
+    self._basic_weapon=weapon
+    local k=0
+    while k<self._player_dummies_size do
+      self._player_dummies[k]:setWeapon(weapon:clone())
+      k=k+1
+    end
+    weapon:setAttachedShip(self)
+  end
 end
 
 function PlayerShip:getWeapon()
@@ -62,6 +78,11 @@ function PlayerShip:die()
   local y=SpaceObject.getPositionY(self)
   AnimatedExplosion:new(my_space,x,y)
   love.graphics.setColor(255,200,200,255)
+  local k=0
+  while k<self._player_dummies_size do
+      self._player_dummies[k]:die()
+      k=k+1
+  end
   SpaceObject.die(self)
 end
 
@@ -72,11 +93,32 @@ function PlayerShip:collision(object,damage)
   end
 end
 
+function PlayerShip:updateDummies(dt)
+  local k=0
+  local alive_dummies={}
+  local count=0
+  while  k<self._player_dummies_size do
+    if not self._player_dummies[k]:isDead() then
+      alive_dummies[count]=self._player_dummies[k]
+      --alive_dummies[count]:pilot(dt)
+      count=count+1
+    end
+    k=k+1
+  end
+  self._player_dummies_size=count
+  self._player_dummies=alive_dummies
+end
+
+function PlayerShip:getDummiesSize()
+  return self._player_dummies_size
+end
+
 --Performs movements changing the position of the object, firing bullets...
 function PlayerShip:pilot(dt)
   if not self:isEnabled() then
     return nil
   end
+  self:updateDummies(dt)
   if self._autopilot then
     --autpilot here
     return self._autoPattern:pilot(dt)
@@ -91,6 +133,11 @@ function PlayerShip:pilot(dt)
 
   local sup_y=my_space:getYend()-self:getHeight()-4
   local sup_x=my_space:getXend()-self:getWidth()-4
+
+  if (self._player_dummies_size>0)then
+      sup_y=sup_y-self:getHeight()
+      inf_y=inf_y+self:getHeight()
+  end
 
   local config=GameConfig.getInstance()
 
@@ -117,6 +164,11 @@ function PlayerShip:pilot(dt)
    end
   if config:isDown(GameConfig.static.FIRE) then
     self._basic_weapon:fire(dt)
+    k=0;
+    while(k<self._player_dummies_size) do
+      self._player_dummies[k]:fire(dt)
+      k=k+1
+    end
   end
   if config:isDown(GameConfig.static.POWER) and self._powertimer>=0.2 then
     --one step at a time updating power

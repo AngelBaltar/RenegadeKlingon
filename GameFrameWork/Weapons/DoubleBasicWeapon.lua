@@ -43,3 +43,9 @@ function DoubleBasicWeapon:doFire()
                ,x_relative_step,y_relative_step)
    
 end
+
+function DoubleBasicWeapon:clone()
+   x=DoubleBasicWeapon:new(nil)
+   self:copy(x)
+   return x
+end

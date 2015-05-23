@@ -39,3 +39,9 @@ function MachineGunWeapon:doFire()
    AnimatedBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y-my_ship:getHeight()/2-2,
                      x_relative_step,y_relative_step,AnimatedBullet.static.PINK_ANIMATED)
 end
+
+function MachineGunWeapon:clone()
+   x=MachineGunWeapon:new(nil)
+   self:copy(x)
+   return x
+end

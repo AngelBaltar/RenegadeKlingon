@@ -39,7 +39,7 @@ function HarvestableObject:collision(object,damage)
       x=x*(-1)
       y=y*(-1)
       self._pilot_pattern:setDirection(x,y)
-     if (object:isPlayerShip()) then
+     if (object:isPlayerShip() or object:isPlayerDummy()) then
        self:die()
      end
 end

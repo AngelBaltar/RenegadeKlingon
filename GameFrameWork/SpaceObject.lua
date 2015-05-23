@@ -59,7 +59,7 @@ end
 
 --Draws the object in the screen
 function SpaceObject:draw()
-	if(self:isPlayerShip() or self:isEnemyShip()) then
+	if(self:isPlayerShip() or self:isEnemyShip() or self:isPlayerDummy()) then
 		local shieldstep=2
 	    if(self._shielddraw>shieldstep) then
 	      local r,g,b=self:getShipColor()

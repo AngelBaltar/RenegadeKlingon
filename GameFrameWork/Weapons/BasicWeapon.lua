@@ -33,3 +33,9 @@ function BasicWeapon:doFire()
    local shot_emit_x,shot_emit_y,delta_x,delta_y=self:calculateFire()
    SimpleBullet:new(my_space,my_ship,shot_emit_x,shot_emit_y,delta_x,delta_y)
 end
+
+function BasicWeapon:clone()
+   x=BasicWeapon:new(nil)
+   self:copy(x)
+   return x
+end

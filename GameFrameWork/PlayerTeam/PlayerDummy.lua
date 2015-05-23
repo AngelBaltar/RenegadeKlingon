@@ -26,30 +26,36 @@ require 'Utils/GameConfig'
 
 PlayerDummy = class('GameFrameWork.PlayerDummy',SpaceObject)
 
-PlayerDummy.static.SHIP = love.graphics.newImage("Resources/gfx/destructor_klingon.png")
+PlayerDummy.static.SHIP = love.graphics.newImage("Resources/gfx/PlayerDummy.png")
 --constructor
 --draw_object must be a drawable
 --posx and posy define the initial positions for the object
 function PlayerDummy:initialize()
+  self._player=nil
+end
 
+function PlayerDummy:getAttachedShip()
+  return self._player
 end
 
 function PlayerDummy:setAttachedShip(player)
-
-  self._offsetx=200
-  self._offsety=200
+  self._player=player
+  if player:getDummiesSize()==1 then
+    self._offsetx=0
+    self._offsety=-(player:getHeight()/2)-20
+  else
+    self._offsetx=0
+    self._offsety=(player:getHeight())+20
+  end
   SpaceObject.initialize(self,player:getSpace(), 
                             PlayerDummy.static.SHIP,
                             player:getPositionX()+self._offsetx,player:getPositionY()+self._offsety,50)
   self:setWeapon(BasicWeapon:new(self))
-  self._shieldpw=player:getWeaponPower()
-  self._weaponpw=player:getShieldPower()
-  self._player=player
 end
 
 function PlayerDummy:fire(dt)
     self._basic_weapon:fire(dt)
-    DEBUG_PRINT(self._basic_weapon:getAttachedShip():toString())
+    --DEBUG_PRINT(self._basic_weapon:getAttachedShip():toString())
 end
 
 function PlayerDummy:setWeapon(weapon)
@@ -79,8 +85,8 @@ end
 
 --Performs movements changing the position of the object, firing bullets...
 function PlayerDummy:pilot(dt)
+  local player=self:getAttachedShip()
   self:setPosition(player:getPositionX()+self._offsetx,player:getPositionY()+self._offsety)
-  self:setWeapon(self._player:getWeapon())
 end
 
 --gets the player red color
@@ -90,12 +96,12 @@ end
 
 --gets the object power on weapons
 function PlayerDummy:getWeaponPower()
-  return self._weaponpw
+  return self._player:getWeaponPower()
 end
 
 --gets the object power on shields
 function PlayerDummy:getShieldPower()
-  return self._shieldpw
+  return self._player:getShieldPower()
 end
 
 function PlayerDummy:toString()

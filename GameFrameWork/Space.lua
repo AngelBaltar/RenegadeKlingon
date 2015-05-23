@@ -430,6 +430,42 @@ local _collisionCheck = function(self,soA,soB)
 		return false
 	end
 
+	--playerdummy bullets do not hit playerdummy
+	if soA:isBullet() and soB:isPlayerDummy() and soA:getEmmiter():isPlayerDummy() then
+		return false
+	end
+
+
+	if soB:isBullet() and soA:isPlayerDummy() and soB:getEmmiter():isPlayerDummy() then
+		return false
+	end
+
+	--playerdummy bullets do not hit playerdummy
+	if soA:isPlayerShip() and soB:isPlayerDummy() then
+		return false
+	end
+
+
+	if soB:isPlayerShip() and soA:isPlayerDummy() then
+		return false
+	end
+
+	--playerdummy bullets do not hit playerdummy
+	if soA:isPlayerDummy() and soB:isPlayerDummy() then
+		return false
+	end
+
+	--playerdummy bullets do not hit playerdummy
+	if soA:isBullet() and soB:isPlayerShip() and soA:getEmmiter():isPlayerDummy() then
+		return false
+	end
+
+
+	if soB:isBullet() and soA:isPlayerShip() and soB:getEmmiter():isPlayerDummy() then
+		return false
+	end
+
+
 	-- --bullets do not hit harvestables
 	-- if soA:isBullet() and soB:isHarvestableObject() then
 	-- 	return false

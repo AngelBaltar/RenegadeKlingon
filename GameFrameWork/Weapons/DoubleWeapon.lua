@@ -45,3 +45,14 @@ function DoubleWeapon:doFire()
                      x_relative_step,y_relative_step,self._bullet)
    
 end
+
+function DoubleWeapon:copy(x)
+    Weapon.copy(self,x)
+    x._bullet=self._bullet
+end
+
+function DoubleWeapon:clone()
+   x=DoubleWeapon:new(nil)
+   self:copy(x)
+   return x
+end
