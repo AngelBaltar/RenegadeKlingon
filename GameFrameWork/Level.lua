@@ -286,6 +286,10 @@ function load_level(map_name,space)
 
 	if(player~=nil) then --keep the previous player if exists
 		_space:addSpaceObject(player)
+		dummies=player:getDummies()
+		for k,v in pairs(dummies) do
+			_space:addSpaceObject(v)
+		end
 	end
 	_map=loader.load(map_name)
 	local ordered_paths={}

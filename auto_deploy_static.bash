@@ -120,16 +120,16 @@ test rm ./Resources/maps/mapSources/*
 test cp -r ./compressed_map_sources/* ./Resources/maps/mapSources/
 
 
-echo "deploying for android..."
-rm -rf ./bin/RenegadeKlingon.android.apk
-rm -rf ./bin/game.zip
-test cp RenegadeKlingon.android.conf RenegadeKlingon.conf
-test zip  -9 ./bin/game.zip -r $necesary_files 1>/dev/null
-test mv ./bin/game.zip ./bin/android/love-android-sdl2/assets/game.love
-test cd ./bin/android/love-android-sdl2/
-test ant debug 1>/dev/null 2>/dev/null
-test cd ./../../../
-test mv ./bin/android/love-android-sdl2/bin/love_android_sdl2-debug.apk ./bin/RenegadeKlingon.android.apk
+# echo "deploying for android..."
+# rm -rf ./bin/RenegadeKlingon.android.apk
+# rm -rf ./bin/game.zip
+# test cp RenegadeKlingon.android.conf RenegadeKlingon.conf
+# test zip  -9 ./bin/game.zip -r $necesary_files 1>/dev/null
+# test mv ./bin/game.zip ./bin/android/love-android-sdl2/assets/game.love
+# test cd ./bin/android/love-android-sdl2/
+# test ant debug 1>/dev/null 2>/dev/null
+# test cd ./../../../
+# test mv ./bin/android/love-android-sdl2/bin/love_android_sdl2-debug.apk ./bin/RenegadeKlingon.android.apk
 
 #lets deploy a .love for LINUX
 echo "deploying for linux..."
@@ -174,4 +174,3 @@ if [ "$me" != "jenkins" ]; then
 fi
 echo "Every deploy OK"
 exit_deploy 0
-

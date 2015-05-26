@@ -55,10 +55,8 @@ function PlayerShip:setWeapon(weapon)
     end
   else
     self._basic_weapon=weapon
-    local k=0
-    while k<self._player_dummies_size do
-      self._player_dummies[k]:setWeapon(weapon:clone())
-      k=k+1
+    for k,dummie in pairs(self._player_dummies) do
+      dummie:setWeapon(weapon:clone())
     end
     weapon:setAttachedShip(self)
   end
@@ -78,10 +76,8 @@ function PlayerShip:die()
   local y=SpaceObject.getPositionY(self)
   AnimatedExplosion:new(my_space,x,y)
   love.graphics.setColor(255,200,200,255)
-  local k=0
-  while k<self._player_dummies_size do
-      self._player_dummies[k]:die()
-      k=k+1
+  for k,dummy in pairs(self._player_dummies) do
+      dummy:die()
   end
   SpaceObject.die(self)
 end
@@ -94,16 +90,14 @@ function PlayerShip:collision(object,damage)
 end
 
 function PlayerShip:updateDummies(dt)
-  local k=0
   local alive_dummies={}
   local count=0
-  while  k<self._player_dummies_size do
-    if not self._player_dummies[k]:isDead() then
-      alive_dummies[count]=self._player_dummies[k]
+  for k,dummy in pairs(self._player_dummies) do
+    if not dummy:isDead() then
+      alive_dummies[count]=dummy
       --alive_dummies[count]:pilot(dt)
       count=count+1
     end
-    k=k+1
   end
   self._player_dummies_size=count
   self._player_dummies=alive_dummies
@@ -111,6 +105,10 @@ end
 
 function PlayerShip:getDummiesSize()
   return self._player_dummies_size
+end
+
+function PlayerShip:getDummies()
+  return self._player_dummies
 end
 
 --Performs movements changing the position of the object, firing bullets...
@@ -164,10 +162,8 @@ function PlayerShip:pilot(dt)
    end
   if config:isDown(GameConfig.static.FIRE) then
     self._basic_weapon:fire(dt)
-    k=0;
-    while(k<self._player_dummies_size) do
-      self._player_dummies[k]:fire(dt)
-      k=k+1
+    for k,dummy in pairs(self._player_dummies) do
+      dummy:fire(dt)
     end
   end
   if config:isDown(GameConfig.static.POWER) and self._powertimer>=0.2 then
