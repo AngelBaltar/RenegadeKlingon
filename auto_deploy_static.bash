@@ -53,8 +53,8 @@ drop_all_temporals() {
 	rm -rf $path_mac
 	rm -rf $path_android
 	rm -rf love.app
-	rm -rf love-0.9.1-win32
-	rm -rf love-0.9.1-android
+	rm -rf love-0.9.2-win32
+	rm -rf love-0.9.2-android
 	rm -rf ./tmpSources
 	rm -rf ./__MACOSX
 }
@@ -66,19 +66,19 @@ check_and_download_binaries()  {
 	if [ $? -ne 0 ]; then
 		mkdir bin
 	fi
-	ls ./bin/love-0.9.1-win32.zip 1>/dev/null 2>/dev/null
+	ls ./bin/love-0.9.2-win32.zip 1>/dev/null 2>/dev/null
 	if [ $? -ne 0 ]; then
 		cd bin
 		echo "	downloading love2d windows binary..."
-		wget https://bitbucket.org/rude/love/downloads/love-0.9.1-win32.zip 1>/dev/null 2>/dev/null
+		wget https://bitbucket.org/rude/love/downloads/love-0.9.2-win32.zip 1>/dev/null 2>/dev/null
 		cd ..
 	fi
-	ls ./bin/love-0.9.1-macosx-x64.zip 1>/dev/null 2>/dev/null
+	ls ./bin/love-0.9.2-macosx-x64.zip 1>/dev/null 2>/dev/null
 	if [ $? -ne 0 ]; then
 		#deployments for mac will need
 		cd bin
 		echo "	downloading love2d mac binary..."
-		wget https://bitbucket.org/rude/love/downloads/love-0.9.1-macosx-x64.zip 1>/dev/null 2>/dev/null
+		wget https://bitbucket.org/rude/love/downloads/love-0.9.2-macosx-x64.zip 1>/dev/null 2>/dev/null
 		cd ..
 	fi
 	ls ./bin/android 1>/dev/null 2>/dev/null
@@ -110,8 +110,8 @@ exit_deploy() {
 check_and_download_binaries
 drop_all_temporals
 echo "extracting love binaries..."
-test unzip -o ./bin/love-0.9.1-win32.zip 1>/dev/null
-test unzip -o ./bin/love-0.9.1-macosx-x64.zip 1>/dev/null
+test unzip -o ./bin/love-0.9.2-win32.zip 1>/dev/null
+test unzip -o ./bin/love-0.9.2-macosx-x64.zip 1>/dev/null
 
 echo "setting compressed map sources to make a compressed deploy..."
 test mkdir ./tmpSources/
@@ -146,7 +146,7 @@ echo "deploying for windows..."
 rm -rf ./bin/RenegadeKlingon.windows.zip
 test mkdir $path_windows
 test cp ./RenegadeKlingon.love $path_windows/game.love
-test cp -R ./love-0.9.1-win32/* $path_windows/
+test cp -R ./love-0.9.2-win32/* $path_windows/
 test cat $path_windows/love.exe $path_windows/game.love > $path_windows/RenegadeKlingon.exe
 test rm $path_windows/*.love $path_windows/love.exe
 test zip -9 -r ./bin/RenegadeKlingon.windows.zip $path_windows 1>/dev/null
