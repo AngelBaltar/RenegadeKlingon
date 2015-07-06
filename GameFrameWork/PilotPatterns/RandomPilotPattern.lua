@@ -28,6 +28,7 @@ function RandomPilotPattern:initialize(ship)
     self._directionX=-1
     self._directionY=1
     self._avoidCollision=AvoidCollisionPilotPattern:new(ship)
+    self._colides=0
 end
 
 function RandomPilotPattern:setShip(ship)
@@ -90,10 +91,17 @@ end
   ship:setPosition(pos_x+self._directionX*speed,pos_y+self._directionY*speed)
   local collides=self._avoidCollision:pilot(dt)
   if collides then
-    self._directionX=self._directionX*-1
-    self._directionY=self._directionY*-1
+    self._colides=self._colides+1
+    local rnd=math.random()
+    if self._colides%2==0 then
+      self._directionX=self._directionX*-1*(1/self._colides)
+    else
+      self._directionY=self._directionY*-1*(1/self._colides)
+    end
+  else
+    self._colides=0
   end
-  if player~=nil and pos_x<player:getPositionX() then
-    self._directionX=3
+  if player~=nil and pos_x<=player:getPositionX() then
+    self._directionX=6
   end
 end

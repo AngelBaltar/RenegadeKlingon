@@ -533,7 +533,7 @@ end
 --bullets collide bullets ...
 function Space:naturalCollisionCheck(soA,soB)
 
-
+	--return _collisionCheck(self,soA,soB)
 	--messages do not collide
 	if (soA:isTextMessage() or soB:isTextMessage()) then
 		return false
