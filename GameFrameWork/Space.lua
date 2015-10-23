@@ -656,12 +656,15 @@ function Space:readPressed()
 	local j=0
 	if (GameConfig.getInstance():isDown(GameConfig.static.PAUSE)) then
 		self._pause= not self._pause
+		if(self._pause) then
+			love.audio.pause()
+		else
+			love.audio.resume()
+		end
 	end
-
-	if(self._pause) then
+	if self._pause then
 		return
 	end
-
 	for obj,_ in pairs(self._objectsList) do
 		obj:readPressed()
 		i=i+1
