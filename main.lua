@@ -59,7 +59,7 @@ function love.load(args)
    s_width=math.min(modes[1].width,1280)
    s_height=math.min(modes[1].height,1024)
    love.window.setMode(s_width,s_height,
-         {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
+         {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = false})
 
    --love.window.setMode(800, 600,
    --      {resizable=false, vsync=true, minwidth=240, minheight=240,fullscreen = true})
